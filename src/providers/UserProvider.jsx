@@ -38,6 +38,7 @@ export const UserProvider = ({ children }) => {
         setCookie("token", "", -1);
         setCookie("refreshToken", "", -1);
         setIsLoggedIn(false);
+        setLoading(false);
       }
     } catch (error) {
       console.log("Auth error:", error);

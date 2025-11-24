@@ -12,9 +12,8 @@ export const showToast = ({
   summary = "",
   detail = "",
   life = 3000,
-  position = "bottom-right", // | "center" | "top-center" | "top-left" | "top-right" | "bottom-center" | "bottom-left"
 }) => {
-  toastRef?.show({ severity, summary, detail, life, position });
+  toastRef?.show({ severity, summary, detail, life });
 };
 
 const ToastProvider = ({ children }) => {

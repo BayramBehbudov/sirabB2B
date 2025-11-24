@@ -1,6 +1,9 @@
 import api from "../axios";
 
 export const createCustomerGroup = async (data) => {
+    // {
+    //   "name": "string"
+    // }
     try {
         const response = await api.post("/B2BCustomerGroup/Create", data);
         return response.data;
@@ -31,6 +34,10 @@ export const getAllCustomerGroup = async () => {
 // };
 
 export const updateCustomerGroup = async (data) => {
+    // {
+    //   "id": 0,
+    //   "name": "string"
+    // }
     try {
         const response = await api.put(`/B2BCustomerGroup/Update`, data);
         return response.data;

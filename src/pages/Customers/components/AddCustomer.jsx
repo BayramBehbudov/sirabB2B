@@ -4,13 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { useTranslation } from "react-i18next";
-import styles from "../customers.module.css";
 import {
   EmptySchema,
   PasswordSchema,
   CustomerSchema,
 } from "@/schemas/user.schema";
-import CustomerGroupSelector from "./CustomerGroupSelector";
+import CustomerGroupSelector from "../groups/components/CustomerGroupSelector";
 import ControlledInput from "../../../components/ui/ControlledInput";
 import { createB2BCustomer, editB2BCustomer } from "@/api/B2BCustomer";
 import { showToast } from "@/providers/ToastProvider";
@@ -88,18 +87,18 @@ const AddCustomer = ({ onSuccess, user, disabled = false }) => {
       <Dialog
         header={t("addCustomerInfo")}
         visible={visible}
-        className={styles.dialog}
+        className={"max-w-[90%] min-w-[700px]"}
         onHide={onClose}
         footer={
           <div>
             <Button
               label={t("cancel")}
-              className={styles.saveBtn}
+              className={"!w-[150px]"}
               onClick={onClose}
             />
             <Button
               label={t("save")}
-              className={styles.saveBtn}
+              className={"!w-[150px]"}
               onClick={handleSubmit(onSubmit)}
               disabled={loading}
               loading={loading}
@@ -107,7 +106,7 @@ const AddCustomer = ({ onSuccess, user, disabled = false }) => {
           </div>
         }
       >
-        <div className={styles.form}>
+        <div className={"flex flex-row flex-wrap gap-2 py-[10px]"}>
           <CustomerGroupSelector control={control} />
 
           {[

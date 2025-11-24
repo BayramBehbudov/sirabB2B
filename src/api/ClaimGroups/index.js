@@ -11,6 +11,9 @@ export const GetClaimGroups = async ({ pageNumber = 1, pageSize = 10 }) => {
 }
 
 export const CreateClaimGroup = async (data) => {
+    // {
+    //     "name": "string"
+    // }
     try {
         const response = await api.post("/ClaimGroup/CreateClaimGroup", data);
         return response.data;
@@ -21,6 +24,10 @@ export const CreateClaimGroup = async (data) => {
 };
 
 export const UpdateClaimGroup = async (data) => {
+    // {
+    //     "id": 0,
+    //     "name": "string"
+    // }
     try {
         const response = await api.put("/ClaimGroup/UpdateClaimGroup", data);
         return response.data;

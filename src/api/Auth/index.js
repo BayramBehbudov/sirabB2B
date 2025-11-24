@@ -1,23 +1,59 @@
 import api from "../axios";
 
-export const loginAuth = async (data) => {
+export const VerifyUser = async (data) => {
+    // {
+    //   "userName": "string",
+    //   "password": "string"
+    // }
     try {
         const response = await api.post("/Auth/VerifyUser", data);
         return response.data.data;
     } catch (error) {
-        console.log('error at loginAuth', error);
+        console.log('error at VerifyUser', error);
         throw error;
     }
 };
 
 
 
-export const AuthCreate = async (data) => {
+export const CreateUser = async (data) => {
+    // {
+    //   "username": "string",
+    //   "phoneNumber": "string",
+    //   "password": "string",
+    //   "confirmPassword": "string",
+    //   "isActive": true
+    //   "isWebLogin": true,
+    //   "isMobileLogin": true
+    // }
+
     try {
         const response = await api.post("/Auth/CreateUser", data);
         return response.data;
     } catch (error) {
-        console.log('error at AuthCreate', error);
+        console.log('error at CreateUser', error);
+        throw error;
+    }
+};
+
+
+
+export const UpdateUser = async (data) => {
+    // {
+    //   "id": 0,
+    //   "username": "string",
+    //   "phoneNumber": "string",
+    //   "isActive": true
+    //   "isWebLogin": true,
+    //   "isMobileLogin": true
+    // }
+
+
+    try {
+        const response = await api.put("/Auth/UpdateUser", data);
+        return response.data;
+    } catch (error) {
+        console.log('error at UpdateUser', error);
         throw error;
     }
 };
@@ -35,7 +71,7 @@ export const RefreshToken = async (token) => {
 };
 export const GetUserClaims = async () => {
     try {
-        const response = await api.get(`/Auth/GetUserClaims`,);
+        const response = await api.get(`/Auth/GetUserClaims`);
         return response.data.data;
     } catch (error) {
         console.log('error at RefreshToken', error);
@@ -56,6 +92,10 @@ export const GetAllSystemUsers = async ({ pageNumber = 1, pageSize = 10 }) => {
 
 
 export const ResetPassword = async (data) => {
+    // {
+    //   "username": "string",
+    //   "password": "string"
+    // }
     try {
         const response = await api.patch(`/Auth/resetPassword`, data);
         return response.data
@@ -76,11 +116,15 @@ export const LogOut = async () => {
 };
 
 export const SetSystemUserStatus = async (data) => {
+    // {
+    //   "id": 0,
+    //   "isActive": true
+    // }
     try {
         const response = await api.patch(`/Auth/SetSystemUserStatus`, data);
         return response.data
     } catch (error) {
-        console.log('error at ResetPassword', error);
+        console.log('error at SetSystemUserStatus', error);
         throw error;
     }
 };

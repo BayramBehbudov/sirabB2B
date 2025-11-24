@@ -19,23 +19,28 @@ import {
     FaTags,
     FaImage,
     FaTerminal,
+    FaRegListAlt,
 } from "react-icons/fa";
 import CustomerGroups from "@/pages/Customers/groups/Groups";
 import NotificationTypes from "@/pages/Notifications/Types/NotificationTypes";
 import NotificationTemplates from "@/pages/Notifications/Forms/NotificationTemplates";
 import ClaimGroups from "@/pages/ClaimGroups/ClaimGroups";
+import DocumentTypes from "@/pages/Parameters/documentTypes/DocumentTypes";
+import Products from "@/pages/Products/Products";
+import ProductCategories from "@/pages/Products/Categories/ProductCategories";
+import ProductUnits from "@/pages/Products/Units/ProductUnits";
 
 
 const routes = [
     {
         id: 1, path: "/",
+        label: "Əsas Səhifə", children: [],
         component: Home, icon: FaHome,
-        label: "Əsas Səhifə", children: []
     },
     {
         id: 2, path: "/customers",
-        component: Customers, icon: FaUsers,
         label: "Müştərilər",
+        component: Customers, icon: FaUsers,
         children: [
             {
                 id: "2-1", path: "/customers/groups",
@@ -44,24 +49,40 @@ const routes = [
             },
         ],
     },
+
     {
-        id: 3, path: "/requests",
-        component: Requests,
-        icon: FaFileAlt,
-        label: "Qeydiyyat müraciətləri",
+        id: 3, path: "/users",
+        label: "İstifadəçilər",
+        component: Users, icon: FaUserCog,
         children: []
     },
     {
-        id: 4, path: "/users",
-        component: Users, icon: FaUserCog,
-        label: "İstifadəçilər",
-        children: []
+        id: 4, path: "/products",
+        label: "Məhsullar",
+        component: Products, icon: FaRegListAlt,
+        children: [
+            {
+                id: "4-1", path: "/product-categories",
+                label: "Məhsul kateqoriyaları",
+                component: ProductCategories,
+            },
+            {
+                id: "4-2", path: "/product-units",
+                label: "Məhsul vahidləri",
+                component: ProductUnits,
+            }]
     },
     {
         id: 5, path: "/parameters",
-        component: Parameters, icon: FaFileContract,
         label: "Standart parametrlər",
-        children: []
+        component: Parameters, icon: FaFileContract,
+        children: [
+            {
+                id: "5-1", path: "/document-types",
+                label: "Sənəd tipləri",
+                component: DocumentTypes,
+            },
+        ]
     },
     {
         id: 6, path: "/notifications",
@@ -104,7 +125,13 @@ const routes = [
         label: "Banner və popup",
         children: []
     },
-    { id: 11, path: "/claim-groups", component: ClaimGroups, icon: FaTerminal, label: "İcazə qrupları", children: [] },
+    {
+        id: 11, path: "/requests",
+        label: "Qeydiyyat müraciətləri",
+        component: Requests, icon: FaFileAlt,
+        children: []
+    },
+    { id: 12, path: "/claim-groups", component: ClaimGroups, icon: FaTerminal, label: "İcazə qrupları", children: [] },
     // { id: 11, path: "/newroute", component: NewRouteComponent, icon: NewRouteIcon, label: "New Route", children: [] },
 ];
 

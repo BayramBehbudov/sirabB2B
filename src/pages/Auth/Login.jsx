@@ -7,7 +7,7 @@ import { useUserContext } from "@/providers/UserProvider";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LoginSchema } from "@/schemas/auth.schema";
-import { loginAuth } from "@/api/Auth";
+import { VerifyUser } from "@/api/Auth";
 import { setCookie } from "@/helper/Cookie";
 import { showToast } from "@/providers/ToastProvider";
 
@@ -27,7 +27,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      const res = await loginAuth(data);
+      const res = await VerifyUser(data);
       setCookie("token", res.token, res.expirationDate);
       setCookie(
         "refreshToken",

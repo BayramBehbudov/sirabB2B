@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaLock } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
-const NotAllowed = () => {
+const NotAllowed = ({ showBackBtn = true }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const canGoBack = window.history.length > 1;
@@ -22,14 +22,16 @@ const NotAllowed = () => {
           {t("notAllowedPageText")}
         </p>
 
-        <button
-          onClick={() => {
-            canGoBack ? navigate(-1) : navigate("/");
-          }}
-          className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-sky-400 text-white font-medium  rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300 hover:gap-4 flex gap-2 items-center"
-        >
-          <span className="">←</span> <span>{t("goBack")}</span>
-        </button>
+        {showBackBtn && (
+          <button
+            onClick={() => {
+              canGoBack ? navigate(-1) : navigate("/");
+            }}
+            className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-sky-400 text-white font-medium  rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300 hover:gap-4 flex gap-2 items-center"
+          >
+            <span className="">←</span> <span>{t("goBack")}</span>
+          </button>
+        )}
       </div>
     </div>
   );

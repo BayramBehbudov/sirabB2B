@@ -13,7 +13,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -28,7 +28,7 @@ const AddNotificationType = ({ onSuccess, defaultValue }) => {
     name: defaultValue?.name || "",
     soundFileName: defaultValue?.soundFileName || "",
     iconFileName: "",
-    iconBase64: "",
+    iconBase64: defaultValue?.iconFilePath || "",
   };
 
   const {
@@ -45,10 +45,12 @@ const AddNotificationType = ({ onSuccess, defaultValue }) => {
     defaultValues,
   });
 
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValue]);
+
   const formValue = watch();
   const onSubmit = async (formData) => {
-    // qeyd create test edilməyib
-    // edit edir amma error qaytarır
     const formatted = {
       ...formData,
       iconBase64: formData.iconBase64.split(",")[1] || "",
@@ -64,7 +66,6 @@ const AddNotificationType = ({ onSuccess, defaultValue }) => {
         detail: res?.message || "",
       });
       setVisible(false);
-      reset(defaultValues);
       onSuccess?.();
     } catch (error) {
       showToast({

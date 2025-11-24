@@ -7,17 +7,49 @@ export const NotificationImageSchema = z.object({
     base64: z
         .string({ message: "errors.required" })
         .min(1, { message: "errors.required" }),
-    notificationId: z.number({ message: "errors.required" }),
 });
 
 export const NotificationSchema =
     z.object({
-        notificationTypeId: z.number({ error: "errors.notificationTypeRequired" }).nonnegative({ error: "errors.notificationTypeRequired" }),
-        notificationTemplateId: z.number({ error: "errors.notificationTemplateRequired" }).nonnegative({ error: "errors.notificationTemplateRequired" }),
-        sendDate: z.iso.datetime({ message: "errors.invalidDate" }).nonempty({ error: "errors.sendDateRequired" }),
+        notificationTypeId: z.number({ error: "errors.notificationTypeRequired" }).min(1, { error: "errors.notificationTypeRequired" }),
+        notificationTemplateId: z.number({ error: "errors.notificationTemplateRequired" }).min(1, { error: "errors.notificationTemplateRequired" }),
+        sendDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.sendDateRequired" }),
         images: z.array(NotificationImageSchema).nonempty({ message: "errors.required" }),
-    });
+        b2BCustomerIds: z
+            .array(z.number({ message: "errors.customerOrGroupRequired" })),
+        b2BCustomerGroupIds: z
+            .array(z.number({ message: "errors.customerOrGroupRequired" })),
+        sendToAllCustomers: z.boolean({ message: "errors.customerTypeRequired" }),
+    }).refine((data) => {
+        if (data.sendToAllCustomers) {
+            return (
+                data.b2BCustomerIds.length === 0 &&
+                data.b2BCustomerGroupIds.length === 0
+            );
+        }
 
+        return (
+            data.b2BCustomerIds.length > 0 ||
+            data.b2BCustomerGroupIds.length > 0
+        );
+    }, {
+        path: ['b2BCustomerIds'],
+        message: 'errors.customerOrGroupRequired',
+    }).refine((data) => {
+        if (data.sendToAllCustomers) {
+            return (
+                data.b2BCustomerIds.length === 0 &&
+                data.b2BCustomerGroupIds.length === 0
+            );
+        }
+        return (
+            data.b2BCustomerIds.length > 0 ||
+            data.b2BCustomerGroupIds.length > 0
+        );
+    }, {
+        path: ['b2BCustomerGroupIds'],
+        message: 'errors.customerOrGroupRequired'
+    });
 
 
 export const NotificationTypeSchema =

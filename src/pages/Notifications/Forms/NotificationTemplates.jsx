@@ -17,11 +17,19 @@ const NotificationTemplates = () => {
   const { t } = useTranslation();
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState({
+    pageNumber: 1,
+    pageSize: 10,
+  });
+  const [totalRecords, setTotalRecords] = useState(0);
+  // qeyd bu səhifə permissionları yazılmayıb
+
   const getTemplates = async () => {
     setLoading(true);
     try {
-      const response = await GetNotificationTemplates();
-      setTemplates(response);
+      const response = await GetNotificationTemplates(page);
+      setTemplates(response.notificationTemplates);
+      setTotalRecords(response.pageInfo.totalItems);
     } catch (error) {
       console.log("error at get notificattion templates", error);
     } finally {
@@ -30,11 +38,10 @@ const NotificationTemplates = () => {
   };
   useEffect(() => {
     getTemplates();
-  }, []);
+  }, [page]);
 
   const handleDelete = async (id) => {
     try {
-      // qeyd succes gəlir amma silmir
       setLoading(true);
       await DeleteNotificationTemplates(id);
       getTemplates();
@@ -72,8 +79,16 @@ const NotificationTemplates = () => {
           value={templates}
           loading={loading}
           {...tableStaticProps}
-          lazy={false}
-          rows={10}
+          first={page.pageNumber * page.pageSize - page.pageSize}
+          totalRecords={totalRecords}
+          rows={page.pageSize}
+          onPage={(e) => {
+            const newPage = {
+              pageNumber: e.page + 1,
+              pageSize: e.rows,
+            };
+            setPage(newPage);
+          }}
         >
           {/* <Column field="id" header={t("id")} /> */}
           <Column field="titleTemplate" header={t("title")} />

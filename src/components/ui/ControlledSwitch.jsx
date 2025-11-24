@@ -2,14 +2,20 @@ import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { InputSwitch } from "primereact/inputswitch";
 
-const ControlledSwitch = ({ control, name, label, tooltip }) => {
+const ControlledSwitch = ({
+  control,
+  name,
+  label,
+  tooltip,
+  className = "",
+}) => {
   const { t } = useTranslation();
   return (
     <Controller
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <div className="flex flex-col gap-1">
+        <div className={`flex flex-col gap-1 ${className}`}>
           {label && <label className="font-semibold">{label}:</label>}
           <InputSwitch
             tooltip={

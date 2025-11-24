@@ -2,7 +2,7 @@ import CustomerSelectorDialog from "@/pages/Customers/components/CustomerSelecto
 import { Fragment, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const CustomerHandler = ({ error, value, setValue }) => {
+const CustomerHandler = ({ error, value, setValue, trigger }) => {
   const [showCustomers, setShowCustomers] = useState(false);
   const { t } = useTranslation();
   const btnRef = useRef(null);
@@ -39,6 +39,7 @@ const CustomerHandler = ({ error, value, setValue }) => {
         handleSelect={(customers) => {
           const ids = customers.map((c) => c.b2BCustomerId);
           setValue("b2BCustomerIds", ids);
+          trigger?.(["b2BCustomerIds", "b2BCustomerGroupIds"]);
           if (btnRef.current) {
             btnRef.current.focus();
           }

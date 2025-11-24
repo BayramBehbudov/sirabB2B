@@ -7,14 +7,15 @@ import React, { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import CustomerHandler from "./CustomerHandler";
-import IsGlobalHandler from "./IsGlobalHandler";
+import SendToAllCustomersHandler from "./SendToAllCustomersHandler";
 import FilePicker from "@/components/ui/file/FilePicker";
 import FileScrollView from "@/components/ui/file/FileScrollView";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BannerCreate } from "@/api/Banner";
 import { showToast } from "@/providers/ToastProvider";
+import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
 
-const AddBanner = () => {
+const AddBanner = ({ onSuccess }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,8 +24,9 @@ const AddBanner = () => {
     description: "",
     startDate: "",
     endDate: "",
-    isGlobal: false,
+    sendToAllCustomers: false,
     b2BCustomerIds: [],
+    b2BCustomerGroupIds: [],
     bannerImageDtos: [],
   };
   const {
@@ -34,11 +36,12 @@ const AddBanner = () => {
     setValue,
     watch,
     reset,
+    trigger,
   } = useForm({
     resolver: zodResolver(BannerSchema),
     defaultValues,
   });
-  const isGlobal = watch("isGlobal");
+  const sendToAllCustomers = watch("sendToAllCustomers");
   const b2BCustomerIds = watch("b2BCustomerIds");
 
   const { fields, append, remove } = useFieldArray({
@@ -66,6 +69,7 @@ const AddBanner = () => {
         summary: t("success"),
         detail: res?.message || "",
       });
+      onSuccess?.();
       reset(defaultValues);
       setVisible(false);
     } catch (error) {
@@ -112,12 +116,20 @@ const AddBanner = () => {
       >
         <div className="flex flex-col gap-5">
           <div className="flex flex-row gap-2 flex-wrap">
-            <IsGlobalHandler control={control} setValue={setValue} />
-            {!isGlobal && (
+            <SendToAllCustomersHandler control={control} setValue={setValue} />
+            {!sendToAllCustomers && (
+              <CustomerGroupMultiSelector
+                fieldName="b2BCustomerGroupIds"
+                control={control}
+                trigger={trigger}
+              />
+            )}
+            {!sendToAllCustomers && (
               <CustomerHandler
                 error={errors.b2BCustomerIds}
                 value={b2BCustomerIds}
                 setValue={setValue}
+                trigger={trigger}
               />
             )}
 

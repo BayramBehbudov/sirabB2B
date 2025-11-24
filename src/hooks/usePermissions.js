@@ -36,7 +36,6 @@ const usePermissions = (obj) => {
     const [result, setResult] = useState({})
     const [ready, setReady] = useState(false);
     const { permissions } = useUserContext()
-
     // permission interface aşağıdakı kimidir { claimName: string, hasAccess: boolean }[]
     useEffect(() => {
         if (!obj || typeof obj !== "object" || Object.keys(obj).length === 0) return;
@@ -75,3 +74,37 @@ const usePermissions = (obj) => {
 
 export default usePermissions
 
+
+//  Auth: UserId-yə görə permission qrupların siyahısı
+// +  Auth: İstifadəçini permission qrupa əlavə et/sil
+// +  Auth: İstifadəçilər siyahısı
+//  Auth: İstifadəçi məlumatlarına id-yə görə baxmaq
+// +  Auth: İstifadəçini deaktiv/aktiv etmək
+// +  Auth: İstifadəçi yaratmaq
+// +  Auth: İstifadəçi yeniləmə
+// +  Auth: İstifadəçi şifrə yeniləmə
+
+// +  B2BMüştərilər: Müştərilər listi
+//  B2BMüştərilər: Müştəri məlumatı
+// +  B2BMüştərilər: Müştəri aktiv/deaktiv etmə
+// +  B2BMüştərilər: B2BMüştəri yaratma
+// +  B2BMüştərilər: Admin B2BMüştəri məlumatlarını yeniləmə
+// +  B2BMüştərilər: B2BMüştəri şifrə yeniləmə
+// +  B2BMüştərilər: Sirab tərəfindən B2BMüştəri məlumatlarını təsdiqləmə
+
+// +  B2BCustomerGroup: Müştəri qrupu siyahısı
+//  B2BCustomerGroup: Müştəri qrupu məlumatları id-yə görə sorğulama
+// +  B2BCustomerGroup: Müştəri qrupu yaratmaq
+// +  B2BCustomerGroup: Müştəri qrupu düzəliş etmək
+// +  B2BCustomerGroup: Müştəri qrupu silmək
+
+// +  Banner: Banner yaratmaq
+// +  Banner: Bannerlərin siyahısı
+//  Banner: Banner məlumatı İd-yə görə baxmaq
+//  Banner: Banner məlumatına müştəriyə görə baxmaq
+
+//  Inventory: Inventar siyahısı
+//  Inventory: Inventar id-yə görə məlumata baxmaq
+//  Inventory: Inventar yaratmaq
+//  Inventory: Inventar düzəliş etmək
+//  Inventory: Inventar silmək

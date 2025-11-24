@@ -7,6 +7,9 @@ import ControlledCalendar from "@/components/ui/ControlledCalendar";
 import ControlledDropdown from "@/components/ui/ControlledDropdown";
 import FilePicker from "@/components/ui/file/FilePicker";
 import FileScrollView from "@/components/ui/file/FileScrollView";
+import CustomerHandler from "@/pages/Banners/components/CustomerHandler";
+import SendToAllCustomersHandler from "@/pages/Banners/components/SendToAllCustomersHandler";
+import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
 import { showToast } from "@/providers/ToastProvider";
 import { NotificationSchema } from "@/schemas/notification.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,17 +27,23 @@ const AddNotification = ({ onSuccess }) => {
   const [temps, setTemps] = useState([]);
 
   const defaultValues = {
-    notificationTypeId: "",
-    notificationTemplateId: "",
+    notificationTypeId: 0,
+    notificationTemplateId: 0,
     sendDate: "",
     images: [],
+    sendToAllCustomers: false,
+    b2BCustomerGroupIds: [],
+    b2BCustomerIds: [],
   };
-  
+
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
+    trigger,
+    watch,
   } = useForm({
     resolver: zodResolver(NotificationSchema),
     defaultValues,
@@ -45,14 +54,17 @@ const AddNotification = ({ onSuccess }) => {
     name: "images",
     keyName: "fieldId",
   });
+  const sendToAllCustomers = watch("sendToAllCustomers");
+  const b2BCustomerIds = watch("b2BCustomerIds");
 
   const getNotificationsData = async () => {
     try {
       setLoading(true);
-      const resTemps = await GetNotificationTemplates();
-      const resTypes = await GetNotificationTypes();
-      setTemps(resTemps);
-      setTypes(resTypes.data);
+      const page = { pageNumber: 1, pageSize: 1000000 };
+      const resTemps = await GetNotificationTemplates(page);
+      const resTypes = await GetNotificationTypes(page);
+      setTemps(resTemps.notificationTemplates);
+      setTypes(resTypes.notificationTypes);
     } catch (error) {
       console.log("error at getNotificationsData", error);
     } finally {
@@ -61,8 +73,9 @@ const AddNotification = ({ onSuccess }) => {
   };
 
   useEffect(() => {
+    if (!visible) return;
     getNotificationsData();
-  }, []);
+  }, [visible]);
 
   const onSubmit = async (data) => {
     const formatted = {
@@ -77,7 +90,6 @@ const AddNotification = ({ onSuccess }) => {
 
     try {
       setLoading(true);
-      // qeyd create xəta atır
       const res = await CreateNotification(formatted);
       showToast({
         severity: "success",
@@ -130,6 +142,25 @@ const AddNotification = ({ onSuccess }) => {
         }
       >
         <div className={`flex flex-row flex-wrap gap-2 py-[10px]`}>
+          <SendToAllCustomersHandler control={control} setValue={setValue} />
+
+          {!sendToAllCustomers && (
+            <CustomerGroupMultiSelector
+              fieldName="b2BCustomerGroupIds"
+              control={control}
+              trigger={trigger}
+            />
+          )}
+
+          {!sendToAllCustomers && (
+            <CustomerHandler
+              error={errors.b2BCustomerIds}
+              value={b2BCustomerIds}
+              setValue={setValue}
+              trigger={trigger}
+            />
+          )}
+
           <ControlledDropdown
             control={control}
             name="notificationTypeId"
@@ -168,7 +199,6 @@ const AddNotification = ({ onSuccess }) => {
                   fileName: file.name,
                   base64: file.base64,
                   type: file.type,
-                  notificationId: 0,
                 };
               });
               append(formatted);

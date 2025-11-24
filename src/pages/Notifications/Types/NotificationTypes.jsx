@@ -17,11 +17,19 @@ const NotificationTypes = () => {
   const { t } = useTranslation();
   const [types, setTypes] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState({
+    pageNumber: 1,
+    pageSize: 10,
+  });
+  const [totalRecords, setTotalRecords] = useState(0);
+  // qeyd bu səhifə permissionları yazılmayıb
+
   const getTypes = async () => {
     try {
       setLoading(true);
-      const res = await GetNotificationTypes();
-      setTypes(res.data);
+      const res = await GetNotificationTypes(page);
+      setTypes(res.notificationTypes);
+      setTotalRecords(res.pageInfo.totalItems);
     } catch (error) {
     } finally {
       setLoading(false);
@@ -29,8 +37,8 @@ const NotificationTypes = () => {
   };
   useEffect(() => {
     getTypes();
-  }, []);
-  
+  }, [page]);
+
   const handleDelete = async (id) => {
     try {
       setLoading(true);
@@ -53,8 +61,6 @@ const NotificationTypes = () => {
     }
   };
 
-  // qeyd iconFilePath göstərmirik
-  console.log(types)
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between p-2`}>
@@ -70,8 +76,16 @@ const NotificationTypes = () => {
           value={types}
           loading={loading}
           {...tableStaticProps}
-          lazy={false}
-          rows={10}
+          first={page.pageNumber * page.pageSize - page.pageSize}
+          totalRecords={totalRecords}
+          rows={page.pageSize}
+          onPage={(e) => {
+            const newPage = {
+              pageNumber: e.page + 1,
+              pageSize: e.rows,
+            };
+            setPage(newPage);
+          }}
         >
           <Column field="name" header={t("name")} />
           <Column field="soundFileName" header={t("soundFileName")} />

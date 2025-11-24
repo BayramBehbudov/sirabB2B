@@ -52,13 +52,13 @@ const FileScrollView = ({ fields, handleRemove }) => {
   if (!fields || fields.length === 0) return null;
   return (
     <div
-      className="flex flex-nowrap gap-3 overflow-x-auto p-2 border border-gray-200 rounded-md"
+      className="flex flex-nowrap gap-3 overflow-x-auto p-2 border border-gray-200 rounded-md max-w-full"
       style={{ scrollbarWidth: "thin" }}
     >
       {fields.map((field, index) => (
         <div
           key={field.fileName + index}
-          className="relative overflow-hidden flex flex-col items-center border rounded-md justify-between w-[150px]"
+          className="relative overflow-hidden flex flex-col items-center border rounded-md justify-between w-[150px] flex-shrink-0"
         >
           {renderPreview(field)}
 

@@ -2,7 +2,7 @@ import {
   GetPermissionsByGroupId,
   SetPermissionSelected,
 } from "@/api/ClaimGroups";
-import ColumnHeaderWithSearch from "@/components/ui/ColumnHeaderWithSearch";
+import ColumnHeaderWithSearch from "@/components/ui/SearchInput";
 import { SwitchConfirm } from "@/components/ui/dialogs/SwitchConfirm";
 import { tableStaticProps } from "@/components/ui/TableContainer";
 import { showToast } from "@/providers/ToastProvider";

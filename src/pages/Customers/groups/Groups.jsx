@@ -12,11 +12,25 @@ import {
 } from "@/api/B2BCustomerGroup";
 import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 import { showToast } from "@/providers/ToastProvider";
+import usePermissions from "@/hooks/usePermissions";
+import { useNavigate } from "react-router-dom";
 
 const UserGroups = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [groups, setGroups] = useState([]);
+
+  const navigate = useNavigate();
+  const perms = usePermissions({
+    show: "B2BCustomerGroup: Müştəri qrupu siyahısı",
+    create: "B2BCustomerGroup: Müştəri qrupu yaratmaq",
+    update: "B2BCustomerGroup: Müştəri qrupu düzəliş etmək",
+    delete: "B2BCustomerGroup: Müştəri qrupu silmək",
+  });
+
+  const isAllowed = perms.isAllowed("show");
+  const hasAny = perms.hasAny(["update", "delete"]);
+
   const getGroups = async () => {
     try {
       setLoading(true);
@@ -30,9 +44,15 @@ const UserGroups = () => {
       setLoading(false);
     }
   };
+
+  // console.log(perms);
   useEffect(() => {
+    if (!perms.ready) return;
+    if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getGroups();
-  }, []);
+  }, [isAllowed, perms.ready]);
+
+  if (!isAllowed || !perms.ready) return null;
 
   const handleDelete = async (id) => {
     try {
@@ -59,7 +79,7 @@ const UserGroups = () => {
           <p className={`text-2xl font-semibold`}>{t("groups")}</p>
         </div>
         <div className="flex flex-row gap-2">
-          <AddUserGroup onSuccess={getGroups} />
+          {perms.create && <AddUserGroup onSuccess={getGroups} />}
         </div>
       </div>
       <DataTableContainer>
@@ -80,19 +100,25 @@ const UserGroups = () => {
           {["name"].map((f) => {
             return <Column field={f} header={t(f)} />;
           })}
-          <Column
-            exportable={false}
-            header={"#"}
-            alignHeader="center"
-            body={(row) => {
-              return (
-                <div className="flex flex-row gap-2 justify-center">
-                  <AddUserGroup group={row} onSuccess={getGroups} />
-                  <DeleteConfirm onConfirm={() => handleDelete(row.id)} />
-                </div>
-              );
-            }}
-          />
+          {hasAny && (
+            <Column
+              exportable={false}
+              header={"#"}
+              alignHeader="center"
+              body={(row) => {
+                return (
+                  <div className="flex flex-row gap-2 justify-center">
+                    {perms.update && (
+                      <AddUserGroup group={row} onSuccess={getGroups} />
+                    )}
+                    {perms.delete && (
+                      <DeleteConfirm onConfirm={() => handleDelete(row.id)} />
+                    )}
+                  </div>
+                );
+              }}
+            />
+          )}
         </DataTable>
       </DataTableContainer>
     </div>

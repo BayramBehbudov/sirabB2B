@@ -1,8 +1,10 @@
 import { getB2BCustomers } from "@/api/B2BCustomer";
-import ColumnHeaderWithSearch from "@/components/ui/ColumnHeaderWithSearch";
+import ColumnHeaderWithSearch from "@/components/ui/SearchInput";
 import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
+import usePermissions from "@/hooks/usePermissions";
+import NotAllowed from "@/pages/404/NotAllowed";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
@@ -22,6 +24,11 @@ const CustomerSelectorDialog = ({
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [filters, setFilters] = useState({});
   const { t } = useTranslation();
+  const perms = usePermissions({
+    show: "B2BMüştərilər: Müştərilər listi",
+  });
+
+  const isAllowed = perms.isAllowed("show");
   const columns = useMemo(
     () => [
       "companyName",
@@ -56,6 +63,7 @@ const CustomerSelectorDialog = ({
     }
   };
   useEffect(() => {
+    if (!isAllowed) return;
     if (visible) getCustomers();
   }, [visible]);
 
@@ -90,7 +98,6 @@ const CustomerSelectorDialog = ({
       <Button
         label={t("confirm")}
         icon="pi pi-check"
-        disabled={selectedCustomers.length === 0}
         onClick={() => {
           handleSelect(selectedCustomers);
           handleClose();
@@ -114,36 +121,40 @@ const CustomerSelectorDialog = ({
       className="w-[95%]"
       footer={footer}
     >
-      <DataTableContainer>
-        <DataTable
-          loading={loading}
-          value={filteredCustomers}
-          {...tableStaticProps}
-          lazy={false}
-          selection={selectedCustomers}
-          onSelectionChange={(e) => setSelectedCustomers(e.value)}
-        >
-          <Column selectionMode="multiple" headerStyle={{ width: "3rem" }} />
+      {isAllowed ? (
+        <DataTableContainer>
+          <DataTable
+            loading={loading}
+            value={filteredCustomers}
+            {...tableStaticProps}
+            lazy={false}
+            selection={selectedCustomers}
+            onSelectionChange={(e) => setSelectedCustomers(e.value)}
+          >
+            <Column selectionMode="multiple" headerStyle={{ width: "3rem" }} />
 
-          {columns.map((f) => {
-            return (
-              <Column
-                key={f}
-                field={f}
-                header={
-                  <ColumnHeaderWithSearch
-                    label={t(f)}
-                    value={filters[f] || ""}
-                    onChange={(val) =>
-                      setFilters((prev) => ({ ...prev, [f]: val }))
-                    }
-                  />
-                }
-              />
-            );
-          })}
-        </DataTable>
-      </DataTableContainer>
+            {columns.map((f) => {
+              return (
+                <Column
+                  key={f}
+                  field={f}
+                  header={
+                    <ColumnHeaderWithSearch
+                      label={t(f)}
+                      value={filters[f] || ""}
+                      onChange={(val) =>
+                        setFilters((prev) => ({ ...prev, [f]: val }))
+                      }
+                    />
+                  }
+                />
+              );
+            })}
+          </DataTable>
+        </DataTableContainer>
+      ) : (
+        <NotAllowed showBackBtn={false} />
+      )}
     </Dialog>
   );
 };

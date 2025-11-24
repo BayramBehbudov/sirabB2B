@@ -11,7 +11,8 @@ import { DataTable } from "primereact/datatable";
 import { GetAllSystemUsers, SetSystemUserStatus } from "@/api/Auth";
 import EditUserPassword from "./components/EditUserPassword";
 import SetClaimGroupToUser from "./components/SetClaimGroupToUser";
-
+import { useNavigate } from "react-router-dom";
+import usePermissions from "@/hooks/usePermissions";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -22,7 +23,19 @@ const Users = () => {
     pageNumber: 1,
     pageSize: 10,
   });
- 
+
+  const navigate = useNavigate();
+  const perms = usePermissions({
+    show: "Auth: İstifadəçilər siyahısı",
+    create: "Auth: İstifadəçi yaratmaq",
+    update: "Auth: İstifadəçi yeniləmə",
+    permUpdate: "Auth: İstifadəçini permission qrupa əlavə et/sil",
+    passUpdate: "Auth: İstifadəçi şifrə yeniləmə",
+    status: "Auth: İstifadəçini deaktiv/aktiv etmək",
+  });
+
+  const isAllowed = perms.isAllowed("show");
+  const hasAny = perms.hasAny(["permUpdate", "passUpdate", "status", "update"]);
 
   const getUsers = async () => {
     try {
@@ -40,10 +53,6 @@ const Users = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    getUsers();
-  }, [page]);
 
   const handleSetStatus = async (id, status) => {
     try {
@@ -68,6 +77,14 @@ const Users = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!perms.ready) return;
+    if (!isAllowed) return navigate("/not-allowed", { replace: true });
+    getUsers();
+  }, [page, isAllowed, perms.ready]);
+
+  if (!isAllowed || !perms.ready) return null;
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between p-2`}>
@@ -75,7 +92,9 @@ const Users = () => {
           <p className={`text-[1.5rem] font-bold`}>{t("users")}</p>
         </div>
         <div className="flex flex-row gap-2">
-          <AddUser onSuccess={getUsers} />
+          {perms.create && (
+            <AddUser onSuccess={getUsers} disabled={!perms.create} />
+          )}
         </div>
       </div>
       <DataTableContainer>
@@ -104,31 +123,44 @@ const Users = () => {
           {["phoneNumber", "userName"].map((f) => {
             return <Column field={f} header={t(f)} />;
           })}
-          <Column
-            header={"#"}
-            alignHeader="center"
-            body={(data) => {
-              const { isActive, id, userName } = data;
-              return (
-                <div className="flex flex-row gap-3 items-center justify-center">
-                  <SetClaimGroupToUser userId={id} />
-                  <EditUserPassword user={data} onSuccess={getUsers} />
-                  <SwitchConfirm
-                    checked={isActive}
-                    onAccept={() => {
-                      handleSetStatus(id, !isActive);
-                    }}
-                    tooltip={t("activePassive")}
-                    text={
-                      !isActive
-                        ? t("confirmActiveUser", { userName })
-                        : t("confirmDeactiveUser", { userName })
-                    }
-                  />
-                </div>
-              );
-            }}
-          />
+          {hasAny && (
+            <Column
+              header={"#"}
+              alignHeader="center"
+              body={(data) => {
+                const { isActive, id, userName } = data;
+                return (
+                  <div className="flex flex-row gap-3 items-center justify-center">
+                    {perms.update && (
+                      <AddUser
+                        user={data}
+                        onSuccess={getUsers}
+                        disabled={!perms.update}
+                      />
+                    )}
+                    {perms.permUpdate && <SetClaimGroupToUser userId={id} />}
+                    {perms.passUpdate && (
+                      <EditUserPassword user={data} onSuccess={getUsers} />
+                    )}
+                    {perms.status && (
+                      <SwitchConfirm
+                        checked={isActive}
+                        onAccept={() => {
+                          handleSetStatus(id, !isActive);
+                        }}
+                        tooltip={t("activePassive")}
+                        text={
+                          !isActive
+                            ? t("confirmActiveUser", { userName })
+                            : t("confirmDeactiveUser", { userName })
+                        }
+                      />
+                    )}
+                  </div>
+                );
+              }}
+            />
+          )}
         </DataTable>
       </DataTableContainer>
     </div>

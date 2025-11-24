@@ -5,6 +5,7 @@ import routes from "../routes/routes";
 import AuthWrapper from "@/pages/Auth/AuthWrapper";
 import Login from "@/pages/Auth/Login";
 import NotAllowed from "@/pages/404/NotAllowed";
+import AddProduct from "@/pages/Products/Add-update/AddProduct";
 
 const RouteProvider = ({ children }) => {
   return (
@@ -28,6 +29,7 @@ const RouteProvider = ({ children }) => {
             </Fragment>
           ))}
           <Route path="/not-allowed" element={<NotAllowed />} />
+          <Route path="/add-product/:id" element={<AddProduct />} />
         </Route>
       </Routes>
       {children}

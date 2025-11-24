@@ -6,7 +6,7 @@ import { Column } from "primereact/column";
 import { useTranslation } from "react-i18next";
 import { tableStaticProps } from "@/components/ui/TableContainer";
 
-const BannerCustomers = ({ customers = [] }) => {
+const CustomersViewDialog = ({ customers = [] }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   return (
@@ -31,12 +31,20 @@ const BannerCustomers = ({ customers = [] }) => {
           rows={10}
           lazy={false}
         >
-          <Column field="customerId" header={t("customerId")} />
-          <Column field="companyName" header={t("companyName")} />
+          {[
+            "companyName",
+            "contactPersonFirstName",
+            "contactPersonLastName",
+            "email",
+            "taxId",
+            "phoneNumber",
+          ].map((i) => {
+            return <Column field={i} header={t(i)} />;
+          })}
         </DataTable>
       </Dialog>
     </div>
   );
 };
 
-export default BannerCustomers;
+export default CustomersViewDialog;

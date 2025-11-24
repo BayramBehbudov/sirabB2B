@@ -17,6 +17,7 @@ export const CustomerSchema =
 export const PasswordSchema = z.object({
     password: PasswordSchemaControl,
 })
+
 export const EmptySchema = z.object({})
 
 export const UserSchema = z.object({
@@ -25,7 +26,18 @@ export const UserSchema = z.object({
     password: PasswordSchemaControl,
     confirmPassword: PasswordSchemaControl,
     isActive: z.boolean({ error: "errors.required" }).default(true),
+    isWebLogin: z.boolean({ error: "errors.required" }).default(false),
+    isMobileLogin: z.boolean({ error: "errors.required" }).default(false),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "errors.passwordsDoNotMatch",
     path: ["confirmPassword"],
+})
+
+
+export const UserUpdateSchema = z.object({
+    username: RequiredSchemaMin3,
+    phoneNumber: PhoneSchema,
+    isActive: z.boolean({ error: "errors.required" }).default(true),
+    isWebLogin: z.boolean({ error: "errors.required" }).default(false),
+    isMobileLogin: z.boolean({ error: "errors.required" }).default(false),
 })

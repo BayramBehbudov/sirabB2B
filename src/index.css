@@ -142,6 +142,11 @@ button:focus {
   box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
 }
 
+button.no-focus:focus {
+  border-color: transparent;
+  box-shadow: none;
+}
+
 button {
   transition: all 0.2s ease;
 }
@@ -168,4 +173,14 @@ button {
   display: box;
   box-orient: vertical;
   line-clamp: 3;
+}
+
+.no-spinner {
+  -moz-appearance: textfield;
+}
+
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

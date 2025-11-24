@@ -1,7 +1,6 @@
 import { Button } from "primereact/button";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import styles from "./groups.module.css";
 import { useForm } from "react-hook-form";
 import ControlledInput from "@/components/ui/ControlledInput";
 import { Dialog } from "primereact/dialog";
@@ -73,7 +72,7 @@ const AddUserGroup = ({ group = null, onSuccess }) => {
       <Dialog
         header={isEdit ? t("editUserGroupInfo") : t("addUserGroupInfo")}
         visible={visible}
-        className={styles.dialog}
+        className={"max-w-[1100px] min-w-[500px]"}
         onHide={onClose}
         showCloseIcon={false}
         draggable={false}
@@ -81,12 +80,12 @@ const AddUserGroup = ({ group = null, onSuccess }) => {
           <div>
             <Button
               label={t("cancel")}
-              className={styles.saveBtn}
+              className={"!w-[100px]"}
               onClick={onClose}
             />
             <Button
               label={isEdit ? t("edit") : t("save")}
-              className={styles.saveBtn}
+              className={"!w-[100px]"}
               onClick={handleSubmit(onSubmit)}
               disabled={loading}
               loading={loading}
@@ -94,7 +93,7 @@ const AddUserGroup = ({ group = null, onSuccess }) => {
           </div>
         }
       >
-        <div className={styles.form}>
+        <div className={"flex flex-row flex-wrap gap-2 py-[10px]"}>
           {[{ name: "name" }].map((input) => (
             <ControlledInput
               control={control}

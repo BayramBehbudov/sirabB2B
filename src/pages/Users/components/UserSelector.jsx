@@ -1,5 +1,5 @@
 import { GetAllSystemUsers } from "@/api/Auth";
-import ColumnHeaderWithSearch from "@/components/ui/ColumnHeaderWithSearch";
+import ColumnHeaderWithSearch from "@/components/ui/SearchInput";
 import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";

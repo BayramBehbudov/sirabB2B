@@ -9,19 +9,45 @@ import { DataTable } from "primereact/datatable";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BannerPhotos } from "./components/BannerPhotos";
-import BannerCustomers from "./components/BannerCustomers";
+import CustomersViewDialog from "../Customers/components/CustomersViewDialog";
 import AddBanner from "./components/AddBanner";
+import { useNavigate } from "react-router-dom";
+import usePermissions from "@/hooks/usePermissions";
+import TableHeader from "@/components/ui/TableHeader";
 
 const Banners = () => {
   const { t } = useTranslation();
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [filter, setFilter] = useState({
+    pageNumber: 1,
+    pageSize: 10,
+    order: "",
+    orderColumn: "",
+    searchList: [],
+  });
 
-  const getBanners = async () => {
+  // qeyd
+  // labelləri yoxla
+  // sort və search yoxla
+  // müştəriləri düz göstərdiyindən əmin ol bütün müştərilər seçiləndə düz qayıtmı customers
+  
+  
+  const navigate = useNavigate();
+  const perms = usePermissions({
+    show: "Banner: Bannerlərin siyahısı",
+    create: "Banner: Banner yaratmaq",
+  });
+
+  const isAllowed = perms.isAllowed("show");
+
+  const getBanners = async (payload = filter) => {
     try {
       setLoading(true);
-      const res = await GetAllBanners();
-      setBanners(res);
+      const res = await GetAllBanners(payload);
+      setBanners(res.banners);
+      setTotalRecords(res.pageInfo.totalItems);
     } catch (error) {
       showToast({
         severity: "error",
@@ -32,10 +58,14 @@ const Banners = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    getBanners();
-  }, []);
 
+  useEffect(() => {
+    if (!perms.ready) return;
+    if (!isAllowed) return navigate("/not-allowed", { replace: true });
+    getBanners();
+  }, [isAllowed, perms.ready]);
+
+  if (!isAllowed || !perms.ready) return null;
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between p-2`}>
@@ -43,7 +73,7 @@ const Banners = () => {
           <p className={`text-[1.5rem] font-bold`}>{t("banners")}</p>
         </div>
         <div className="flex flex-row gap-2">
-          <AddBanner />
+          {perms.create && <AddBanner onSuccess={() => getBanners()} />}
         </div>
       </div>
       <DataTableContainer>
@@ -51,38 +81,92 @@ const Banners = () => {
           value={banners}
           loading={loading}
           {...tableStaticProps}
-          lazy={false}
-          rows={10}
+          first={filter.pageNumber * filter.pageSize - filter.pageSize}
+          totalRecords={totalRecords}
+          rows={filter.pageSize}
+          onPage={(e) => {
+            const newPage = {
+              pageNumber: e.page + 1,
+              pageSize: e.rows,
+            };
+            setFilter((p) => {
+              const newFilter = { ...p, ...newPage };
+              getBanners(newFilter);
+              return newFilter;
+            });
+          }}
         >
-          <Column field="title" header={t("title")} />
-          <Column field="description" header={t("description")} />
-          <Column
-            field="isGlobal"
+          {[
+            { label: "title", field: "title", type: "text" },
+            { label: "description", field: "description", type: "text" },
+            { label: "startDate", field: "startDate", type: "date" },
+            { label: "endDate", field: "endDate", type: "date" },
+          ].map((c) => (
+            <Column
+              field={c.field}
+              body={(data) => {
+                const v = data[c.field];
+                if (c.type === "date") return formatDate(v);
+                return v;
+              }}
+              header={() => {
+                return (
+                  <TableHeader
+                    type={c.type}
+                    handleSearch={getBanners}
+                    onChange={(v) => {
+                      setFilter((prev) => {
+                        const newFilter = { ...prev };
+                        newFilter.searchList = newFilter.searchList.filter(
+                          (item) => item.colName !== c.field
+                        );
+                        if (v) {
+                          newFilter.searchList.push({
+                            colName: c.field,
+                            value: v,
+                          });
+                        }
+                        return newFilter;
+                      });
+                    }}
+                    label={t(c.label)}
+                    placeholder={t("search")}
+                    value={
+                      filter.searchList.find((item) => item.colName === c.field)
+                        ?.value
+                    }
+                    sort={filter.orderColumn === c.field ? filter.order : ""}
+                    handleSort={(s) => {
+                      setFilter((prev) => {
+                        const newFilter = { ...prev };
+                        newFilter.orderColumn = c.field;
+                        newFilter.order = s;
+                        getBanners(newFilter);
+                        return newFilter;
+                      });
+                    }}
+                  />
+                );
+              }}
+            />
+          ))}
+          {/* <Column
+            field="sendToAllCustomers"
             header={t("type")}
             body={(data) =>
-              data.isGlobal ? t("allCustomers") : t("selectedCustomers")
+              data.sendToAllCustomers
+                ? t("allCustomers")
+                : t("selectedCustomers")
             }
-          />
-          <Column
-            field="startDate"
-            header={t("startDate")}
-            body={(data) => {
-              return formatDate(data.startDate);
-            }}
-          />
-          <Column
-            field="endDate"
-            header={t("endDate")}
-            body={(data) => {
-              return formatDate(data.endDate);
-            }}
-          />
+          /> */}
+
           <Column
             body={(data) => {
               return (
+                // qeyd bu hissənin permissionları yazılmayıb
                 <div className="flex flex-row gap-2">
                   <BannerPhotos images={data.bannerImages} />
-                  <BannerCustomers customers={data.bannerCustomers} />
+                  <CustomersViewDialog customers={data.bannerCustomers} />
                 </div>
               );
             }}

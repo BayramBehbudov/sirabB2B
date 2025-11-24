@@ -9,6 +9,7 @@ const ControlledDropdown = ({
   placeholder,
   showIcon = true,
   options = [], // [{ value: "a", label: "b" }] nümunə, b göstərir a qaytarır
+  className = "",
 }) => {
   const { t } = useTranslation();
 
@@ -20,7 +21,7 @@ const ControlledDropdown = ({
         <div className="flex flex-col gap-1">
           {label && <label className="font-semibold">{label}:</label>}
           <Dropdown
-            style={{ width: "200px" }}
+            style={{ width: "200px", ...(error ? { border: "1px solid #ff0000" } : {} )}}
             options={options}
             placeholder={placeholder || t("select")}
             onChange={(v) => {
@@ -28,6 +29,7 @@ const ControlledDropdown = ({
             }}
             value={field.value}
             showClear={showIcon}
+            className={className}
           />
           {error && <small className="p-error">{t(error.message)}</small>}
         </div>

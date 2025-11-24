@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { getAllCustomerGroup } from "@/api/B2BCustomerGroup";
-import styles from "../customers.module.css";
 
 const CustomerGroupSelector = ({ control }) => {
   const [groups, setGroups] = useState([]);
@@ -33,8 +32,8 @@ const CustomerGroupSelector = ({ control }) => {
       name="customerGroupId"
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <div className={styles.item}>
-          <label className={styles.label}>{t("customerGroup")}</label>
+        <div className={`flex flex-col gap-1 w-[250px]`}>
+          <label className={`font-semibold`}>{t("customerGroup")}</label>
           <Dropdown
             {...field}
             options={groups.map((group) => ({

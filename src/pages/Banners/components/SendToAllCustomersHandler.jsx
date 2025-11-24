@@ -2,12 +2,12 @@ import { Dropdown } from "primereact/dropdown";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const IsGlobalHandler = ({ control, setValue }) => {
+const SendToAllCustomersHandler = ({ control, setValue }) => {
   const { t } = useTranslation();
   return (
     <Controller
       control={control}
-      name={"isGlobal"}
+      name={"sendToAllCustomers"}
       render={({ field, fieldState: { error } }) => {
         return (
           <div className="flex flex-col gap-1">
@@ -18,6 +18,7 @@ const IsGlobalHandler = ({ control, setValue }) => {
                 field.onChange(e.value);
                 if (e.value) {
                   setValue("b2BCustomerIds", []);
+                  setValue("b2BCustomerGroupIds", []);
                 }
               }}
               options={[
@@ -35,4 +36,4 @@ const IsGlobalHandler = ({ control, setValue }) => {
   );
 };
 
-export default IsGlobalHandler;
+export default SendToAllCustomersHandler;

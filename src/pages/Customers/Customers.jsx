@@ -16,7 +16,6 @@ import { showToast } from "@/providers/ToastProvider";
 import AddCustomer from "./components/AddCustomer";
 import usePermissions from "@/hooks/usePermissions";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "@/providers/UserProvider";
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
@@ -26,8 +25,10 @@ const Customers = () => {
     pageNumber: 1,
     pageSize: 10,
   });
-  const navigate = useNavigate();
+
   const { t } = useTranslation();
+
+  const navigate = useNavigate();
   const perms = usePermissions({
     show: "B2BMüştərilər: Müştərilər listi",
     create: "B2BMüştərilər: B2BMüştəri yaratma",
@@ -39,6 +40,7 @@ const Customers = () => {
   });
 
   const isAllowed = perms.isAllowed("show");
+  const hasAny = perms.hasAny(["update", "passUpdate", "confirm", "status"]);
 
   const getCustomers = async () => {
     try {
@@ -147,7 +149,7 @@ const Customers = () => {
           ].map((f) => {
             return <Column field={f} header={t(f)} />;
           })}
-          {Object.values(perms).some((p) => p) && (
+          {hasAny && (
             <Column
               header={"#"}
               alignHeader="center"

@@ -22,6 +22,10 @@ const DeleteConfirm = ({ onConfirm, onCancel, trigger = "icon" }) => {
         className="p-button-danger"
         label={trigger === "label" ? t("delete") : ""}
         severity="danger"
+        tooltip={t("delete")}
+        tooltipOptions={{
+          position: "top",
+        }}
       />
       <ConfirmDialog
         group="declarative"

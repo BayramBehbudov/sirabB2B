@@ -1,8 +1,8 @@
-export function formatDate(isoString) {
-    if (!isoString) return "";
+export function formatDate(dateString) {
+    if (!dateString) return "";
 
-    const date = new Date(isoString);
-    if (isNaN(date)) return isoString; 
+    const date = new Date(dateString);
+    if (isNaN(date)) return dateString;
 
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -12,3 +12,11 @@ export function formatDate(isoString) {
 
     return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
+
+
+
+export const formatDateToBakuTimeZone = (date) => {
+    return date.toLocaleString("sv-SE", {
+        timeZone: "Asia/Baku"
+    }).replace(" ", "T");
+};

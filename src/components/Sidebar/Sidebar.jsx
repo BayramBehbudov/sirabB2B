@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { LogOut } from "@/api/Auth";
 import { showToast } from "@/providers/ToastProvider";
 import { deleteCookie } from "@/helper/Cookie";
+import { Tooltip } from "primereact/tooltip";
 
 const Sidebar = ({ setIsOpen, isOpen }) => {
   const [loading, setLoading] = useState(false);
@@ -53,6 +54,7 @@ const Sidebar = ({ setIsOpen, isOpen }) => {
         isOpen ? "w-70" : "w-14"
       } flex flex-col overflow-y-scroll scrollbar-hidden`}
     >
+      <Tooltip target=".sidebar-tooltip" className="ml-1" />
       <div className="flex h-14 items-center mx-1 gap-4 p-4">
         <button onClick={toggleSidebar} className="h-full focus:!shadow-none">
           <FaBars />
@@ -73,20 +75,17 @@ const Sidebar = ({ setIsOpen, isOpen }) => {
           const isOpenMenu = openMenuId === r.id;
 
           return (
-            <div
-              key={`${r.id}-${r.path}`}
-              className=""
-              title={t(`menu.${r.id}`) || r.label}
-            >
+            <div key={`${r.id}-${r.path}`}>
               <NavLink
                 disabled={loading}
                 to={r.path}
                 onClick={() => handleMainClick(r)}
                 className={({ isActive }) =>
-                  `flex items-center justify-between px-4 mt-1 mx-1 min-h-10 rounded-2xl  text-white hover:bg-[#34495c]  transition-all duration-200 ${
+                  `sidebar-tooltip flex items-center justify-between px-4 mt-1 mx-1 min-h-10 rounded-2xl  text-white hover:bg-[#34495c]  transition-all duration-200 ${
                     isActive ? "bg-[#34495c]" : ""
                   }`
                 }
+                data-pr-tooltip={!isOpen ? t(`menu.${r.id}`) : ""}
               >
                 <div className="flex items-center gap-4 w-full">
                   <div>

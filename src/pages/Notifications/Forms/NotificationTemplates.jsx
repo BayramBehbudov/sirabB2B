@@ -12,6 +12,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 import { showToast } from "@/providers/ToastProvider";
+import usePermissions from "@/hooks/usePermissions";
 
 const NotificationTemplates = () => {
   const { t } = useTranslation();
@@ -22,7 +23,16 @@ const NotificationTemplates = () => {
     pageSize: 10,
   });
   const [totalRecords, setTotalRecords] = useState(0);
-  // qeyd bu səhifə permissionları yazılmayıb
+
+  const perms = usePermissions({
+    show: "Bildiriş şablonu: Bildiriş şablonlarını görmək",
+    create: "Bildiriş şablonu: Bildiriş şablonu yaratmaq",
+    update: "Bildiriş şablonu: Bildiriş şablonu yeniləmək",
+    delete: "Bildiriş şablonu: Bildiriş şablonu silmək",
+  });
+
+  const isAllowed = perms.isAllowed("show");
+  const hasAny = perms.hasAny(["update", "delete"]);
 
   const getTemplates = async () => {
     setLoading(true);
@@ -37,8 +47,10 @@ const NotificationTemplates = () => {
     }
   };
   useEffect(() => {
+    if (!perms.ready) return;
+    if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getTemplates();
-  }, [page]);
+  }, [page, isAllowed, perms.ready]);
 
   const handleDelete = async (id) => {
     try {
@@ -62,6 +74,7 @@ const NotificationTemplates = () => {
     }
   };
 
+  if (!isAllowed || !perms.ready) return null;
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between p-2`}>
@@ -71,7 +84,7 @@ const NotificationTemplates = () => {
           </p>
         </div>
         <div className="flex flex-row gap-2">
-          <AddNotificationTemplate onSuccess={getTemplates} />
+          {perms.create && <AddNotificationTemplate onSuccess={getTemplates} />}
         </div>
       </div>
       <DataTableContainer>
@@ -93,23 +106,29 @@ const NotificationTemplates = () => {
           {/* <Column field="id" header={t("id")} /> */}
           <Column field="titleTemplate" header={t("title")} />
           <Column field="bodyTemplate" header={t("body")} />
-          <Column
-            body={(data) => {
-              return (
-                <div className="flex flex-row gap-2">
-                  <AddNotificationTemplate
-                    defaultValue={data}
-                    onSuccess={getTemplates}
-                  />
-                  <DeleteConfirm
-                    onConfirm={() => {
-                      handleDelete(data.id);
-                    }}
-                  />
-                </div>
-              );
-            }}
-          />
+          {hasAny && (
+            <Column
+              body={(data) => {
+                return (
+                  <div className="flex flex-row gap-2">
+                    {perms.update && (
+                      <AddNotificationTemplate
+                        defaultValue={data}
+                        onSuccess={getTemplates}
+                      />
+                    )}
+                    {perms.delete && (
+                      <DeleteConfirm
+                        onConfirm={() => {
+                          handleDelete(data.id);
+                        }}
+                      />
+                    )}{" "}
+                  </div>
+                );
+              }}
+            />
+          )}
         </DataTable>
       </DataTableContainer>
     </div>

@@ -120,7 +120,7 @@ export const CreateNotification = async (data) => {
     //     0
     //   ],
     //   "sendToAllCustomers": true,
-    
+
     //   "notificationTypeId": 0,
     //   "notificationTemplateId": 0,
     //   "sendDate": "2025-11-11T09:08:11.807Z",
@@ -144,5 +144,47 @@ export const CreateNotification = async (data) => {
     }
 };
 
-// qeyd update delete yazılmayıb
-// qeyd NotificationRecipient yazılmayıb
+
+export const UpdateNotification = async (data) => {
+    // {
+    //     "b2BCustomerGroupIds": [0],
+    //     "b2BCustomerIds": [0],
+    //     "sendDate": "2025-11-25T08:04:01.297Z",
+    //     "notificationTypeId": 0,
+    //     "notificationTemplateId": 0,
+
+    //     "deletedNotificationImageIds": [
+    //       0
+    //     ],
+
+    //     "sendToAllCustomers": true,
+    //     "images": [
+    //       {
+    //         "id": 0,
+    //         "fileName": "string",
+    //         "base64": "string"
+    //       }
+    //     ]
+    //   }
+
+
+    try {
+        const response = await api.put("/Notification/Update", data);
+        return response.data;
+    } catch (error) {
+        console.log('error at UpdateNotification', error);
+        throw error;
+    }
+};
+
+
+export const DeleteNotification = async (id) => {
+    try {
+        const response = await api.put(`Notification/Delete/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log('error at DeleteNotification', error);
+        throw error;
+    }
+};
+

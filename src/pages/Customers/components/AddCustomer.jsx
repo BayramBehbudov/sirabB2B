@@ -21,7 +21,7 @@ const AddCustomer = ({ onSuccess, user, disabled = false }) => {
   const isEdit = !!user;
 
   const defaultValues = {
-    customerGroupId: user?.customerGroupId || null,
+    customerGroupId: user?.customerGroupId || 0,
     erpId: user?.erpId || "",
     taxId: user?.taxId || "",
     phoneNumber: user?.phoneNumber || "",

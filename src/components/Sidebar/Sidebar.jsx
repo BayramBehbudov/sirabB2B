@@ -12,7 +12,7 @@ import { Tooltip } from "primereact/tooltip";
 const Sidebar = ({ setIsOpen, isOpen }) => {
   const [loading, setLoading] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
-  const { setIsLoggedIn } = useUserContext();
+  const { setIsLoggedIn, permissions } = useUserContext();
   const { t } = useTranslation();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -47,6 +47,34 @@ const Sidebar = ({ setIsOpen, isOpen }) => {
   //     setOpenMenuId(null);
   //   }
   // }, [isOpen]);
+  
+  const routesWithPermissions = routes
+    .map((r) => {
+      if (r.permission === "all")
+        return {
+          ...r,
+          children:
+            r.children?.filter((c) => {
+              return permissions.some((p) => {
+                if (c.permission === "all") return true;
+                return p.claimName === c.permission;
+              });
+            }) || [],
+        };
+      else if (permissions.some((p) => p.claimName === r.permission))
+        return {
+          ...r,
+          children:
+            r.children?.filter((c) => {
+              return permissions.some((p) => {
+                if (c.permission === "all") return true;
+                return p.claimName === c.permission;
+              });
+            }) || [],
+        };
+      else return null;
+    })
+    .filter((r) => r !== null);
 
   return (
     <div
@@ -69,7 +97,7 @@ const Sidebar = ({ setIsOpen, isOpen }) => {
       </div>
 
       <nav className="flex-1 border-t">
-        {routes.map((r) => {
+        {routesWithPermissions.map((r) => {
           const Icon = r.icon;
           const hasChildren = r.children && r.children.length > 0;
           const isOpenMenu = openMenuId === r.id;

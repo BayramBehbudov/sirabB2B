@@ -4,7 +4,7 @@ import { Dialog } from "primereact/dialog";
 import { Image } from "primereact/image";
 import { useTranslation } from "react-i18next";
 
-export const BannerPhotos = ({ images = [] }) => {
+export const PhotosViewerDialog = ({ images = [] }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   return (

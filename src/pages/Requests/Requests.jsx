@@ -9,6 +9,8 @@ import { DataTable } from "primereact/datatable";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import RequsetsDocuments from "./components/RequsetsDocuments";
+import { useNavigate } from "react-router-dom";
+import usePermissions from "@/hooks/usePermissions";
 
 const Requests = () => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +24,16 @@ const Requests = () => {
     searchList: [],
   });
   const { t } = useTranslation();
-  // qeyd bu səhifə permissionları yazılmayıb
+
+  const navigate = useNavigate();
+
+  const perms = usePermissions({
+    show: "Müştəri sənədi: Müştəri sənədlərini görmək",
+    confirm: "Müştəri sənədi: Müştəri sənədini təsdiq və ya rədd etmək",
+  });
+
+  const isAllowed = perms.isAllowed("show");
+  const hasAny = perms.hasAny(["confirm"]);
 
   const getRequests = async (payload = filter) => {
     setLoading(true);
@@ -38,8 +49,10 @@ const Requests = () => {
   };
 
   useEffect(() => {
+    if (!perms.ready) return;
+    if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getRequests();
-  }, []);
+  }, [isAllowed, perms.ready]);
 
   // qeyd sort test edilməyib
   return (
@@ -120,19 +133,23 @@ const Requests = () => {
               }}
             />
           ))}
-          <Column
-            header={""}
-            body={(row) => {
-              return (
-                <div className="flex flex-row gap-2">
-                  <RequsetsDocuments
-                    row={row}
-                    onSuccess={() => getRequests()}
-                  />
-                </div>
-              );
-            }}
-          />
+          {hasAny && (
+            <Column
+              header={""}
+              body={(row) => {
+                return (
+                  <div className="flex flex-row gap-2">
+                    {perms.confirm && (
+                      <RequsetsDocuments
+                        row={row}
+                        onSuccess={() => getRequests()}
+                      />
+                    )}
+                  </div>
+                );
+              }}
+            />
+          )}
         </DataTable>
       </DataTableContainer>
     </div>

@@ -105,7 +105,7 @@ export const UpdateProduct = async (data) => {
     //   }
 
     try {
-        const res = await api.post(`Product/UpdateProduct`, data);
+        const res = await api.put(`Product/UpdateProduct`, data);
         return res.data;
     } catch (error) {
         console.log('error at CreateProduct', error);

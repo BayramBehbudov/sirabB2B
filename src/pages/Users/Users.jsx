@@ -93,7 +93,11 @@ const Users = () => {
         </div>
         <div className="flex flex-row gap-2">
           {perms.create && (
-            <AddUser onSuccess={getUsers} disabled={!perms.create} />
+            <AddUser
+              onSuccess={getUsers}
+              disabled={!perms.create}
+              statusDisabled={!perms.status}
+            />
           )}
         </div>
       </div>
@@ -136,6 +140,7 @@ const Users = () => {
                         user={data}
                         onSuccess={getUsers}
                         disabled={!perms.update}
+                        statusDisabled={!perms.status}
                       />
                     )}
                     {perms.permUpdate && <SetClaimGroupToUser userId={id} />}

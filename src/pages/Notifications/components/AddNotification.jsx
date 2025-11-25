@@ -2,6 +2,7 @@ import {
   CreateNotification,
   GetNotificationTemplates,
   GetNotificationTypes,
+  UpdateNotification,
 } from "@/api/Notification";
 import ControlledCalendar from "@/components/ui/ControlledCalendar";
 import ControlledDropdown from "@/components/ui/ControlledDropdown";
@@ -19,21 +20,30 @@ import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const AddNotification = ({ onSuccess }) => {
+const AddNotification = ({ onSuccess, notification, disabled }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [types, setTypes] = useState([]);
   const [temps, setTemps] = useState([]);
-
+  const isEdit = !!notification;
   const defaultValues = {
-    notificationTypeId: 0,
-    notificationTemplateId: 0,
-    sendDate: "",
-    images: [],
-    sendToAllCustomers: false,
     b2BCustomerGroupIds: [],
-    b2BCustomerIds: [],
+    b2BCustomerIds: notification?.recipients?.map((r) => r.b2BCustomerId) || [],
+    sendDate: notification?.sendDate || "",
+
+    notificationTypeId: notification?.notificationTypeId || 0,
+    notificationTemplateId: notification?.notificationTemplateId || 0,
+    images:
+      notification?.images?.map((i) => {
+        return {
+          fileName: i.fileName,
+          base64: i.filePath,
+          type: "image/",
+          id: i.id,
+        };
+      }) || [],
+    sendToAllCustomers: false,
   };
 
   const {
@@ -77,20 +87,37 @@ const AddNotification = ({ onSuccess }) => {
     getNotificationsData();
   }, [visible]);
 
+  useEffect(() => {
+    reset(defaultValues);
+  }, [notification]);
+
   const onSubmit = async (data) => {
     const formatted = {
       ...data,
-      images: data.images.map((image) => {
-        return {
-          ...image,
-          base64: image.base64.split(",")[1],
-        };
-      }),
+      images: data.images
+        .map((image) => {
+          return {
+            ...image,
+            base64: image.base64.split(",")[1],
+          };
+        })
+        .filter((i) => i.id === 0 && i.base64),
     };
+    const deletedNotificationImageIds = isEdit
+      ? notification.images
+          .filter((image) => !data.images.some((i) => i.id === image.id))
+          .map((i) => i.id)
+      : [];
 
     try {
       setLoading(true);
-      const res = await CreateNotification(formatted);
+      const res = isEdit
+        ? await UpdateNotification({
+            ...formatted,
+            id: notification.id,
+            deletedNotificationImageIds,
+          })
+        : await CreateNotification(formatted);
       showToast({
         severity: "success",
         summary: t("success"),
@@ -115,9 +142,12 @@ const AddNotification = ({ onSuccess }) => {
   return (
     <div>
       <Button
-        icon={"pi pi-plus"}
+        tooltip={isEdit ? t("edit") : ""}
+        tooltipOptions={{ position: "top" }}
+        icon={`pi ${isEdit ? "pi-pencil" : "pi-plus"}`}
         onClick={() => setVisible(true)}
-        label={t("add")}
+        label={!isEdit && t("add")}
+        disabled={disabled}
       />
       <Dialog
         header={t("addNotificationInfo")}
@@ -199,6 +229,7 @@ const AddNotification = ({ onSuccess }) => {
                   fileName: file.name,
                   base64: file.base64,
                   type: file.type,
+                  id: 0,
                 };
               });
               append(formatted);

@@ -9,14 +9,8 @@ const UnitController = ({ control, units, formUnits }) => {
   const { t } = useTranslation();
   const {
     fields: selectedUnits,
-    append, //sona element əlavə edir, append(value)
-    remove, // bir elementi silir, remove(2); // 3-cü elementi silir, remove([1, 3]) -birdən çox index silmək    remove() - hamısını silmək
-    insert, //istənilən index-ə əlavə edir,  insert(1, value); Index 1-ə qoyur və digərlərini sağa sürüşdürür.
-    move, // elementi bir yerdən başqa yerə sürüşdürür, move(3, 0); // 4-cü elementi birinci yerə çəkir
-    prepend, //əvvələ element əlavə edir, prepend(value);
-    replace, // bütün array-ı yenisi ilə əvəz edir, replace([value1, value2, value3]);
-    swap, // 2 elementi yerlə dəyişdirir, swap(0, 2);
-    update, //mövcud elementi tam olaraq dəyişmək, update(1, value);
+    append,
+    remove,
   } = useFieldArray({
     control,
     name: "productUnits",
@@ -47,7 +41,6 @@ const UnitController = ({ control, units, formUnits }) => {
                         {...field}
                         onChange={(e) => {
                           const v = e.value;
-
                           if (
                             formUnits.some(
                               (unit) => unit.unitDefinitionId === v
@@ -125,7 +118,7 @@ const UnitController = ({ control, units, formUnits }) => {
                       )}
                       icon="pi pi-plus"
                       onClick={() =>
-                        append({ unitDefinitionId: null, unit: null })
+                        append({ unitDefinitionId: null, unit: null, id: 0 })
                       }
                     />
                   )}

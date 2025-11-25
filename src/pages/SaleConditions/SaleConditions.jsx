@@ -1,24 +1,19 @@
-import { GetAllBanners } from "@/api/Banner";
+import { useTranslation } from "react-i18next";
+import AddSaleCondition from "./components/AddSaleCondition";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import usePermissions from "@/hooks/usePermissions";
 import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
-import { formatDate } from "@/helper/DateFormatter";
-import { showToast } from "@/providers/ToastProvider";
-import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-
-import CustomersViewDialog from "../Customers/components/CustomersViewDialog";
-import AddBanner from "./components/AddBanner";
-import { useNavigate } from "react-router-dom";
-import usePermissions from "@/hooks/usePermissions";
 import TableHeader from "@/components/ui/TableHeader";
-import { PhotosViewerDialog } from "@/components/ui/file/PhotosViewerDialog";
+import { Column } from "primereact/column";
+import { GetAllSaleCondtions } from "@/api/SaleConditions";
 
-const Banners = () => {
+const SaleConditions = () => {
   const { t } = useTranslation();
-  const [banners, setBanners] = useState([]);
+  const [conditions, setConditions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
   const [filter, setFilter] = useState({
@@ -29,29 +24,23 @@ const Banners = () => {
     searchList: [],
   });
 
-  // qeyd sort və search yoxla
-
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "Banner: Bannerlərin siyahısı",
-    create: "Banner: Banner yaratmaq",
-    update: "Banner: Banner yeniləmə",
+    show: "Satış şərti: Satış şərtlərini görmək",
+    create: "Satış şərti: Satış şərti yaratmaq",
+    update: "Satış şərti: Satış şərti yeniləmə",
   });
 
   const isAllowed = perms.isAllowed("show");
-
-  const getBanners = async (payload = filter) => {
+  const getConditions = async (payload = filter) => {
     try {
       setLoading(true);
-      const res = await GetAllBanners(payload);
-      setBanners(res.banners);
-      setTotalRecords(res.pageInfo.totalItems);
+      const res = await GetAllSaleCondtions(payload);
+      console.log(res)
+      // setConditions(res.data);
+      // setTotalRecords(res.totalCount);
     } catch (error) {
-      showToast({
-        severity: "error",
-        summary: t("error"),
-        detail: error?.response?.data?.message || t("unexpectedError"),
-      });
+      console.log("error at getConditions", error);
     } finally {
       setLoading(false);
     }
@@ -60,7 +49,7 @@ const Banners = () => {
   useEffect(() => {
     if (!perms.ready) return;
     if (!isAllowed) return navigate("/not-allowed", { replace: true });
-    getBanners();
+    getConditions();
   }, [isAllowed, perms.ready]);
 
   if (!isAllowed || !perms.ready) return null;
@@ -68,15 +57,17 @@ const Banners = () => {
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between p-2`}>
         <div>
-          <p className={`text-[1.5rem] font-bold`}>{t("banners")}</p>
+          <p className={`text-[1.5rem] font-bold`}>{t("SaleConditions")}</p>
         </div>
         <div className="flex flex-row gap-2">
-          {perms.create && <AddBanner onSuccess={() => getBanners()} />}
+          {perms.create && (
+            <AddSaleCondition onSuccess={() => getConditions()} />
+          )}
         </div>
       </div>
       <DataTableContainer>
         <DataTable
-          value={banners}
+          value={conditions}
           loading={loading}
           {...tableStaticProps}
           first={filter.pageNumber * filter.pageSize - filter.pageSize}
@@ -89,29 +80,24 @@ const Banners = () => {
             };
             setFilter((p) => {
               const newFilter = { ...p, ...newPage };
-              getBanners(newFilter);
+              getConditions(newFilter);
               return newFilter;
             });
           }}
         >
-          {[
-            { label: "title", field: "title", type: "text" },
-            { label: "description", field: "description", type: "text" },
-            { label: "startDate", field: "startDate", type: "date" },
-            { label: "endDate", field: "endDate", type: "date" },
-          ].map((c) => (
+          {[{ label: "title", field: "title", type: "text" }].map((c) => (
             <Column
               field={c.field}
-              body={(data) => {
-                const v = data[c.field];
-                if (c.type === "date") return formatDate(v);
-                return v;
-              }}
+              // body={(data) => {
+              //   const v = data[c.field];
+              //   if (c.type === "date") return formatDate(v);
+              //   return v;
+              // }}
               header={() => {
                 return (
                   <TableHeader
                     type={c.type}
-                    handleSearch={getBanners}
+                    handleSearch={getConditions}
                     onChange={(v) => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
@@ -139,7 +125,7 @@ const Banners = () => {
                         const newFilter = { ...prev };
                         newFilter.orderColumn = c.field;
                         newFilter.order = s;
-                        getBanners(newFilter);
+                        getConditions(newFilter);
                         return newFilter;
                       });
                     }}
@@ -153,15 +139,10 @@ const Banners = () => {
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">
-                  <PhotosViewerDialog images={data.bannerImages} />
-                  <CustomersViewDialog
-                    customers={data.bannerCustomers}
-                    allCustomers={data.sendToAllCustomers}
-                  />
                   {perms.update && (
-                    <AddBanner
-                      onSuccess={() => getBanners()}
-                      banner={data}
+                    <AddSaleCondition
+                      onSuccess={() => getConditions()}
+                      condition={data}
                       disabled={!perms.update}
                     />
                   )}
@@ -175,4 +156,4 @@ const Banners = () => {
   );
 };
 
-export default Banners;
+export default SaleConditions;

@@ -7,7 +7,6 @@ const FileScrollView = ({ fields, handleRemove }) => {
 
   const renderPreview = (field) => {
     const type = field.type || "";
-
     if (type.startsWith("image/")) {
       return (
         <Image

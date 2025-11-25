@@ -6,9 +6,13 @@ import { Column } from "primereact/column";
 import { useTranslation } from "react-i18next";
 import { tableStaticProps } from "@/components/ui/TableContainer";
 
-const CustomersViewDialog = ({ customers = [] }) => {
+const CustomersViewDialog = ({
+  customers = [],
+  allCustomers = false,
+}) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
+  
   return (
     <div>
       <Button
@@ -25,23 +29,27 @@ const CustomersViewDialog = ({ customers = [] }) => {
         onHide={() => setVisible(false)}
         className="min-w-[700px]"
       >
-        <DataTable
-          value={customers}
-          {...tableStaticProps}
-          rows={10}
-          lazy={false}
-        >
-          {[
-            "companyName",
-            "contactPersonFirstName",
-            "contactPersonLastName",
-            "email",
-            "taxId",
-            "phoneNumber",
-          ].map((i) => {
-            return <Column field={i} header={t(i)} />;
-          })}
-        </DataTable>
+        {allCustomers ? (
+          <p className="text-center text-lg font-bold">{t("allCustomers")}</p>
+        ) : (
+          <DataTable
+            value={customers}
+            {...tableStaticProps}
+            rows={10}
+            lazy={false}
+          >
+            {[
+              "companyName",
+              "contactPersonFirstName",
+              "contactPersonLastName",
+              "email",
+              "taxId",
+              "phoneNumber",
+            ].map((i) => {
+              return <Column field={i} header={t(i)} />;
+            })}
+          </DataTable>
+        )}
       </Dialog>
     </div>
   );

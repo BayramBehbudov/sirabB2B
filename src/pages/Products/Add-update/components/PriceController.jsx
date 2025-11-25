@@ -153,6 +153,7 @@ const PriceController = ({ control, formPrices }) => {
                         endDate: "",
                         priority: formPrices.length + 1,
                         isVAT: false,
+                        id: 0,
                       })
                     }
                   />

@@ -36,6 +36,7 @@ const usePermissions = (obj) => {
     const [result, setResult] = useState({})
     const [ready, setReady] = useState(false);
     const { permissions } = useUserContext()
+
     // permission interface aşağıdakı kimidir { claimName: string, hasAccess: boolean }[]
     useEffect(() => {
         if (!obj || typeof obj !== "object" || Object.keys(obj).length === 0) return;
@@ -52,7 +53,7 @@ const usePermissions = (obj) => {
         setReady(true);
 
     }, [permissions])
-
+    
 
     const helpers = useMemo(() => {
         const isAllowed = (key) => !!result[key];
@@ -98,13 +99,69 @@ export default usePermissions
 // +  B2BCustomerGroup: Müştəri qrupu düzəliş etmək
 // +  B2BCustomerGroup: Müştəri qrupu silmək
 
-// +  Banner: Banner yaratmaq
 // +  Banner: Bannerlərin siyahısı
+// +  Banner: Banner yaratmaq
+// +  Banner: Banner yeniləmə
 //  Banner: Banner məlumatı İd-yə görə baxmaq
 //  Banner: Banner məlumatına müştəriyə görə baxmaq
+
+// + Məhsul: Məhsulları görmək
+// + Məhsul: Məhsulu görmək
+// + Məhsul: Məhsul yaratmaq
+// + Məhsul: Məhsul yeniləmə
+
+
+// + Məhsul kateqoriyası: Məhsul kateqoriyaları görmək
+// Məhsul kateqoriyası: Məhsul kateqoriyası görmək
+// + Məhsul kateqoriyası: Məhsul kateqoriyası yaratmaq
+// + Məhsul kateqoriyası: Məhsul kateqoriyası yeniləmə
+// + Məhsul kateqoriyası: Məhsul kateqoriyası silmə
+
+
+// + Vahid: Vahidləri görmək
+// Vahid: Vahidi görmək
+// + Vahid: Vahid yaratma
+// + Vahid: Vahid yeniləmə
+
+
+// + Sənəd növü: Sənəd növlərini görmək
+// Sənəd növü: Sənəd növünü görmək
+// + Sənəd növü: Sənəd növü yaratmaq
+// + Sənəd növü: Sənəd növünü yeniləmək
+// + Sənəd növü: Sənəd növünü silmək
+
+// + Bildiriş: Bildirişləri görmək
+// Bildiriş: Bildirişi görmək
+// + Bildiriş: Bildiriş yaratmaq
+// + Bildiriş: Bildiriş yeniləmək
+// + Bildiriş: Bildiriş silmək
+
+// + Bildiriş tipi: Bildiriş tiplərini görmək
+// Bildiriş tipi: Bildiriş tipini görmək
+// + Bildiriş tipi: Bildiriş tipi yaratmaq
+// + Bildiriş tipi: Bildiriş tipi yeniləmək
+// + Bildiriş tipi: Bildiriş tipi silmək
+
+
+// + Bildiriş şablonu: Bildiriş şablonlarını görmək
+// Bildiriş şablonu: Bildiriş şablonunu görmək
+// + Bildiriş şablonu: Bildiriş şablonu yaratmaq
+// + Bildiriş şablonu: Bildiriş şablonu yeniləmək
+// + Bildiriş şablonu: Bildiriş şablonu silmək
+
+// + Müştəri sənədi: Müştəri sənədlərini görmək
+// Müştəri sənədi: Müştəri sənədini görmək
+// + Müştəri sənədi: Müştəri sənədini təsdiq və ya rədd etmək
+
 
 //  Inventory: Inventar siyahısı
 //  Inventory: Inventar id-yə görə məlumata baxmaq
 //  Inventory: Inventar yaratmaq
 //  Inventory: Inventar düzəliş etmək
 //  Inventory: Inventar silmək
+
+
+// + Satış şərti: Satış şərtlərini görmək
+// Satış şərti: Satış şərti görmək
+// + Satış şərti: Satış şərti yaratmaq
+// + Satış şərti: Satış şərti yeniləmə

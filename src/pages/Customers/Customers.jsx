@@ -26,6 +26,7 @@ const Customers = () => {
     pageSize: 10,
   });
 
+  
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -141,7 +142,7 @@ const Customers = () => {
             "companyName",
             "contactPersonFirstName",
             "contactPersonLastName",
-            "customerGroupId",
+            "custmerGrupName",
             "email",
             "erpId",
             "phoneNumber",

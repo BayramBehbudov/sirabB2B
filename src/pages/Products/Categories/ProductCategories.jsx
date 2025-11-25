@@ -12,12 +12,13 @@ import { showToast } from "@/providers/ToastProvider";
 import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 import ColumnHeaderWithSearch from "@/components/ui/SearchInput";
 import SearchInput from "@/components/ui/SearchInput";
+import { useNavigate } from "react-router-dom";
+import usePermissions from "@/hooks/usePermissions";
 
 const ProductCategories = () => {
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
 
-  // qeyd bu səhifənin permissionları yazılmayıb
   const [loading, setLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
   const [filter, setFilter] = useState({
@@ -27,6 +28,18 @@ const ProductCategories = () => {
     orderColumn: "",
     searchList: [],
   });
+  const navigate = useNavigate();
+
+  const perms = usePermissions({
+    show: "Məhsul kateqoriyası: Məhsul kateqoriyaları görmək",
+    create: "Məhsul kateqoriyası: Məhsul kateqoriyası yaratmaq",
+    update: "Məhsul kateqoriyası: Məhsul kateqoriyası yeniləmə",
+    delete: "Məhsul kateqoriyası: Məhsul kateqoriyası silmə",
+  });
+
+  const isAllowed = perms.isAllowed("show");
+  const hasAny = perms.hasAny(["update", "delete"]);
+
   const getCategories = async (payload = filter) => {
     try {
       setLoading(true);
@@ -66,8 +79,10 @@ const ProductCategories = () => {
   };
 
   useEffect(() => {
+    if (!perms.ready) return;
+    if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getCategories();
-  }, []);
+  }, [isAllowed, perms.ready]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -93,7 +108,7 @@ const ProductCategories = () => {
             handleSearch={getCategories}
             placeholder={t("searchWithName")}
           />
-          <AddProductCategory onSuccess={getCategories} />
+          {perms.create && <AddProductCategory onSuccess={getCategories} />}
         </div>
       </div>
 
@@ -162,25 +177,30 @@ const ProductCategories = () => {
               );
             }}
           />
-          <Column
-            header={"#"}
-            body={(data) => {
-              return (
-                // qeyd bu hissənin permissionları yazılmayıb
-                <div className="flex flex-row gap-2">
-                  <AddProductCategory
-                    category={data}
-                    onSuccess={getCategories}
-                  />
-                  <DeleteConfirm
-                    onConfirm={() => {
-                      handleDelete(data.id);
-                    }}
-                  />
-                </div>
-              );
-            }}
-          />
+          {hasAny && (
+            <Column
+              header={"#"}
+              body={(data) => {
+                return (
+                  <div className="flex flex-row gap-2">
+                    {perms.update && (
+                      <AddProductCategory
+                        category={data}
+                        onSuccess={getCategories}
+                      />
+                    )}
+                    {perms.delete && (
+                      <DeleteConfirm
+                        onConfirm={() => {
+                          handleDelete(data.id);
+                        }}
+                      />
+                    )}
+                  </div>
+                );
+              }}
+            />
+          )}
         </DataTable>
       </DataTableContainer>
     </div>

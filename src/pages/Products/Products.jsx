@@ -3,6 +3,7 @@ import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
 import TableHeader from "@/components/ui/TableHeader";
+import usePermissions from "@/hooks/usePermissions";
 import { showToast } from "@/providers/ToastProvider";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
@@ -14,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 const Products = () => {
   const { t } = useTranslation();
   const [products, setProducts] = useState([]);
-  // qeyd bu səhifənin permissionları yazılmayıb
   const [loading, setLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
   const [filter, setFilter] = useState({
@@ -24,12 +24,22 @@ const Products = () => {
     orderColumn: "",
     searchList: [],
   });
+
   const navigate = useNavigate();
+
+  const perms = usePermissions({
+    show: "Məhsul: Məhsulları görmək",
+    create: "Məhsul: Məhsul yaratmaq",
+    update: "Məhsul: Məhsul yeniləmə",
+  });
+
+  const isAllowed = perms.isAllowed("show");
+  const hasAny = perms.hasAny(["update"]);
+
   const getProducts = async (payload = filter) => {
     try {
       setLoading(true);
       const res = await GetAllProducts(payload);
-      console.log(res);
       setProducts(res.products);
       setTotalRecords(res.pageInfo.totalItems);
     } catch (error) {
@@ -44,8 +54,12 @@ const Products = () => {
   };
 
   useEffect(() => {
+    if (!perms.ready) return;
+    if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getProducts();
-  }, []);
+  }, [isAllowed, perms.ready]);
+
+  if (!isAllowed || !perms.ready) return null;
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between p-2`}>
@@ -53,12 +67,14 @@ const Products = () => {
           <p className={`text-[1.5rem] font-bold`}>{t("products")}</p>
         </div>
         <div className="flex flex-row gap-2">
-          <Button
-            tooltipOptions={{ position: "top" }}
-            icon={`pi pi-plus`}
-            onClick={() => navigate("/add-product/add")}
-            label={t("add")}
-          />
+          {perms.create && (
+            <Button
+              tooltipOptions={{ position: "top" }}
+              icon={`pi pi-plus`}
+              onClick={() => navigate("/add-product/add")}
+              label={t("add")}
+            />
+          )}
         </div>
       </div>
       <DataTableContainer>
@@ -131,22 +147,25 @@ const Products = () => {
             />
           ))}
 
-          <Column
-            header={"#"}
-            body={(data) => {
-              return (
-                // qeyd bu hissənin permissionları yazılmayıb
-                <div className="flex flex-row gap-2">
-                  <Button
-                    tooltip={t("edit")}
-                    tooltipOptions={{ position: "top" }}
-                    icon={`pi pi-pencil`}
-                    onClick={() => navigate(`/add-product/${data.id}`)}
-                  />
-                </div>
-              );
-            }}
-          />
+          {hasAny && (
+            <Column
+              header={"#"}
+              body={(data) => {
+                return (
+                  <div className="flex flex-row gap-2">
+                    {perms.update && (
+                      <Button
+                        tooltip={t("edit")}
+                        tooltipOptions={{ position: "top" }}
+                        icon={`pi pi-pencil`}
+                        onClick={() => navigate(`/add-product/${data.id}`)}
+                      />
+                    )}
+                  </div>
+                );
+              }}
+            />
+          )}
         </DataTable>
       </DataTableContainer>
     </div>

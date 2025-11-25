@@ -10,7 +10,12 @@ import { showToast } from "@/providers/ToastProvider";
 import { CreateUser, UpdateUser } from "@/api/Auth";
 import ControlledSwitch from "@/components/ui/ControlledSwitch";
 
-const AddUser = ({ onSuccess, user, disabled = false }) => {
+const AddUser = ({
+  onSuccess,
+  user,
+  disabled = false,
+  statusDisabled = false,
+}) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -124,9 +129,13 @@ const AddUser = ({ onSuccess, user, disabled = false }) => {
           </div>
           <div className="flex flex-row flex-wrap gap-3 py-2">
             {[
-              { label: "activePassive", name: "isActive" },
-              { label: "webAccess", name: "isWebLogin" },
-              { label: "mobileAccess", name: "isMobileLogin" },
+              {
+                disabled: statusDisabled,
+                label: "activePassive",
+                name: "isActive",
+              },
+              { disabled: false, label: "webAccess", name: "isWebLogin" },
+              { disabled: false, label: "mobileAccess", name: "isMobileLogin" },
             ].map((input) => {
               return (
                 <ControlledSwitch
@@ -135,6 +144,7 @@ const AddUser = ({ onSuccess, user, disabled = false }) => {
                   name={input.name}
                   label={t(input.label)}
                   className="mr-5"
+                  disabled={input.disabled}
                 />
               );
             })}

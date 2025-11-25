@@ -1,4 +1,5 @@
 import z from "zod";
+import { RequiredSchemaId } from "./shared.schema";
 
 export const NotificationImageSchema = z.object({
     fileName: z
@@ -7,6 +8,7 @@ export const NotificationImageSchema = z.object({
     base64: z
         .string({ message: "errors.required" })
         .min(1, { message: "errors.required" }),
+    id: RequiredSchemaId,
 });
 
 export const NotificationSchema =
@@ -14,7 +16,7 @@ export const NotificationSchema =
         notificationTypeId: z.number({ error: "errors.notificationTypeRequired" }).min(1, { error: "errors.notificationTypeRequired" }),
         notificationTemplateId: z.number({ error: "errors.notificationTemplateRequired" }).min(1, { error: "errors.notificationTemplateRequired" }),
         sendDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.sendDateRequired" }),
-        images: z.array(NotificationImageSchema).nonempty({ message: "errors.required" }),
+        images: z.array(NotificationImageSchema),
         b2BCustomerIds: z
             .array(z.number({ message: "errors.customerOrGroupRequired" })),
         b2BCustomerGroupIds: z

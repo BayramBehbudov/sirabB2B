@@ -3,6 +3,7 @@ import {
   GetAllProductCategories,
   GetAllUnitDefinition,
   GetProductById,
+  UpdateProduct,
 } from "@/api/Products";
 import ControlledDropdown from "@/components/ui/ControlledDropdown";
 import ControlledInput from "@/components/ui/ControlledInput";
@@ -18,16 +19,32 @@ import UnitController from "./components/UnitController";
 import FullScreenLoader from "@/components/ui/FullScreenLoader";
 import PriceController from "./components/PriceController";
 import ImageControllerForProduct from "./components/ImageControllerForProduct";
+import usePermissions from "@/hooks/usePermissions";
 
 const AddProduct = () => {
+  const { id } = useParams();
   const [units, setUnits] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
-  const { id } = useParams();
+  const [editedProduct, setEditedProduct] = useState(null);
   const navigate = useNavigate();
-
   const isEdit = id && /^[1-9]\d*$/.test(id);
+
+  const perms = usePermissions({
+    showAll: "Məhsul: Məhsulları görmək",
+    show: "Məhsul: Məhsulu görmək",
+    create: "Məhsul: Məhsul yaratmaq",
+    update: "Məhsul: Məhsul yeniləmə",
+    showCats: "Məhsul kateqoriyası: Məhsul kateqoriyaları görmək",
+    showUnits: "Vahid: Vahidləri görmək",
+  });
+
+  const hasShow = perms.isAllowed("show");
+  const hasShowAll = perms.isAllowed("showAll");
+  const hasUpdate = perms.isAllowed("update");
+  const hasShowDependencies = perms.hasAll(["showCats", "showUnits"]);
+  const hasOperations = perms.hasAny(["create", "update"]);
 
   const defaultValues = {
     erpId: "",
@@ -38,6 +55,7 @@ const AddProduct = () => {
       {
         unitDefinitionId: null,
         unit: null,
+        id: 0,
       },
     ],
     productPrices: [
@@ -47,6 +65,7 @@ const AddProduct = () => {
         endDate: "",
         priority: 1,
         isVAT: false,
+        id: 0,
       },
     ],
     productImages: [],
@@ -62,21 +81,67 @@ const AddProduct = () => {
     defaultValues,
   });
 
-  const getAllUnitsAndCategories = async () => {
+  const getProduct = async () => {
+    try {
+      const res = await GetProductById(id);
+      const productData = {
+        ...res.data,
+        productUnits: res.data.productUnits.map((unit) => {
+          return {
+            id: unit.productUnitId,
+            unitDefinitionId: unit.unitDefinitionId,
+            unit: unit.unit,
+          };
+        }),
+        productPrices: res.data.productPrices.map((price) => {
+          return {
+            id: price.priceId,
+            isVAT: price.isVAT,
+            price: price.price,
+            priority: price.priority,
+            startDate: price.startDate,
+            endDate: price.endDate,
+          };
+        }),
+        productImages: res.data.productImages.map((image) => {
+          return {
+            fileName: image.fileName,
+            base64: image.filePath,
+            type: "image/",
+            id: image.productImageId,
+          };
+        }),
+      };
+      setEditedProduct(productData);
+      reset(productData);
+    } catch (error) {
+      showToast({
+        severity: "error",
+        summary: t("error"),
+        detail: t("productNotFound"),
+      });
+
+      navigate("/page-not-found");
+    }
+  };
+  const loadInitialData = async () => {
     try {
       setLoading(true);
-      const [res1, res2] = await Promise.all([
-        GetAllProductCategories({
-          pageNumber: 1,
-          pageSize: 10000000,
-          order: "",
-          orderColumn: "",
-          searchList: [],
-        }),
-        GetAllUnitDefinition(),
-      ]);
+      const res1 = await GetAllProductCategories({
+        pageNumber: 1,
+        pageSize: 1000000000,
+        order: "",
+        orderColumn: "",
+        searchList: [],
+      });
       setCategories(res1.productCategories);
+      const res2 = await GetAllUnitDefinition();
       setUnits(res2.data);
+
+      if (!isEdit) return;
+      if (!hasUpdate || !hasShow)
+        return navigate("/not-allowed", { replace: true });
+      getProduct();
     } catch (error) {
       console.log("error at getAllUnitsAndCategories", error);
     } finally {
@@ -85,29 +150,19 @@ const AddProduct = () => {
   };
 
   useEffect(() => {
-    getAllUnitsAndCategories();
-  }, []);
+    if (!perms.ready) return;
+    if (!hasShowDependencies || !hasOperations || !hasShowAll)
+      return navigate("/not-allowed", { replace: true });
+    loadInitialData();
+  }, [perms.ready]);
 
-  const getProduct = async () => {
-    try {
-      const res = await GetProductById(id);
-      console.log(res);
-    } catch (error) {
-      console.log("error at getProduct", error);
-    }
-  };
-  useEffect(() => {
-    if (!isEdit) return;
-    getProduct();
-  }, [id]);
-
-  const onSubmit = async (formData) => {
+  const onCreate = async (formData) => {
     try {
       const formatted = {
         ...formData,
         productImages: formData.productImages.map((image) => {
           return {
-            fileName: image.fileName,
+            ...image,
             base64: image.base64.split(",")[1],
           };
         }),
@@ -128,6 +183,69 @@ const AddProduct = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+  const onUpdate = async (formData) => {
+    try {
+      const formattedImages = formData.productImages
+        .map((image) => {
+          return {
+            ...image,
+            base64: image.base64.split(",")[1],
+          };
+        })
+        .filter((image) => image.id === 0);
+      const deletedProductImageIds = editedProduct.productImages
+        .filter(
+          (image) =>
+            !formData.productImages.some((fImage) => fImage.id === image.id)
+        )
+        .map((image) => image.id);
+
+      const deletedProductPriceIds = editedProduct.productPrices
+        .filter(
+          (price) =>
+            !formData.productPrices.some((fPrice) => fPrice.id === price.id)
+        )
+        .map((price) => price.id);
+      const deletedProductUnitIds = editedProduct.productUnits
+        .filter(
+          (unit) => !formData.productUnits.some((fUnit) => fUnit.id === unit.id)
+        )
+        .map((unit) => unit.id);
+
+      setLoading(true);
+      const formattedValue = {
+        ...formData,
+        productImages: formattedImages,
+        deletedProductImageIds,
+        deletedProductPriceIds,
+        deletedProductUnitIds,
+        id,
+      };
+      const res = await UpdateProduct(formattedValue);
+      showToast({
+        severity: "success",
+        summary: t("success"),
+        detail: res?.message || "",
+      });
+    } catch (error) {
+      console.log("error at onUpdate", error);
+      showToast({
+        severity: "error",
+        summary: t("error"),
+        detail: error?.response?.data?.message || t("unexpectedError"),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = (formValue) => {
+    if (isEdit) {
+      onUpdate(formValue);
+    } else {
+      onCreate(formValue);
     }
   };
 
@@ -194,7 +312,11 @@ const AddProduct = () => {
         formUnits={watch("productUnits")}
       />
       <PriceController control={control} formPrices={watch("productPrices")} />
-      <ImageControllerForProduct control={control} errors={errors} />
+      <ImageControllerForProduct
+        control={control}
+        errors={errors}
+        isEdit={isEdit}
+      />
 
       <div className={`flex items-center justify-end mt-10 `}>
         <Button

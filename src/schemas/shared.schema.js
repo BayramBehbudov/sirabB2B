@@ -28,3 +28,4 @@ export const RequiredSchemaMin1 = z.string({ error: "errors.required" }).nonempt
 
 export const RequiredSchemaIntNumber = z.number({ error: "errors.required" }).nonnegative({ error: "errors.invalidNumber" }).int({ error: "errors.invalidNumber" }).min(1, { error: 'errors.required' })
 export const RequiredSchemaNumber = z.number({ error: "errors.required" }).nonnegative({ error: "errors.invalidNumber" }).min(0.01, { error: 'errors.required' })
+export const RequiredSchemaId = z.number({ error: "errors.required" }).nonnegative({ error: "errors.invalidNumber" }).min(0, { error: 'errors.required' })

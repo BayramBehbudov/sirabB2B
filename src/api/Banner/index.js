@@ -43,7 +43,6 @@ export const BannerCreate = async (data) => {
     //     {
     //       "fileName": "string",
     //       "base64": "string",
-    //       "bannerId": 0
     //     }
     //   ]
     // }
@@ -54,6 +53,40 @@ export const BannerCreate = async (data) => {
         return response.data;
     } catch (error) {
         console.log('error at BannerCreate', error);
+        throw error;
+    }
+};
+
+
+
+export const BannerUpdate = async (data) => {
+    // {
+    //     "id": 0,
+    //     "title": "string",
+    //     "description": "string",
+    //     "sendToAllCustomers": true,
+    //     "startDate": "2025-11-25T09:19:49.160Z",
+    //     "endDate": "2025-11-25T09:19:49.160Z",
+    //     "b2BCustomerIds": [0],
+    //     "customerGroupIds": [0],
+    //     "bannerImageDtos": [
+    //       {
+    //         "id": 0,
+    //         "fileName": "string",
+    //         "base64": "string"
+    //       }
+    //     ]
+    //     "deletedBannerImageIds": [
+    //       0
+    //     ]
+    //   }
+
+
+    try {
+        const response = await api.put("/Banner/Update", data);
+        return response.data;
+    } catch (error) {
+        console.log('error at BannerUpdate', error);
         throw error;
     }
 };

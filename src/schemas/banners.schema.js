@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { RequiredSchemaId } from "./shared.schema";
 
 export const BannerImageSchema = z.object({
     fileName: z
@@ -7,7 +8,7 @@ export const BannerImageSchema = z.object({
     base64: z
         .string({ message: "errors.required" })
         .min(1, { message: "errors.required" }),
-    bannerId: z.number({ message: "errors.required" }),
+    id: RequiredSchemaId,
 });
 
 export const BannerSchema = z.object({

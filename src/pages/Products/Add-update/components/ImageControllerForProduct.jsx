@@ -3,7 +3,7 @@ import FileScrollView from "@/components/ui/file/FileScrollView";
 import { useFieldArray } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const ImageControllerForProduct = ({ control, errors }) => {
+const ImageControllerForProduct = ({ control, errors, isEdit = false }) => {
   const { t } = useTranslation();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -20,6 +20,7 @@ const ImageControllerForProduct = ({ control, errors }) => {
               fileName: file.name,
               base64: file.base64,
               type: file.type,
+              id: 0,
             };
           });
           append(formatted);

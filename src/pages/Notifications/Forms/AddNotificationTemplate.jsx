@@ -75,7 +75,7 @@ const AddNotificationTemplate = ({ onSuccess, defaultValue }) => {
       <Dialog
         header={t("addNotificationInfo")}
         visible={visible}
-        className={`max-w-[1100px]`}
+        className={`max-w-[1100px] min-w-[800px]`}
         onHide={onClose}
         footer={
           <div>
@@ -94,21 +94,37 @@ const AddNotificationTemplate = ({ onSuccess, defaultValue }) => {
           </div>
         }
       >
-        <div className={`flex flex-row flex-wrap gap-2 py-[10px]`}>
-          {[
-            { name: "titleTemplate", label: "title" },
-            { name: "bodyTemplate", label: "body" },
-          ].map((input) => (
-            <ControlledInput
-              control={control}
-              key={input.name}
-              name={input.name}
-              placeholder={t(input.label)}
-              label={t(input.label)}
-              type={input.type || "text"}
-              className={"w-[250px]"}
-            />
-          ))}
+        <div className="flex flex-col">
+          <div className={`flex flex-row flex-wrap gap-2 py-[10px] `}>
+            {[{ name: "titleTemplate", type: "text", label: "title" }].map(
+              (input) => (
+                <ControlledInput
+                  control={control}
+                  key={input.name}
+                  name={input.name}
+                  placeholder={t(input.label)}
+                  label={t(input.label)}
+                  type={input.type || "text"}
+                  className={"w-[250px]"}
+                />
+              )
+            )}
+          </div>
+          <div className={`flex flex-row flex-wrap gap-2 py-[10px] `}>
+            {[{ name: "bodyTemplate", type: "textarea", label: "body" }].map(
+              (input) => (
+                <ControlledInput
+                  control={control}
+                  key={input.name}
+                  name={input.name}
+                  placeholder={t(input.label)}
+                  label={t(input.label)}
+                  type={input.type || "text"}
+                  classNameContainer="grow"
+                />
+              )
+            )}
+          </div>
         </div>
       </Dialog>
     </div>

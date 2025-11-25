@@ -1,5 +1,5 @@
 import z from "zod";
-import { RequiredSchemaIntNumber, RequiredSchemaMin1, RequiredSchemaMin2, RequiredSchemaMin3, RequiredSchemaNumber } from "./shared.schema";
+import { RequiredSchemaId, RequiredSchemaIntNumber, RequiredSchemaMin1, RequiredSchemaMin2, RequiredSchemaMin3, RequiredSchemaNumber } from "./shared.schema";
 
 export const ProductCategorySchema = z.object({
     name: z.string({ error: "errors.nameRequired" }).nonempty({ error: "errors.nameRequired" }),
@@ -19,6 +19,7 @@ export const UnitSchema = z.object({
 export const ProductUnitSchema = z.object({
     unitDefinitionId: RequiredSchemaNumber,
     unit: RequiredSchemaNumber,
+    id: RequiredSchemaId,
 });
 
 export const ProductPriceSchema = z.object({
@@ -27,6 +28,7 @@ export const ProductPriceSchema = z.object({
     endDate: RequiredSchemaMin1,
     priority: RequiredSchemaIntNumber,
     isVAT: z.boolean(),
+    id: RequiredSchemaId,
 });
 export const ProductImageSchema = z.object({
     fileName: z
@@ -35,6 +37,7 @@ export const ProductImageSchema = z.object({
     base64: z
         .string({ message: "errors.required" })
         .min(1, { message: "errors.required" }),
+    id: RequiredSchemaId,
 });
 
 

@@ -12,6 +12,8 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 import { showToast } from "@/providers/ToastProvider";
+import { useNavigate } from "react-router-dom";
+import usePermissions from "@/hooks/usePermissions";
 
 const NotificationTypes = () => {
   const { t } = useTranslation();
@@ -22,7 +24,18 @@ const NotificationTypes = () => {
     pageSize: 10,
   });
   const [totalRecords, setTotalRecords] = useState(0);
-  // qeyd bu səhifə permissionları yazılmayıb
+
+  const navigate = useNavigate();
+
+  const perms = usePermissions({
+    show: "Bildiriş tipi: Bildiriş tiplərini görmək",
+    create: "Bildiriş tipi: Bildiriş tipi yaratmaq",
+    update: "Bildiriş tipi: Bildiriş tipi yeniləmək",
+    delete: "Bildiriş tipi: Bildiriş tipi silmək",
+  });
+
+  const isAllowed = perms.isAllowed("show");
+  const hasAny = perms.hasAny(["update", "delete"]);
 
   const getTypes = async () => {
     try {
@@ -36,8 +49,10 @@ const NotificationTypes = () => {
     }
   };
   useEffect(() => {
+    if (!perms.ready) return;
+    if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getTypes();
-  }, [page]);
+  }, [page, isAllowed, perms.ready]);
 
   const handleDelete = async (id) => {
     try {
@@ -61,6 +76,7 @@ const NotificationTypes = () => {
     }
   };
 
+  if (!isAllowed || !perms.ready) return null;
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between p-2`}>
@@ -68,7 +84,7 @@ const NotificationTypes = () => {
           <p className={`text-[1.5rem] font-bold`}>{t("notificationTypes")}</p>
         </div>
         <div className="flex flex-row gap-2">
-          <AddNotificationType onSuccess={getTypes} />
+          {perms.create && <AddNotificationType onSuccess={getTypes} />}
         </div>
       </div>
       <DataTableContainer>
@@ -89,23 +105,29 @@ const NotificationTypes = () => {
         >
           <Column field="name" header={t("name")} />
           <Column field="soundFileName" header={t("soundFileName")} />
-          <Column
-            body={(data) => {
-              return (
-                <div className="flex flex-row gap-2">
-                  <AddNotificationType
-                    defaultValue={data}
-                    onSuccess={getTypes}
-                  />
-                  <DeleteConfirm
-                    onConfirm={() => {
-                      handleDelete(data.id);
-                    }}
-                  />
-                </div>
-              );
-            }}
-          />
+          {hasAny && (
+            <Column
+              body={(data) => {
+                return (
+                  <div className="flex flex-row gap-2">
+                    {perms.update && (
+                      <AddNotificationType
+                        defaultValue={data}
+                        onSuccess={getTypes}
+                      />
+                    )}
+                    {perms.delete && (
+                      <DeleteConfirm
+                        onConfirm={() => {
+                          handleDelete(data.id);
+                        }}
+                      />
+                    )}
+                  </div>
+                );
+              }}
+            />
+          )}
         </DataTable>
       </DataTableContainer>
     </div>

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import AddNotification from "./components/AddNotification";
 import { useEffect, useState } from "react";
-import { GetAllNotifications } from "@/api/Notification";
+import { DeleteNotification, GetAllNotifications } from "@/api/Notification";
 import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
@@ -9,6 +9,11 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { formatDate } from "@/helper/DateFormatter";
 import CustomersViewDialog from "../Customers/components/CustomersViewDialog";
+import { useNavigate } from "react-router-dom";
+import usePermissions from "@/hooks/usePermissions";
+import { PhotosViewerDialog } from "@/components/ui/file/PhotosViewerDialog";
+import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
+import { showToast } from "@/providers/ToastProvider";
 
 const notificationStatuses = {
   0: "Pending",
@@ -25,8 +30,17 @@ const Notifications = () => {
     pageSize: 10,
   });
   const [totalRecords, setTotalRecords] = useState(0);
-  // qeyd bu səhifə permissionları yazılmayıb
-//  bildirişin şəkilləri göstərmirik
+  const navigate = useNavigate();
+
+  const perms = usePermissions({
+    show: "Bildiriş: Bildirişləri görmək",
+    create: "Bildiriş: Bildiriş yaratmaq",
+    update: "Bildiriş: Bildiriş yeniləmək",
+    delete: "Bildiriş: Bildiriş silmək",
+  });
+
+  const isAllowed = perms.isAllowed("show");
+
   const getNotifications = async () => {
     try {
       setLoading(true);
@@ -40,10 +54,34 @@ const Notifications = () => {
     }
   };
 
-  useEffect(() => {
-    getNotifications();
-  }, [page]);
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
+      const res = await DeleteNotification(id);
+      await getNotifications();
+      showToast({
+        severity: "success",
+        summary: t("success"),
+        detail: res?.message || "",
+      });
+    } catch (error) {
+      showToast({
+        severity: "error",
+        summary: t("error"),
+        detail: error?.response?.data?.message || t("unexpectedError"),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    if (!perms.ready) return;
+    if (!isAllowed) return navigate("/not-allowed", { replace: true });
+    getNotifications();
+  }, [page, isAllowed, perms.ready]);
+
+  if (!isAllowed || !perms.ready) return null;
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between p-2`}>
@@ -51,7 +89,7 @@ const Notifications = () => {
           <p className={`text-[1.5rem] font-bold`}>{t("notifications")}</p>
         </div>
         <div className="flex flex-row gap-2">
-          <AddNotification onSuccess={getNotifications} />
+          {perms.create && <AddNotification onSuccess={getNotifications} />}
         </div>
       </div>
       <DataTableContainer>
@@ -97,7 +135,22 @@ const Notifications = () => {
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">
+                  <PhotosViewerDialog images={data.images} />
                   <CustomersViewDialog customers={data.recipients} />
+                  {perms.update && (
+                    <AddNotification
+                      onSuccess={getNotifications}
+                      disabled={!perms.update}
+                      notification={data}
+                    />
+                  )}
+                  {perms.delete && (
+                    <DeleteConfirm
+                      onConfirm={() => {
+                        handleDelete(data.id);
+                      }}
+                    />
+                  )}
                 </div>
               );
             }}

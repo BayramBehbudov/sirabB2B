@@ -3,7 +3,7 @@ import ControlledInput from "@/components/ui/ControlledInput";
 import { BannerSchema } from "@/schemas/banners.schema";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import CustomerHandler from "./CustomerHandler";
@@ -11,24 +11,34 @@ import SendToAllCustomersHandler from "./SendToAllCustomersHandler";
 import FilePicker from "@/components/ui/file/FilePicker";
 import FileScrollView from "@/components/ui/file/FileScrollView";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BannerCreate } from "@/api/Banner";
+import { BannerCreate, BannerUpdate } from "@/api/Banner";
 import { showToast } from "@/providers/ToastProvider";
 import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
 
-const AddBanner = ({ onSuccess }) => {
+const AddBanner = ({ onSuccess, banner, disabled }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const isEdit = !!banner;
   const defaultValues = {
-    title: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    sendToAllCustomers: false,
-    b2BCustomerIds: [],
+    title: banner?.title || "",
+    description: banner?.description || "",
+    sendToAllCustomers: banner?.sendToAllCustomers || false,
+    startDate: banner?.startDate || "",
+    endDate: banner?.endDate || "",
+    b2BCustomerIds: banner?.bannerCustomers?.map((c) => c.customerId) || [],
     b2BCustomerGroupIds: [],
-    bannerImageDtos: [],
+    bannerImageDtos:
+      banner?.bannerImages?.map((i) => {
+        return {
+          fileName: i.fileName,
+          base64: i.filePath,
+          type: "image/",
+          id: i.id,
+        };
+      }) || [],
   };
+
   const {
     handleSubmit,
     formState: { errors },
@@ -50,20 +60,39 @@ const AddBanner = ({ onSuccess }) => {
     keyName: "fieldId",
   });
 
+  useEffect(() => {
+    reset(defaultValues);
+  }, [banner]);
+
   const onSubmit = async (formData) => {
     setLoading(true);
+
     try {
+      const images = formData.bannerImageDtos
+        .map((image) => {
+          return {
+            ...image,
+            base64: image.base64.split(",")[1],
+          };
+        })
+        .filter((i) => i.id === 0 && i.base64);
+      const deletedBannerImageIds =
+        isEdit && banner
+          ? banner.bannerImages
+              .filter(
+                (image) =>
+                  !formData.bannerImageDtos.some((i) => i.id === image.id)
+              )
+              .map((i) => i.id)
+          : undefined;
       const formattedDATA = {
         ...formData,
-        bannerImageDtos: formData.bannerImageDtos.map((image) => {
-          return {
-            fileName: image.fileName,
-            base64: image.base64.split(",")[1],
-            bannerId: 0,
-          };
-        }),
+        bannerImageDtos: images,
+        ...(isEdit ? { id: banner.id, deletedBannerImageIds } : {}),
       };
-      const res = await BannerCreate(formattedDATA);
+      const res = isEdit
+        ? await BannerUpdate(formattedDATA)
+        : await BannerCreate(formattedDATA);
       showToast({
         severity: "success",
         summary: t("success"),
@@ -82,26 +111,31 @@ const AddBanner = ({ onSuccess }) => {
       setLoading(false);
     }
   };
+  const onClose = () => {
+    setVisible(false);
+    reset(defaultValues);
+  };
 
   return (
     <div>
       <Button
-        tooltip={""}
+        tooltip={isEdit ? t("edit") : ""}
         tooltipOptions={{ position: "top" }}
-        icon={`pi ${"pi-plus"}`}
+        icon={`pi ${isEdit ? "pi-pencil" : "pi-plus"}`}
         onClick={() => setVisible(true)}
-        label={t("add")}
+        label={!isEdit && t("add")}
+        disabled={disabled}
       />
       <Dialog
         header={t("addBannerInfo")}
         visible={visible}
-        onHide={() => setVisible(false)}
+        onHide={onClose}
         className="max-w-[90%] min-w-[90%] min-h-[70%]"
         footer={
           <div>
             <Button
               label={t("cancel")}
-              onClick={() => setVisible(false)}
+              onClick={onClose}
               className="mr-2"
               disabled={loading}
             />
@@ -162,7 +196,7 @@ const AddBanner = ({ onSuccess }) => {
                     fileName: file.name,
                     base64: file.base64,
                     type: file.type,
-                    bannerId: 0,
+                    id: 0,
                   };
                 });
                 append(formatted);

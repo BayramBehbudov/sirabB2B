@@ -53,7 +53,7 @@ const usePermissions = (obj) => {
         setReady(true);
 
     }, [permissions])
-    
+
 
     const helpers = useMemo(() => {
         const isAllowed = (key) => !!result[key];
@@ -105,53 +105,20 @@ export default usePermissions
 //  Banner: Banner məlumatı İd-yə görə baxmaq
 //  Banner: Banner məlumatına müştəriyə görə baxmaq
 
-// + Məhsul: Məhsulları görmək
-// + Məhsul: Məhsulu görmək
-// + Məhsul: Məhsul yaratmaq
-// + Məhsul: Məhsul yeniləmə
+// + Müştəri sənədi: Müştəri sənədlərini görmək
+// Müştəri sənədi: Müştəri sənədini görmək
+// + Müştəri sənədi: Müştəri sənədini təsdiq və ya rədd etmək
 
-
-// + Məhsul kateqoriyası: Məhsul kateqoriyaları görmək
-// Məhsul kateqoriyası: Məhsul kateqoriyası görmək
-// + Məhsul kateqoriyası: Məhsul kateqoriyası yaratmaq
-// + Məhsul kateqoriyası: Məhsul kateqoriyası yeniləmə
-// + Məhsul kateqoriyası: Məhsul kateqoriyası silmə
-
-
-// + Vahid: Vahidləri görmək
-// Vahid: Vahidi görmək
-// + Vahid: Vahid yaratma
-// + Vahid: Vahid yeniləmə
-
+// Endirim şərti: Endirim şərtlərini görmək
+// Endirim şərti: Endirim şərtini görmək
+// Endirim şərti: Endirim şərti yaratmaq
+// Endirim şərti: Endirim şərtlərini yeniləmək
 
 // + Sənəd növü: Sənəd növlərini görmək
 // Sənəd növü: Sənəd növünü görmək
 // + Sənəd növü: Sənəd növü yaratmaq
 // + Sənəd növü: Sənəd növünü yeniləmək
 // + Sənəd növü: Sənəd növünü silmək
-
-// + Bildiriş: Bildirişləri görmək
-// Bildiriş: Bildirişi görmək
-// + Bildiriş: Bildiriş yaratmaq
-// + Bildiriş: Bildiriş yeniləmək
-// + Bildiriş: Bildiriş silmək
-
-// + Bildiriş tipi: Bildiriş tiplərini görmək
-// Bildiriş tipi: Bildiriş tipini görmək
-// + Bildiriş tipi: Bildiriş tipi yaratmaq
-// + Bildiriş tipi: Bildiriş tipi yeniləmək
-// + Bildiriş tipi: Bildiriş tipi silmək
-
-
-// + Bildiriş şablonu: Bildiriş şablonlarını görmək
-// Bildiriş şablonu: Bildiriş şablonunu görmək
-// + Bildiriş şablonu: Bildiriş şablonu yaratmaq
-// + Bildiriş şablonu: Bildiriş şablonu yeniləmək
-// + Bildiriş şablonu: Bildiriş şablonu silmək
-
-// + Müştəri sənədi: Müştəri sənədlərini görmək
-// Müştəri sənədi: Müştəri sənədini görmək
-// + Müştəri sənədi: Müştəri sənədini təsdiq və ya rədd etmək
 
 
 //  Inventory: Inventar siyahısı
@@ -160,8 +127,46 @@ export default usePermissions
 //  Inventory: Inventar düzəliş etmək
 //  Inventory: Inventar silmək
 
+// + Bildiriş: Bildirişləri görmək
+// Bildiriş: Bildirişi görmək
+// + Bildiriş: Bildiriş yaratmaq
+// + Bildiriş: Bildiriş yeniləmək
+// + Bildiriş: Bildiriş silmək
+
+
+
+// + Bildiriş şablonu: Bildiriş şablonlarını görmək
+// Bildiriş şablonu: Bildiriş şablonunu görmək
+// + Bildiriş şablonu: Bildiriş şablonu yaratmaq
+// + Bildiriş şablonu: Bildiriş şablonu yeniləmək
+// + Bildiriş şablonu: Bildiriş şablonu silmək
+
+
+
+// + Bildiriş tipi: Bildiriş tiplərini görmək
+// Bildiriş tipi: Bildiriş tipini görmək
+// + Bildiriş tipi: Bildiriş tipi yaratmaq
+// + Bildiriş tipi: Bildiriş tipi yeniləmək
+// + Bildiriş tipi: Bildiriş tipi silmək
+
+// + Məhsul kateqoriyası: Məhsul kateqoriyaları görmək
+// Məhsul kateqoriyası: Məhsul kateqoriyası görmək
+// + Məhsul kateqoriyası: Məhsul kateqoriyası yaratmaq
+// + Məhsul kateqoriyası: Məhsul kateqoriyası yeniləmə
+// + Məhsul kateqoriyası: Məhsul kateqoriyası silmə
+
+
+// + Məhsul: Məhsulları görmək
+// + Məhsul: Məhsulu görmək
+// + Məhsul: Məhsul yaratmaq
+// + Məhsul: Məhsul yeniləmə
 
 // + Satış şərti: Satış şərtlərini görmək
 // Satış şərti: Satış şərti görmək
 // + Satış şərti: Satış şərti yaratmaq
 // + Satış şərti: Satış şərti yeniləmə
+
+// + Vahid: Vahidləri görmək
+// Vahid: Vahidi görmək
+// + Vahid: Vahid yaratma
+// + Vahid: Vahid yeniləmə

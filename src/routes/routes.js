@@ -19,6 +19,7 @@ import {
     FaImage,
     FaTerminal,
     FaRegListAlt,
+    FaCalendarCheck
 } from "react-icons/fa";
 import CustomerGroups from "@/pages/Customers/groups/Groups";
 import NotificationTypes from "@/pages/Notifications/Types/NotificationTypes";
@@ -96,12 +97,6 @@ const routes = [
                 component: DocumentTypes,
 
             },
-            {
-                id: "5-2", path: "/inventory-check-requirement",
-                label: "Inventarlar",
-                permission: "all",
-                component: InventoryCheckRequirement,
-            },
         ]
     },
     {
@@ -135,14 +130,14 @@ const routes = [
         id: 8, path: "/sales-conditions",
         component: SaleConditions, icon: FaFileContract,
         label: "Satış şərtləri",
-        permission: "all",
+        permission: "Satış şərti: Satış şərtlərini görmək",
         children: []
     },
     {
         id: 9, path: "/discounts",
         component: Discounts, icon: FaTags,
         label: "Endirimlər",
-        permission: "all",
+        permission: "Endirim şərti: Endirim şərtlərini görmək",
         children: []
     },
     {
@@ -160,7 +155,14 @@ const routes = [
         children: []
     },
     {
-        id: 12, path: "/claim-groups",
+        id: "12", path: "/inventory-check-requirement",
+        label: "Inventarlar",
+        permission: "all",
+        component: InventoryCheckRequirement,
+        icon: FaCalendarCheck,
+    },
+    {
+        id: 13, path: "/claim-groups",
         label: "İcazə qrupları",
         component: ClaimGroups, icon: FaTerminal,
         permission: "Auth: UserId-yə görə permission qrupların siyahısı",

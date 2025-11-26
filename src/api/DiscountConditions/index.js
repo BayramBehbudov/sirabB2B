@@ -1,7 +1,7 @@
 'use server'
 import api from "../axios";
 
-export const GetAllSaleCondtions = async (payload) => {
+export const GetAllDiscountConditions = async (payload) => {
     // {
     //     "pageNumber": 0,
     //     "pageSize": 0,
@@ -14,18 +14,19 @@ export const GetAllSaleCondtions = async (payload) => {
     //       }
     //     ]
     //   }
+    
     try {
-        const res = await api.post(`SaleCondition/GetAllDashboardSaleCondtions`, payload);
+        const res = await api.post(`DiscountCondition/GetAllDashboardDiscountConditions`, payload);
         return res.data;
     } catch (error) {
-        console.log('error at GetAllSaleCondtions', error);
+        console.log('error at GetAllDiscountConditions', error);
         throw error;
     }
 };
 
 
 
-export const CreateSaleCondition = async (data) => {
+export const CreateDiscountCondition = async (data) => {
     // {
     //     "b2BCustomerGroupIds": [0],
     //     "b2BCustomerIds": [0],
@@ -33,7 +34,7 @@ export const CreateSaleCondition = async (data) => {
     //     "startDate": "2025-11-25T09:10:32.518Z",
     //     "endDate": "2025-11-25T09:10:32.518Z",
     //     "description": "string",
-    //     "saleConditionLines": [
+    //     "discountConditionLines": [
     //       {
     //         "price": 0,
     //         "isVAT": true,
@@ -42,30 +43,25 @@ export const CreateSaleCondition = async (data) => {
     //     ]
     //   }
 
-
     try {
-        const res = await api.post(`SaleCondition/CreateSaleCondition`, data);
+        const res = await api.post(`DiscountCondition/CreateDiscountCondition`, data);
         return res.data;
     } catch (error) {
-        console.log('error at CreateSaleCondition', error);
+        console.log('error at CreateDiscountCondition', error);
         throw error;
     }
 };
 
-export const UpdateSaleCondition = async (data) => {
+export const UpdateDiscountCondition = async (data) => {
     // {
     //     "id": 0,
     //     "sendToAllCustomers": true,
-    //     "b2BCustomerGroupIds": [
-    //       0
-    //     ],
-    //     "b2BCustomerIds": [
-    //       0
-    //     ],
+    //     "b2BCustomerGroupIds": [0],
+    //     "b2BCustomerIds": [0],
     //     "startDate": "2025-11-25T09:11:11.254Z",
     //     "endDate": "2025-11-25T09:11:11.254Z",
     //     "description": "string",
-    //     "saleConditionLines": [
+    //     "discountConditionLines": [
     //       {
     //         "id": 0,
     //         "price": 0,
@@ -74,11 +70,12 @@ export const UpdateSaleCondition = async (data) => {
     //       }
     //     ]
     //   }
+
     try {
-        const res = await api.put(`SaleCondition/UpdateSaleCondition`, data);
+        const res = await api.put(`DiscountCondition/UpdateDiscountCondition`, data);
         return res.data;
     } catch (error) {
-        console.log('error at UpdateSaleCondition', error);
+        console.log('error at UpdateDiscountCondition', error);
         throw error;
     }
 };

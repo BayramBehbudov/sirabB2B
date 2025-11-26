@@ -167,7 +167,7 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
               />
             )}
 
-            {["title", "description"].map((item) => (
+            {["title"].map((item) => (
               <ControlledInput
                 key={item}
                 control={control}
@@ -206,6 +206,17 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
               accept={"image/*"}
             />
           </div>
+          {["description"].map((item) => (
+            <ControlledInput
+              type="textarea"
+              classNameContainer="grow"
+              key={item}
+              control={control}
+              name={item}
+              placeholder={t(item)}
+              label={t(item)}
+            />
+          ))}
           <FileScrollView fields={fields} handleRemove={remove} />
         </div>
       </Dialog>

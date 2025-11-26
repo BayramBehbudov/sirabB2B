@@ -10,6 +10,7 @@ import { DataTable } from "primereact/datatable";
 import TableHeader from "@/components/ui/TableHeader";
 import { Column } from "primereact/column";
 import { GetAllSaleCondtions } from "@/api/SaleConditions";
+import { formatDate } from "@/helper/DateFormatter";
 
 const SaleConditions = () => {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ const SaleConditions = () => {
     orderColumn: "",
     searchList: [],
   });
-
+  // qeyd yoxla gör uzun mətnlər cədvəllərdə necə görünür bütün səhifələri yoxla
   const navigate = useNavigate();
   const perms = usePermissions({
     show: "Satış şərti: Satış şərtlərini görmək",
@@ -36,9 +37,8 @@ const SaleConditions = () => {
     try {
       setLoading(true);
       const res = await GetAllSaleCondtions(payload);
-      console.log(res)
-      // setConditions(res.data);
-      // setTotalRecords(res.totalCount);
+      setConditions(res.saleConditions);
+      setTotalRecords(res.pageInfo.totalItems);
     } catch (error) {
       console.log("error at getConditions", error);
     } finally {
@@ -61,7 +61,10 @@ const SaleConditions = () => {
         </div>
         <div className="flex flex-row gap-2">
           {perms.create && (
-            <AddSaleCondition onSuccess={() => getConditions()} />
+            <AddSaleCondition
+              onSuccess={() => getConditions()}
+              disabled={!perms.create}
+            />
           )}
         </div>
       </div>
@@ -85,14 +88,28 @@ const SaleConditions = () => {
             });
           }}
         >
-          {[{ label: "title", field: "title", type: "text" }].map((c) => (
+          {[
+            { label: "description", field: "description", type: "text" },
+            {
+              label: "customerGroup",
+              field: "customerGroupName",
+              type: "text",
+            },
+            {
+              label: "companyName",
+              field: "b2BCustomerCompanyName",
+              type: "text",
+            },
+            { label: "startDate", field: "startDate", type: "date" },
+            { label: "endDate", field: "endDate", type: "date" },
+          ].map((c) => (
             <Column
               field={c.field}
-              // body={(data) => {
-              //   const v = data[c.field];
-              //   if (c.type === "date") return formatDate(v);
-              //   return v;
-              // }}
+              body={(data) => {
+                const v = data[c.field];
+                if (c.type === "date") return formatDate(v);
+                return v;
+              }}
               header={() => {
                 return (
                   <TableHeader

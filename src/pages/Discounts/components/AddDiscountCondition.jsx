@@ -3,27 +3,28 @@ import ControlledInput from "@/components/ui/ControlledInput";
 import CustomerHandler from "@/pages/Banners/components/CustomerHandler";
 import SendToAllCustomersHandler from "@/pages/Banners/components/SendToAllCustomersHandler";
 import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
-import { SaleConditionSchema } from "@/schemas/sale-condition.schema";
+import { DiscountConditionSchema } from "@/schemas/discount-condition.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import SaleConditionPriceController from "./SaleConditionPriceController";
-import { CreateSaleCondition } from "@/api/SaleConditions";
+import DiscountConditionPriceController from "./DiscountConditionPriceController";
+import { CreateDiscountCondition } from "@/api/DiscountConditions";
 import { showToast } from "@/providers/ToastProvider";
 
-const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
+const AddDiscountCondition = ({ onSuccess, condition, disabled }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const isEdit = !!condition;
+
   const defaultValues = {
     startDate: condition?.startDate || "",
     endDate: condition?.endDate || "",
     description: condition?.description || "",
-    saleConditionLines: condition?.saleConditionLines?.map((l) => ({
+    discountConditionLines: condition?.discountConditionLines?.map((l) => ({
       price: l.price,
       isVAT: l.isVAT,
       productId: l.productId,
@@ -49,17 +50,17 @@ const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
     setValue,
     trigger,
   } = useForm({
-    resolver: zodResolver(SaleConditionSchema),
+    resolver: zodResolver(DiscountConditionSchema),
     defaultValues,
   });
-
   const sendToAllCustomers = watch("sendToAllCustomers");
   const b2BCustomerIds = watch("b2BCustomerIds");
+
   const onSubmit = async (formData) => {
     if (isEdit) return;
     try {
       setLoading(true);
-      const res = await CreateSaleCondition(formData);
+      const res = await CreateDiscountCondition(formData);
       showToast({
         severity: "success",
         summary: t("success"),
@@ -173,9 +174,9 @@ const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
               />
             ))}
           </div>
-          <SaleConditionPriceController
+          <DiscountConditionPriceController
             control={control}
-            formPrices={watch("saleConditionLines")}
+            formPrices={watch("discountConditionLines")}
           />
         </div>
       </Dialog>
@@ -183,4 +184,4 @@ const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
   );
 };
 
-export default AddSaleCondition;
+export default AddDiscountCondition;

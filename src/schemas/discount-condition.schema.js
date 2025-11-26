@@ -1,14 +1,14 @@
 import { z } from "zod";
 import { RequiredSchemaId, RequiredSchemaNumber } from "./shared.schema";
 
-export const SaleConditionLineSchema = z.object({
+export const DiscountConditionLineSchema = z.object({
     price: RequiredSchemaNumber,
     isVAT: z.boolean(),
     productId: RequiredSchemaId,
 });
 
 
-export const SaleConditionSchema = z.object({
+export const DiscountConditionSchema = z.object({
     b2BCustomerGroupIds: z
         .array(z.number({ message: "errors.customerOrGroupRequired" })),
     b2BCustomerIds: z
@@ -19,10 +19,8 @@ export const SaleConditionSchema = z.object({
     description: z
         .string({ message: "errors.descriptionRequired" })
         .min(1, { message: "errors.descriptionRequired" }),
-
-
-    saleConditionLines: z
-        .array(SaleConditionLineSchema)
+    discountConditionLines: z
+        .array(DiscountConditionLineSchema)
         .nonempty({ message: "errors.required" }),
 }).refine((data) => {
     if (data.sendToAllCustomers) {

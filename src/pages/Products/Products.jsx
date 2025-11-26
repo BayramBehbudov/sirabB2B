@@ -106,6 +106,7 @@ const Products = () => {
           {["name", "productCategoryName", "erpId", "description"].map((c) => (
             <Column
               field={c}
+              key={c}
               header={() => {
                 return (
                   <TableHeader

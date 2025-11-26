@@ -1,6 +1,10 @@
 {
   "inventoryCheckRequirement": "İnventarlar",
+  "product": "Məhsul",
+  "productAlreadySelected": "Bu məhsul artıq seçilib",
   "addInfo": "Məlumatları daxil edin",
+  "prices": "Qiymətlər",
+  "productSelect": "Məhsul seç",
   "productNotFound": "Məhsul tapılmadı, yenidən cəhd edin",
   "productPrices": "Məhsul qiymətləri",
   "price": "Qiymət",
@@ -226,7 +230,6 @@
     "4-2": "Məhsul vahidləri",
     "5": "Standart parametrlər",
     "5-1": "Sənəd tipləri",
-    "5-2": "İnventarlar",
     "6": "Bildiriş göndərilməsi",
     "6-1": "Bildiriş tipləri",
     "6-2": "Bildiriş nümunələri",
@@ -235,7 +238,8 @@
     "9": "Endirimlər",
     "10": "Bannerlər",
     "11": "Qeydiyyat müraciətləri",
-    "12": "İcazə qrupları",
+    "12": "İnventar yoxlaması",
+    "13": "İcazə qrupları",
     "logout": "Çıxış"
   }
 }

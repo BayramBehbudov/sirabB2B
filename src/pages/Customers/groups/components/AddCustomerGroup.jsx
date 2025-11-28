@@ -11,13 +11,18 @@ import {
   createCustomerGroup,
   updateCustomerGroup,
 } from "@/api/B2BCustomerGroup";
-const AddUserGroup = ({ group = null, onSuccess }) => {
+const AddCustomerGroup = ({ group = null, onSuccess }) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const isEdit = !!group;
 
-  const { handleSubmit, control, reset } = useForm({
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { isDirty },
+  } = useForm({
     resolver: zodResolver(
       z.object({
         name: z
@@ -50,7 +55,7 @@ const AddUserGroup = ({ group = null, onSuccess }) => {
         summary: t("error"),
         detail:
           error?.response?.data?.message ??
-          t("messages.userGroupCreationError") + ". " + t("messages.tryAgain"),
+          t("messages.customerGroupCreationError") + ". " + t("messages.tryAgain"),
       });
     } finally {
       setLoading(false);
@@ -66,11 +71,11 @@ const AddUserGroup = ({ group = null, onSuccess }) => {
     <div>
       <Button
         onClick={() => setVisible(true)}
-        label={isEdit ? undefined : t("addUserGroup")}
+        label={isEdit ? undefined : t("addGroup")}
         icon={isEdit ? "pi pi-pencil" : "pi pi-plus"}
       />
       <Dialog
-        header={isEdit ? t("editUserGroupInfo") : t("addUserGroupInfo")}
+        header={isEdit ? t("editCustomerGroupInfo") : t("addCustomerGroupInfo")}
         visible={visible}
         className={"max-w-[1100px] min-w-[500px]"}
         onHide={onClose}
@@ -87,7 +92,7 @@ const AddUserGroup = ({ group = null, onSuccess }) => {
               label={isEdit ? t("edit") : t("save")}
               className={"!w-[100px]"}
               onClick={handleSubmit(onSubmit)}
-              disabled={loading}
+              disabled={loading || !isDirty}
               loading={loading}
             />
           </div>
@@ -111,4 +116,4 @@ const AddUserGroup = ({ group = null, onSuccess }) => {
   );
 };
 
-export default AddUserGroup;
+export default AddCustomerGroup

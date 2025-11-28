@@ -1,6 +1,6 @@
 {
-  "popups":"Popuplar",
-  "addPopupInfo":"Popup məlumatlarını daxil edin",
+  "popups": "Popuplar",
+  "addPopupInfo": "Popup məlumatlarını daxil edin",
   "fullAddress": "Tam ünvan",
   "addressLine": "Tam ünvan",
   "city": "Şəhər",
@@ -84,9 +84,9 @@
   "notMandatory": "Məcburi deyil",
   "createdUser": "İstifadəçi yaradıldı",
   "groups": "Qruplar",
-  "addUserGroup": "Qrup yarat",
-  "addUserGroupInfo": "İstifadəçi qrupunun məlumatlarını əlavə et",
-  "editUserGroupInfo": "İstifadəçi qrupunun məlumatlarını redaktə et",
+  "addGroup": "Qrup yarat",
+  "addCustomerGroupInfo": "Müştəri qrupunun məlumatlarını əlavə et",
+  "editCustomerGroupInfo": "Müştəri qrupunun məlumatlarını redaktə et",
   "groupName": "Qrup adı",
   "name": "Ad",
   "noAvailableOptions": "Mövcud məlumat yoxdur",
@@ -253,8 +253,7 @@
     "invalidPriority": "Müxtəlif qiymət vahidləri üçün eyni prioritet təkrar istifadə edilə bilməz, prioritet ardıcıl olmalıdır"
   },
   "messages": {
-    "userGroupAddedSuccessfully": "İstifadəçi qrupu uğurla əlavə olundu",
-    "userGroupCreationError": "İstifadəçi qrupu yaradılan zaman xəta baş verdi",
+    "customerGroupCreationError": "Müştəri qrupu yaradılan zaman xəta baş verdi",
     "tryAgain": "Yenidən cəhd edin",
     "changePassword": "Şifrəni dəyiş",
     "setClaimGroup": "İcazə qrupunu təyin et"

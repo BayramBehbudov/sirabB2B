@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import AddUserGroup from "./components/AddUserGroup";
 import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
@@ -14,8 +13,9 @@ import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 import { showToast } from "@/providers/ToastProvider";
 import usePermissions from "@/hooks/usePermissions";
 import { useNavigate } from "react-router-dom";
+import AddCustomerGroup from "./components/AddCustomerGroup";
 
-const UserGroups = () => {
+const CustomerGroups = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [groups, setGroups] = useState([]);
@@ -78,7 +78,7 @@ const UserGroups = () => {
           <p className={`text-2xl font-semibold`}>{t("groups")}</p>
         </div>
         <div className="flex flex-row gap-2">
-          {perms.create && <AddUserGroup onSuccess={getGroups} />}
+          {perms.create && <AddCustomerGroup onSuccess={getGroups} />}
         </div>
       </div>
       <DataTableContainer>
@@ -108,7 +108,7 @@ const UserGroups = () => {
                 return (
                   <div className="flex flex-row gap-2 justify-center">
                     {perms.update && (
-                      <AddUserGroup group={row} onSuccess={getGroups} />
+                      <AddCustomerGroup group={row} onSuccess={getGroups} />
                     )}
                     {perms.delete && (
                       <DeleteConfirm onConfirm={() => handleDelete(row.id)} />
@@ -124,4 +124,4 @@ const UserGroups = () => {
   );
 };
 
-export default UserGroups;
+export default CustomerGroups;

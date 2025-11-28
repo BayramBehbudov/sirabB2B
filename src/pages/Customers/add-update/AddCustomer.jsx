@@ -6,7 +6,7 @@ import {
 } from "@/schemas/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,6 +14,12 @@ import CustomerGroupSelector from "../groups/components/CustomerGroupSelector";
 import ControlledInput from "@/components/ui/ControlledInput";
 import FullScreenLoader from "@/components/ui/FullScreenLoader";
 import AddressesController from "./AddressesController";
+import {
+  createB2BCustomer,
+  editB2BCustomer,
+  GetB2BCustomer,
+} from "@/api/B2BCustomer";
+import { showToast } from "@/providers/ToastProvider";
 
 const AddCustomer = () => {
   const { id } = useParams();
@@ -23,17 +29,7 @@ const AddCustomer = () => {
   const isEdit = id && /^[1-9]\d*$/.test(id);
 
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
-
-  const perms = usePermissions({
-    show: "B2BMüştərilər: Müştərilər listi",
-    // create: "B2BMüştərilər: B2BMüştəri yaratma",
-    // passUpdate: "B2BMüştərilər: B2BMüştəri şifrə yeniləmə",
-    // update: "B2BMüştərilər: Admin B2BMüştəri məlumatlarını yeniləmə",
-    // confirm:
-    //   "B2BMüştərilər: Sirab tərəfindən B2BMüştəri məlumatlarını təsdiqləmə",
-    // status: "B2BMüştərilər: Müştəri aktiv/deaktiv etmə",
-  });
+  const [customer, setCustomer] = useState(null);
 
   const defaultValues = {
     customerGroupId: 0,
@@ -56,34 +52,98 @@ const AddCustomer = () => {
     ),
     defaultValues,
   });
-  const onSubmit = async (formData) => {
-    console.log(formData);
-    // try {
-    //   setLoading(true);
-    //   const res = isEdit
-    //     ? await editB2BCustomer({
-    //         ...formData,
-    //         b2BCustomerId: user.b2BCustomerId,
-    //       })
-    //     : await createB2BCustomer(formData);
-    //   showToast({
-    //     severity: "success",
-    //     summary: t("success"),
-    //     detail: res?.message || "",
-    //   });
 
-    //   setVisible(false);
-    //   reset(defaultValues);
-    //   onSuccess?.();
-    // } catch (error) {
-    //   showToast({
-    //     severity: "error",
-    //     summary: t("error"),
-    //     detail: error?.response?.data?.message || t("unexpectedError"),
-    //   });
-    // } finally {
-    //   setLoading(false);
-    // }
+  const perms = usePermissions({
+    create: "B2BMüştərilər: B2BMüştəri yaratma",
+    update: "B2BMüştərilər: Admin B2BMüştəri məlumatlarını yeniləmə",
+    showOne: "B2BMüştərilər: Müştəri məlumatı",
+  });
+
+  const hasUpdate = perms.isAllowed("update");
+  const hasCreate = perms.isAllowed("create");
+
+  useEffect(() => {
+    if (!perms.ready) return;
+    if (!isEdit && !hasCreate)
+      return navigate("/not-allowed", { replace: true });
+    if (!isEdit) return;
+    if (!hasUpdate || !perms.showOne)
+      return navigate("/not-allowed", { replace: true });
+    getCustomer();
+  }, [perms.ready]);
+
+  const getCustomer = async () => {
+    try {
+      const res = await GetB2BCustomer(id);
+      const data = res.data;
+      const customerData = {
+        customerGroupId: data.customerGroupId,
+        erpId: data.erpId,
+        taxId: data.taxId,
+        phoneNumber: data.phoneNumber,
+        email: data.email,
+        contactPersonFirstName: data.contactPersonFirstName,
+        contactPersonLastName: data.contactPersonLastName,
+        companyName: data.companyName,
+        deliveryAddresses: data.deliveryAddresses || [],
+      };
+      setCustomer(data);
+      reset(customerData);
+    } catch (error) {
+      showToast({
+        severity: "error",
+        summary: t("error"),
+        detail: t("customerNotFound"),
+      });
+      navigate("/page-not-found");
+    }
+  };
+  const onSubmit = async (formData) => {
+    const { deliveryAddresses, ...rest } = formData;
+    const forDelete = isEdit
+      ? (customer.deliveryAddresses || [])
+          .filter(
+            (adr) =>
+              !deliveryAddresses.some(
+                (ad) => ad.deliveryAddressId === adr.deliveryAddressId
+              )
+          )
+          .map((a) => a.deliveryAddressId)
+      : [];
+    try {
+      setLoading(true);
+      const res = isEdit
+        ? await editB2BCustomer({
+            ...rest,
+            b2BCustomerId: id,
+            updateCustomerDeliveryAddresses: deliveryAddresses,
+            deletedCustomerDeliveryAddresses: forDelete,
+          })
+        : await createB2BCustomer({
+            ...rest,
+            createCustomerDeliveryAddresses: deliveryAddresses,
+          });
+      showToast({
+        severity: "success",
+        summary: t("success"),
+        detail: res?.message || "",
+      });
+
+      if (!isEdit) {
+        reset(defaultValues);
+      }
+      {
+        // qeyd səhifəni reload etmək lazımdır
+      }
+    } catch (error) {
+      showToast({
+        severity: "error",
+        summary: t("error"),
+        detail: error?.response?.data?.message || t("unexpectedError"),
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -143,7 +143,9 @@ const AddDiscountCondition = ({ onSuccess, condition, disabled }) => {
               const minDate =
                 item === "startDate"
                   ? new Date()
-                  : new Date(watch("startDate"));
+                  : watch("startDate")
+                  ? new Date(watch("startDate"))
+                  : new Date();
               const maxDate =
                 item === "startDate" ? new Date(watch("endDate")) : undefined;
 

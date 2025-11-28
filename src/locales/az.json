@@ -1,4 +1,6 @@
 {
+  "popups":"Popuplar",
+  "addPopupInfo":"Popup məlumatlarını daxil edin",
   "fullAddress": "Tam ünvan",
   "addressLine": "Tam ünvan",
   "city": "Şəhər",
@@ -10,12 +12,13 @@
   "street": "Küçə",
   "addRow": "Sətir artır",
   "addressCount": "Ünvan {{count}}",
+  "customerNotFound": "Müştəri tapılmadı",
   "isDefault": "Fərzedilən",
   "makeIsDefatult": "Fərzedilən et",
   "deleteAddress": "Ünvanı sil",
   "login_hero_title": "B2B platforma xoş gəlmişsiniz",
   "login_hero_description": "Çevik sifariş, inventar və müştəri idarəçiliyi üçün vahid platformadan istifadə edin.",
-  "login_tagline": "Partnyor portal",
+  "login_tagline": "B2B portal",
   "login_support": "Dəstək lazımdırsa support@b2b.example ilə əlaqə saxlayın.",
   "coordinates": "Koordinatlar",
   "addCustomer": "Müştəri əlavə et",
@@ -277,6 +280,7 @@
     "12": "İnventar yoxlaması",
     "12-1": "İnventar yoxlama siyahısı",
     "13": "İcazə qrupları",
+    "14": "Popuplar",
     "logout": "Çıxış"
   }
 }

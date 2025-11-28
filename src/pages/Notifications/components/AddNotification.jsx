@@ -220,6 +220,7 @@ const AddNotification = ({ onSuccess, notification, disabled }) => {
             name="sendDate"
             label={t("sendDate")}
             placeholder={t("select")}
+            minDate={new Date()}
           />
           <FilePicker
             label={t("images")}

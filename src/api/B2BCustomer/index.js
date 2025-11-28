@@ -123,3 +123,14 @@ export const setB2BCustomerStatus = async (data) => {
         throw error;
     }
 };
+
+
+export const GetB2BCustomer = async (id) => {
+    try {
+        const response = await api.get(`/B2BCustomer/GetB2BCustomerProfileInfo?id=${id}`,);
+        return response.data;
+    } catch (error) {
+        console.log('error at GetB2BCustomer', error);
+        throw error;
+    }
+};

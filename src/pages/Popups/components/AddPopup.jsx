@@ -1,35 +1,35 @@
 import ControlledCalendar from "@/components/ui/ControlledCalendar";
 import ControlledInput from "@/components/ui/ControlledInput";
-import { BannerSchema } from "@/schemas/banners.schema";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import CustomerHandler from "./CustomerHandler";
-import SendToAllCustomersHandler from "./SendToAllCustomersHandler";
 import FilePicker from "@/components/ui/file/FilePicker";
 import FileScrollView from "@/components/ui/file/FileScrollView";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BannerCreate, BannerUpdate } from "@/api/Banner";
 import { showToast } from "@/providers/ToastProvider";
+import SendToAllCustomersHandler from "@/pages/Banners/components/SendToAllCustomersHandler";
 import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
+import CustomerHandler from "@/pages/Banners/components/CustomerHandler";
+import { PopupSchema } from "@/schemas/popups.schema";
+import { PromoPopupCreate, PromoPopupUpdate } from "@/api/Popup";
 
-const AddBanner = ({ onSuccess, banner, disabled }) => {
+const AddPopup = ({ onSuccess, popup, disabled }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const isEdit = !!banner;
+  const isEdit = !!popup;
   const defaultValues = {
-    title: banner?.title || "",
-    description: banner?.description || "",
-    sendToAllCustomers: banner?.sendToAllCustomers || false,
-    startDate: banner?.startDate || "",
-    endDate: banner?.endDate || "",
-    b2BCustomerIds: banner?.bannerCustomers?.map((c) => c.customerId) || [],
+    sendToAllCustomers: popup?.sendToAllCustomers || false,
+    title: popup?.title || "",
+    description: popup?.description || "",
+    startDate: popup?.startDate || "",
+    endDate: popup?.endDate || "",
+    b2BCustomerIds: popup?.promoPopupCustomers?.map((c) => c.customerId) || [],
     b2BCustomerGroupIds: [],
-    bannerImageDtos:
-      banner?.bannerImages?.map((i) => {
+    promoPopupImageDtos:
+      popup?.promoPopupImages?.map((i) => {
         return {
           fileName: i.fileName,
           base64: i.filePath,
@@ -38,7 +38,6 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
         };
       }) || [],
   };
-
   const {
     handleSubmit,
     formState: { errors },
@@ -48,7 +47,7 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
     reset,
     trigger,
   } = useForm({
-    resolver: zodResolver(BannerSchema),
+    resolver: zodResolver(PopupSchema),
     defaultValues,
   });
   const sendToAllCustomers = watch("sendToAllCustomers");
@@ -56,19 +55,19 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "bannerImageDtos",
+    name: "promoPopupImageDtos",
     keyName: "fieldId",
   });
 
   useEffect(() => {
     reset(defaultValues);
-  }, [banner]);
+  }, [popup]);
 
   const onSubmit = async (formData) => {
     setLoading(true);
 
     try {
-      const images = formData.bannerImageDtos
+      const images = formData.promoPopupImageDtos
         .map((image) => {
           return {
             ...image,
@@ -76,23 +75,23 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
           };
         })
         .filter((i) => i.id === 0 && i.base64);
-      const deletedBannerImageIds =
-        isEdit && banner
-          ? banner.bannerImages
+      const deletedPromoPopupImageIds =
+        isEdit && popup
+          ? popup.promoPopupImages
               .filter(
                 (image) =>
-                  !formData.bannerImageDtos.some((i) => i.id === image.id)
+                  !formData.promoPopupImageDtos.some((i) => i.id === image.id)
               )
               .map((i) => i.id)
           : undefined;
       const formattedDATA = {
         ...formData,
-        bannerImageDtos: images,
-        ...(isEdit ? { id: banner.id, deletedBannerImageIds } : {}),
+        promoPopupImageDtos: images,
+        ...(isEdit ? { id: popup.id, deletedPromoPopupImageIds } : {}),
       };
       const res = isEdit
-        ? await BannerUpdate(formattedDATA)
-        : await BannerCreate(formattedDATA);
+        ? await PromoPopupUpdate(formattedDATA)
+        : await PromoPopupCreate(formattedDATA);
       showToast({
         severity: "success",
         summary: t("success"),
@@ -127,7 +126,7 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
         disabled={disabled}
       />
       <Dialog
-        header={t("addBannerInfo")}
+        header={t("addPopupInfo")}
         visible={visible}
         onHide={onClose}
         className="max-w-[90%] min-w-[90%] min-h-[70%]"
@@ -197,6 +196,7 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
                 />
               );
             })}
+
             <FilePicker
               label={t("images")}
               onChange={(files) => {
@@ -210,7 +210,7 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
                 });
                 append(formatted);
               }}
-              error={errors.bannerImageDtos}
+              error={errors.promoPopupImageDtos}
               value={fields}
               accept={"image/*"}
             />
@@ -233,4 +233,4 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
   );
 };
 
-export default AddBanner;
+export default AddPopup;

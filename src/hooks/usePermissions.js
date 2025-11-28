@@ -36,7 +36,7 @@ const usePermissions = (obj) => {
     const [result, setResult] = useState({})
     const [ready, setReady] = useState(false);
     const { permissions } = useUserContext()
-    
+
     // permission interface aşağıdakı kimidir { claimName: string, hasAccess: boolean }[]
     useEffect(() => {
         if (!obj || typeof obj !== "object" || Object.keys(obj).length === 0) return;
@@ -86,7 +86,7 @@ export default usePermissions
 // +  Auth: İstifadəçi şifrə yeniləmə
 
 // +  B2BMüştərilər: Müştərilər listi
-//  B2BMüştərilər: Müştəri məlumatı
+// +  B2BMüştərilər: Müştəri məlumatı
 // +  B2BMüştərilər: Müştəri aktiv/deaktiv etmə
 // +  B2BMüştərilər: B2BMüştəri yaratma
 // +  B2BMüştərilər: Admin B2BMüştəri məlumatlarını yeniləmə
@@ -161,6 +161,12 @@ export default usePermissions
 // + Məhsul: Məhsulu görmək
 // + Məhsul: Məhsul yaratmaq
 // + Məhsul: Məhsul yeniləmə
+
+// + PromoPopup: PromoPopup yaratmaq
+// + PromoPopup: PromoPopup yeniləmə
+// + PromoPopup: PromoPopupların siyahısı
+//  PromoPopup: PromoPopup məlumatı İd-yə görə baxmaq
+//  PromoPopup: PromoPopup məlumatına müştəriyə görə baxmaq
 
 // + Satış şərti: Satış şərtlərini görmək
 // Satış şərti: Satış şərti görmək

@@ -12,7 +12,6 @@ const AddressesController = ({ control, formAddresses = [], setValue }) => {
     name: "deliveryAddresses",
     keyName: "fieldId",
   });
-
   return (
     <div className="flex flex-col gap-3 border p-3 rounded-md border-gray-200">
       <div className="flex md:flex-row flex-col justify-between md:items-center items-start border-b pb-2 border-gray-200">

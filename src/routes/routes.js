@@ -19,7 +19,9 @@ import {
     FaImage,
     FaTerminal,
     FaRegListAlt,
-    FaCalendarCheck
+    FaCalendarCheck,
+    FaFileImage,
+    FaRegFileImage
 } from "react-icons/fa";
 import CustomerGroups from "@/pages/Customers/groups/Groups";
 import NotificationTypes from "@/pages/Notifications/Types/NotificationTypes";
@@ -32,6 +34,7 @@ import ProductUnits from "@/pages/Products/Units/ProductUnits";
 import SaleConditions from "@/pages/SaleConditions/SaleConditions";
 import InventoryCheckRequirement from "@/pages/Inventory/InventoryCheckRequirement";
 import InventoryCheckAssignment from "@/pages/Inventory/assignment/InventoryCheckAssignment";
+import Popups from "@/pages/Popups/Popups";
 
 // qeyd permission all olan səhifələr  hamıya görünür
 const routes = [
@@ -145,6 +148,13 @@ const routes = [
         label: "Bannerlər",
         component: Banners, icon: FaImage,
         permission: "Banner: Bannerlərin siyahısı",
+        children: []
+    },
+    {
+        id: 14, path: "/popups",
+        label: "Popuplar",
+        component: Popups, icon: FaRegFileImage,
+        permission: "PromoPopup: PromoPopupların siyahısı",
         children: []
     },
     {

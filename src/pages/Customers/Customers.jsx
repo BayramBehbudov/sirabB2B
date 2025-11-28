@@ -38,10 +38,12 @@ const Customers = () => {
     confirm:
       "B2BMüştərilər: Sirab tərəfindən B2BMüştəri məlumatlarını təsdiqləmə",
     status: "B2BMüştərilər: Müştəri aktiv/deaktiv etmə",
+    showOne: "B2BMüştərilər: Müştəri məlumatı",
   });
 
   const isAllowed = perms.isAllowed("show");
   const hasAny = perms.hasAny(["update", "passUpdate", "confirm", "status"]);
+  const hasUpdate = perms.hasAll(["update", "showOne"]);
 
   const getCustomers = async () => {
     try {
@@ -173,7 +175,7 @@ const Customers = () => {
                   contactPersonFirstName + " " + contactPersonLastName;
                 return (
                   <div className="flex flex-row gap-3 items-center justify-center">
-                    {perms.update && (
+                    {hasUpdate && (
                       <Button
                         tooltip={t("edit")}
                         tooltipOptions={{ position: "top" }}
@@ -181,7 +183,7 @@ const Customers = () => {
                         onClick={() => {
                           navigate(`/add-customer/${b2BCustomerId}`);
                         }}
-                        disabled={!perms.update}
+                        disabled={!hasUpdate}
                       />
                     )}
                     {perms.passUpdate && (

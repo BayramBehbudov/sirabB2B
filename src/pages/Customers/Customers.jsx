@@ -13,9 +13,10 @@ import {
 } from "@/api/B2BCustomer";
 import { SwitchConfirm } from "@/components/ui/dialogs/SwitchConfirm";
 import { showToast } from "@/providers/ToastProvider";
-import AddCustomer from "./components/AddCustomer";
+import AddCustomer from "./components/AddCustomerlast";
 import usePermissions from "@/hooks/usePermissions";
 import { useNavigate } from "react-router-dom";
+import { Button } from "primereact/button";
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
@@ -26,7 +27,6 @@ const Customers = () => {
     pageSize: 10,
   });
 
-  
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -118,7 +118,14 @@ const Customers = () => {
         </div>
         <div className="flex flex-row gap-2">
           {perms.create && (
-            <AddCustomer onSuccess={getCustomers} disabled={!perms.create} />
+            <Button
+              icon={`pi pi-plus`}
+              onClick={() => {
+                navigate("/add-customer/add");
+              }}
+              label={t("add")}
+              disabled={!perms.create}
+            />
           )}
         </div>
       </div>
@@ -167,9 +174,13 @@ const Customers = () => {
                 return (
                   <div className="flex flex-row gap-3 items-center justify-center">
                     {perms.update && (
-                      <AddCustomer
-                        onSuccess={getCustomers}
-                        user={data}
+                      <Button
+                        tooltip={t("edit")}
+                        tooltipOptions={{ position: "top" }}
+                        icon={`pi pi-pencil`}
+                        onClick={() => {
+                          navigate(`/add-customer/${b2BCustomerId}`);
+                        }}
                         disabled={!perms.update}
                       />
                     )}

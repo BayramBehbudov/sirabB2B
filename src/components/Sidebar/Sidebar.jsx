@@ -47,7 +47,7 @@ const Sidebar = ({ setIsOpen, isOpen }) => {
   //     setOpenMenuId(null);
   //   }
   // }, [isOpen]);
-  
+
   const routesWithPermissions = routes
     .map((r) => {
       if (r.permission === "all")
@@ -78,7 +78,7 @@ const Sidebar = ({ setIsOpen, isOpen }) => {
 
   return (
     <div
-      className={`bg-[#2d3e50]  text-white  transition-all duration-300 ${
+      className={`bg-slate-900  text-white  transition-all duration-300 ${
         isOpen ? "w-70" : "w-14"
       } flex flex-col overflow-y-scroll scrollbar-hidden`}
     >
@@ -92,7 +92,7 @@ const Sidebar = ({ setIsOpen, isOpen }) => {
             isOpen ? "block" : "hidden"
           }`}
         >
-          Sirab BTB
+          Sirab B2B
         </span>
       </div>
 

@@ -1,5 +1,5 @@
-import { formatDateToBakuTimeZone } from "@/helper/DateFormatter";
 import { Calendar } from "primereact/calendar";
+import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { useTranslation } from "react-i18next";
 import { BiSearch, BiSortAlt2, BiSortDown, BiSortUp } from "react-icons/bi";
@@ -12,10 +12,12 @@ const TableHeader = ({
   handleSearch,
   type = "text",
   sort = "",
+  dropdownOptions = [],
   handleSort,
 }) => {
   const { t } = useTranslation();
   const isDate = type === "date";
+  const isDropdown = type === "dropdown";
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -25,7 +27,7 @@ const TableHeader = ({
   };
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-2 ">
+      <div className="flex items-center gap-2">
         <p className="w-[15rem] m-0 p-0">{label}</p>
         <button
           onClick={() => {
@@ -59,6 +61,19 @@ const TableHeader = ({
             showTime
             hideOnDateTimeSelect
             className={`w-[15rem]`}
+          />
+        ) : isDropdown ? (
+          <Dropdown
+            className={`w-[15rem]`}
+            options={dropdownOptions || []}
+            emptyMessage={t("dataNotFound")}
+            panelClassName="w-[15rem]"
+            placeholder={placeholder || t("select")}
+            onChange={(e) => {
+              onChange(e.value || "");
+            }}
+            value={value}
+            showClear
           />
         ) : (
           <InputText

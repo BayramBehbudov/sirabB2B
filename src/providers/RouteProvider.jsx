@@ -7,6 +7,7 @@ import Login from "@/pages/Auth/Login";
 import NotAllowed from "@/pages/404/NotAllowed";
 import NotFound from "@/pages/404/NotFound";
 import AddProduct from "@/pages/Products/Add-update/AddProduct";
+import AddCustomer from "@/pages/Customers/add-update/AddCustomer";
 
 const RouteProvider = ({ children }) => {
   return (
@@ -31,6 +32,7 @@ const RouteProvider = ({ children }) => {
           ))}
           <Route path="/not-allowed" element={<NotAllowed />} />
           <Route path="/add-product/:id" element={<AddProduct />} />
+          <Route path="/add-customer/:id" element={<AddCustomer />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

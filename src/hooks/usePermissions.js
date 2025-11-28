@@ -36,7 +36,7 @@ const usePermissions = (obj) => {
     const [result, setResult] = useState({})
     const [ready, setReady] = useState(false);
     const { permissions } = useUserContext()
-
+    
     // permission interface aşağıdakı kimidir { claimName: string, hasAccess: boolean }[]
     useEffect(() => {
         if (!obj || typeof obj !== "object" || Object.keys(obj).length === 0) return;
@@ -109,10 +109,10 @@ export default usePermissions
 // Müştəri sənədi: Müştəri sənədini görmək
 // + Müştəri sənədi: Müştəri sənədini təsdiq və ya rədd etmək
 
-// Endirim şərti: Endirim şərtlərini görmək
+// + Endirim şərti: Endirim şərtlərini görmək
 // Endirim şərti: Endirim şərtini görmək
-// Endirim şərti: Endirim şərti yaratmaq
-// Endirim şərti: Endirim şərtlərini yeniləmək
+// + Endirim şərti: Endirim şərti yaratmaq
+// + Endirim şərti: Endirim şərtlərini yeniləmək
 
 // + Sənəd növü: Sənəd növlərini görmək
 // Sənəd növü: Sənəd növünü görmək
@@ -121,11 +121,12 @@ export default usePermissions
 // + Sənəd növü: Sənəd növünü silmək
 
 
-//  Inventory: Inventar siyahısı
-//  Inventory: Inventar id-yə görə məlumata baxmaq
-//  Inventory: Inventar yaratmaq
-//  Inventory: Inventar düzəliş etmək
-//  Inventory: Inventar silmək
+// + Inventory: Inventar tapşırıqları siyahısı
+// + Inventory: Müştərilər üzrə yaradılan inventarların siyahısı
+// + Inventory: Inventar inventarı yaratmaq
+//  Inventory: Müştəri əlavə etdiyi inventarı təsdiqləmə/ləğv etmə
+
+
 
 // + Bildiriş: Bildirişləri görmək
 // Bildiriş: Bildirişi görmək

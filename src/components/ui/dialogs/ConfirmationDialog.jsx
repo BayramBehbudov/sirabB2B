@@ -8,6 +8,7 @@ const ConfirmationDialog = ({
   onCancel,
   trigger = "icon",
   disabled,
+  tooltipText = "",
 }) => {
   const [visible, setVisible] = useState(false);
   const { t } = useTranslation();
@@ -23,14 +24,17 @@ const ConfirmationDialog = ({
     <Fragment>
       <Button
         icon="pi pi-check"
-        onClick={() => setVisible(true)}
+        onClick={() => {
+          if (disabled) return;
+          setVisible(true);
+        }}
         rounded
         outlined
         label={trigger === "label" ? t("confirm") : ""}
         disabled={disabled}
         severity="success"
         size="small"
-        tooltip={t("confirm")}
+        tooltip={tooltipText || t("confirm")}
         tooltipOptions={{
           position: "top",
         }}

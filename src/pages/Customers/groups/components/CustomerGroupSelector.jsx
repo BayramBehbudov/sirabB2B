@@ -3,11 +3,16 @@ import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { getAllCustomerGroup } from "@/api/B2BCustomerGroup";
+import usePermissions from "@/hooks/usePermissions";
 
 const CustomerGroupSelector = ({ control }) => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
+  const perms = usePermissions({
+    show: "B2BCustomerGroup: Müştəri qrupu siyahısı",
+  });
+  const isAllowed = perms.isAllowed("show");
 
   const getGroups = async () => {
     try {
@@ -24,8 +29,9 @@ const CustomerGroupSelector = ({ control }) => {
   };
 
   useEffect(() => {
+    if (!perms.ready || !isAllowed) return;
     getGroups();
-  }, []);
+  }, [isAllowed, perms.ready]);
 
   return (
     <Controller
@@ -36,6 +42,7 @@ const CustomerGroupSelector = ({ control }) => {
           <label className={`font-semibold`}>{t("customerGroup")}</label>
           <Dropdown
             {...field}
+            emptyMessage={isAllowed ? t("dataNotFound") : t("notPermForList")}
             options={groups.map((group) => ({
               name: group.name,
               value: group.id,

@@ -9,6 +9,8 @@ const RejectConfirmWithReason = ({
   onCancel,
   trigger = "icon",
   disabled,
+  requiredReason = true,
+  tooltipText = "",
 }) => {
   const [visible, setVisible] = useState(false);
   const { t } = useTranslation();
@@ -33,11 +35,14 @@ const RejectConfirmWithReason = ({
         disabled={disabled}
         label={trigger === "label" ? t("reject") : ""}
         size="small"
-        tooltip={t("reject")}
+        tooltip={tooltipText || t("reject")}
         tooltipOptions={{
           position: "top",
         }}
-        onClick={() => setVisible(true)}
+        onClick={() => {
+          if (disabled) return;
+          setVisible(true);
+        }}
       />
       <Dialog
         header={t("confirReject")}
@@ -59,7 +64,7 @@ const RejectConfirmWithReason = ({
                 rounded
                 severity="success"
                 label={t("reject")}
-                disabled={reason.trim() === ""}
+                disabled={reason.trim() === "" && requiredReason}
                 onClick={accept}
               />
             </div>
@@ -67,13 +72,15 @@ const RejectConfirmWithReason = ({
         }}
       >
         <div>
-          <div className="flex flex-col gap-2">
-            <p>{t("enterRejectReason")}</p>
-            <InputTextarea
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-            />
-          </div>
+          {requiredReason && (
+            <div className="flex flex-col gap-2">
+              <p>{t("enterRejectReason")}</p>
+              <InputTextarea
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+              />
+            </div>
+          )}
         </div>
       </Dialog>
     </Fragment>

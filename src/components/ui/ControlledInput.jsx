@@ -22,12 +22,12 @@ const ControlledInput = ({
       name={name}
       render={({ field, fieldState: { error } }) => (
         <div className={`flex flex-col gap-1 ${classNameContainer}`}>
-          {label && <label className="font-semibold">{label}:</label>}
+          {label && <label className="font-semibold ">{label}:</label>}
           {type === "textarea" ? (
             <InputTextarea
               {...field}
               placeholder={placeholder}
-              className={`${error ? "p-invalid" : ""} ${className}`}
+              className={`${error ? "p-invalid" : ""} ${className} !text-black`}
               onFocus={() => {
                 if (avtoValue && !field.value) {
                   field.onChange(avtoValue);
@@ -39,9 +39,17 @@ const ControlledInput = ({
           ) : (
             <InputText
               {...field}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (type === "number") {
+                  field.onChange(v ? Number(v) : v);
+                } else {
+                  field.onChange(v);
+                }
+              }}
               placeholder={placeholder}
               type={type}
-              className={`${error ? "p-invalid" : ""} ${className}`}
+              className={`${error ? "p-invalid" : ""} ${className} !text-black`}
               onFocus={() => {
                 if (avtoValue && !field.value) {
                   field.onChange(avtoValue);

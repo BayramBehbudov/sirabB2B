@@ -56,6 +56,7 @@ const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
   const sendToAllCustomers = watch("sendToAllCustomers");
   const b2BCustomerIds = watch("b2BCustomerIds");
   const onSubmit = async (formData) => {
+    // qeyd edit yazılmayıb
     if (isEdit) return;
     try {
       setLoading(true);

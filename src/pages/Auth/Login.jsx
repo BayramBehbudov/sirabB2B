@@ -49,35 +49,88 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col w-[400px] gap-2 p-5 border-1 border-gray-200 rounded-md"
-      >
-        <h2 className="text-center mb-5 font-bold">{t("login")}</h2>
+    <div className="flex min-h-screen min-w-screen flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="flex flex-1 items-center justify-center px-4 py-8">
+        <div className="grid w-full max-w-6xl overflow-hidden rounded-3xl  shadow-2xl lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="relative hidden bg-slate-900 px-10 py-12 text-white lg:flex">
+            <div className="space-y-8 flex flex-col gap-2 justify-center items-center">
+              <img
+                src="/logo.png"
+                alt="Brand logo"
+                className="h-16 w-auto drop-shadow-lg"
+              />
+              <div className="space-y-4">
+                <h2 className="text-3xl font-semibold leading-tight">
+                  {t("login_hero_title")}
+                </h2>
+                <p className="text-base text-slate-200">
+                  {t("login_hero_description")}
+                </p>
+              </div>
+              {/* <div className="rounded-2xl bg-white/10 p-5 backdrop-blur w-full text-center">
+                <p className="text-sm text-slate-200">
+                  {t("login_hero_hint", {
+                    defaultValue:
+                      "Giriş məlumatlarınız yoxdur? Adminlə əlaqə saxlayın.",
+                  })}
+                </p>
+              </div> */}
+            </div>
+          </div>
 
-        <ControlledInput
-          control={control}
-          name="userName"
-          placeholder={t("username")}
-          className="!rounded-lg"
-        />
-        <ControlledInput
-          control={control}
-          name="password"
-          placeholder={t("password")}
-          type="password"
-          className="!rounded-lg"
-        />
+          <div className="p-8 sm:p-10 bg-white">
+            <div className="mb-10 space-y-2">
+              <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
+                {t("login_tagline")}
+              </p>
+              <h1 className="text-3xl font-semibold text-slate-900">
+                {t("login")}
+              </h1>
+            </div>
 
-        <Button
-          type="submit"
-          label={t("login")}
-          loading={loading}
-          disabled={loading}
-          style={{ width: "100%" }}
-        />
-      </form>
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+                  {t("username")}
+                </label>
+                <ControlledInput
+                  control={control}
+                  name="userName"
+                  placeholder={t("username_placeholder", {
+                    defaultValue: "example@company.com",
+                  })}
+                  className="!rounded-2xl !border-slate-200 focus:!border-slate-500"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+                  {t("password")}
+                </label>
+                <ControlledInput
+                  control={control}
+                  name="password"
+                  placeholder={"••••••••"}
+                  type="password"
+                  className="!rounded-2xl !border-slate-200 focus:!border-slate-500"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                label={t("login")}
+                loading={loading}
+                disabled={loading}
+                className="!w-full !rounded-2xl !border-none !bg-slate-900 hover:!bg-slate-800"
+              />
+            </form>
+
+            <div className="mt-10 rounded-2xl border border-dashed border-slate-200 p-4 text-center text-sm text-slate-500">
+              {t("login_support")}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

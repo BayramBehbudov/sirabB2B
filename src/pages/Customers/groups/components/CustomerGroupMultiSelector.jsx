@@ -3,12 +3,17 @@ import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { getAllCustomerGroup } from "@/api/B2BCustomerGroup";
 import { MultiSelect } from "primereact/multiselect";
+import usePermissions from "@/hooks/usePermissions";
 
 //  müştəri qruplarının idlərini arrayda qaytarır
 const CustomerGroupMultiSelector = ({ control, fieldName, trigger }) => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
+  const perms = usePermissions({
+    show: "B2BCustomerGroup: Müştəri qrupu siyahısı",
+  });
+  const isAllowed = perms.isAllowed("show");
 
   const getGroups = async () => {
     try {
@@ -25,9 +30,9 @@ const CustomerGroupMultiSelector = ({ control, fieldName, trigger }) => {
   };
 
   useEffect(() => {
+    if (!perms.ready || !isAllowed) return;
     getGroups();
-  }, []);
-
+  }, [isAllowed, perms.ready]);
   return (
     <Controller
       name={fieldName}
@@ -41,6 +46,7 @@ const CustomerGroupMultiSelector = ({ control, fieldName, trigger }) => {
               field.onChange(v.value, { shouldValidate: true });
               trigger?.(["b2BCustomerIds", "b2BCustomerGroupIds"]);
             }}
+            emptyMessage={isAllowed ? t("dataNotFound") : t("notPermForList")}
             options={groups.map((group) => ({
               label: group.name,
               value: group.id,

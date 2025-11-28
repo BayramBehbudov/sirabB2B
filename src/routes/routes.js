@@ -30,15 +30,17 @@ import Products from "@/pages/Products/Products";
 import ProductCategories from "@/pages/Products/Categories/ProductCategories";
 import ProductUnits from "@/pages/Products/Units/ProductUnits";
 import SaleConditions from "@/pages/SaleConditions/SaleConditions";
-import InventoryCheckRequirement from "@/pages/Parameters/InventoryCheckRequirement/InventoryCheckRequirement";
+import InventoryCheckRequirement from "@/pages/Inventory/InventoryCheckRequirement";
+import InventoryCheckAssignment from "@/pages/Inventory/assignment/InventoryCheckAssignment";
 
 // qeyd permission all olan səhifələr  hamıya görünür
 const routes = [
     {
         id: 1, path: "/",
-        label: "Əsas Səhifə", children: [],
+        label: "Əsas Səhifə",
         component: Home, icon: FaHome,
         permission: 'all',
+        children: [],
 
     },
     {
@@ -73,9 +75,7 @@ const routes = [
                 id: "4-1", path: "/product-categories",
                 label: "Məhsul kateqoriyaları",
                 component: ProductCategories,
-                permission:
-                    "Məhsul kateqoriyası: Məhsul kateqoriyaları görmək"
-                ,
+                permission: "Məhsul kateqoriyası: Məhsul kateqoriyaları görmək"
             },
             {
                 id: "4-2", path: "/product-units",
@@ -93,8 +93,8 @@ const routes = [
             {
                 id: "5-1", path: "/document-types",
                 label: "Sənəd tipləri",
-                permission: "Sənəd növü: Sənəd növlərini görmək",
                 component: DocumentTypes,
+                permission: "Sənəd növü: Sənəd növlərini görmək",
 
             },
         ]
@@ -108,42 +108,42 @@ const routes = [
             {
                 id: "6-1", path: "/notifications/types",
                 label: "Bildiriş tipləri",
+                component: NotificationTypes,
                 permission: "Bildiriş tipi: Bildiriş tiplərini görmək",
-                component: NotificationTypes
             },
             {
                 id: "6-2", path: "/notifications/forms",
                 label: "Bildiriş formaları",
+                component: NotificationTemplates,
                 permission: "Bildiriş şablonu: Bildiriş şablonlarını görmək",
-                component: NotificationTemplates
             }
         ]
     },
     {
         id: 7, path: "/ratings",
-        component: Ratings, icon: FaStar,
         label: "Qiymətləndirmələr",
+        component: Ratings, icon: FaStar,
         permission: "all",
         children: []
     },
     {
         id: 8, path: "/sales-conditions",
-        component: SaleConditions, icon: FaFileContract,
         label: "Satış şərtləri",
+        component: SaleConditions, icon: FaFileContract,
         permission: "Satış şərti: Satış şərtlərini görmək",
         children: []
     },
     {
         id: 9, path: "/discounts",
-        component: Discounts, icon: FaTags,
         label: "Endirimlər",
+        component: Discounts, icon: FaTags,
         permission: "Endirim şərti: Endirim şərtlərini görmək",
         children: []
     },
     {
         id: 10, path: "/banners",
-        component: Banners, icon: FaImage,
         label: "Bannerlər",
+        component: Banners, icon: FaImage,
         permission: "Banner: Bannerlərin siyahısı",
         children: []
     },
@@ -156,10 +156,17 @@ const routes = [
     },
     {
         id: "12", path: "/inventory-check-requirement",
-        label: "Inventarlar",
-        permission: "all",
-        component: InventoryCheckRequirement,
-        icon: FaCalendarCheck,
+        label: "Inventar yoxlama tələbləri",
+        component: InventoryCheckRequirement, icon: FaCalendarCheck,
+        permission: "Inventory: Inventar tapşırıqları siyahısı",
+        children: [
+            {
+                id: "12-1", path: "/inventory-check-assignment",
+                label: "İnventar yoxlama siyahısı",
+                component: InventoryCheckAssignment,
+                permission: "Inventory: Müştərilər üzrə yaradılan inventarların siyahısı",
+            }
+        ]
     },
     {
         id: 13, path: "/claim-groups",

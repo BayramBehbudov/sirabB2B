@@ -11,6 +11,18 @@ export const createB2BCustomer = async (data) => {
     //   "contactPersonLastName": "string",
     //   "companyName": "string",
     //   "password": "string"
+    //   "createCustomerDeliveryAddresses": [
+    //     {
+    //       "title": "string",
+    //       "addressLine": "string",
+    //       "city": "string",
+    //       "district": "string",
+    //       "postalCode": "string",
+    //       "loc_X": 0,
+    //       "loc_Y": 0,
+    //       "isDefault": true
+    //     }
+    //    ]
     // }
     try {
         const response = await api.post("/B2BCustomer/CreateB2BCustomer", data);
@@ -43,6 +55,20 @@ export const editB2BCustomer = async (data) => {
     //   "contactPersonFirstName": "string",
     //   "contactPersonLastName": "string",
     //   "companyName": "string"
+    //   "deletedCustomerDeliveryAddresses": [0],
+    //   "updateCustomerDeliveryAddresses": [
+    //      {
+    //          "deliveryAddressId": 0,
+    //          "title": "string",
+    //          "addressLine": "string",
+    //          "city": "string",
+    //          "district": "string",
+    //          "postalCode": "string",
+    //          "loc_X": 0,
+    //          "loc_Y": 0,
+    //          "isDefault": true
+    //    }
+    //    ]
     // }
     try {
         const response = await api.put("/B2BCustomer/UpdateB2BCustomerProfileByAdmin", data);

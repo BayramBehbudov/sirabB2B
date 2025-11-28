@@ -1,67 +1,52 @@
-import ControlledCalendar from "@/components/ui/ControlledCalendar";
+import { InventoryCheckRequirementAdd } from "@/api/Inventory";
 import ControlledInput from "@/components/ui/ControlledInput";
 import CustomerHandler from "@/pages/Banners/components/CustomerHandler";
 import SendToAllCustomersHandler from "@/pages/Banners/components/SendToAllCustomersHandler";
 import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
-import { DiscountConditionSchema } from "@/schemas/discount-condition.schema";
+import { showToast } from "@/providers/ToastProvider";
+import { InventoryRequirementSchema } from "@/schemas/inventory.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import DiscountConditionPriceController from "./DiscountConditionPriceController";
-import { CreateDiscountCondition } from "@/api/DiscountConditions";
-import { showToast } from "@/providers/ToastProvider";
 
-const AddDiscountCondition = ({ onSuccess, condition, disabled }) => {
+const AddInventoryRequirement = ({ onSuccess, defaultReq, disabled }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const isEdit = !!condition;
+  const isEdit = !!defaultReq;
 
   const defaultValues = {
-    startDate: condition?.startDate || "",
-    endDate: condition?.endDate || "",
-    description: condition?.description || "",
-    discountConditionLines: condition?.discountConditionLines?.map((l) => ({
-      price: l.price,
-      isVAT: l.isVAT,
-      productId: l.productId,
-    })) || [
-      {
-        price: null,
-        isVAT: false,
-        productId: null,
-      },
-    ],
-
+    requiredPhotoCount: 1,
+    description: "",
     sendToAllCustomers: false,
-    b2BCustomerGroupIds: [],
     b2BCustomerIds: [],
+    b2BCustomerGroupIds: [],
   };
 
   const {
-    control,
     handleSubmit,
-    reset,
     formState: { errors },
-    watch,
+    control,
     setValue,
+    watch,
+    reset,
     trigger,
   } = useForm({
-    resolver: zodResolver(DiscountConditionSchema),
+    resolver: zodResolver(InventoryRequirementSchema),
     defaultValues,
   });
   const sendToAllCustomers = watch("sendToAllCustomers");
   const b2BCustomerIds = watch("b2BCustomerIds");
-
+  
   const onSubmit = async (formData) => {
     // qeyd edit yazılmayıb
     if (isEdit) return;
     try {
       setLoading(true);
-      const res = await CreateDiscountCondition(formData);
+      const res = await InventoryCheckRequirementAdd(formData);
       showToast({
         severity: "success",
         summary: t("success"),
@@ -80,14 +65,11 @@ const AddDiscountCondition = ({ onSuccess, condition, disabled }) => {
       setLoading(false);
     }
   };
+
   const onClose = () => {
     setVisible(false);
     reset(defaultValues);
   };
-
-  useEffect(() => {
-    reset(defaultValues);
-  }, [condition]);
 
   return (
     <div>
@@ -121,7 +103,7 @@ const AddDiscountCondition = ({ onSuccess, condition, disabled }) => {
           </div>
         }
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-5">
           <div className="flex flex-row gap-2 flex-wrap">
             <SendToAllCustomersHandler control={control} setValue={setValue} />
             {!sendToAllCustomers && (
@@ -139,50 +121,40 @@ const AddDiscountCondition = ({ onSuccess, condition, disabled }) => {
                 trigger={trigger}
               />
             )}
-            {["startDate", "endDate"].map((item) => {
-              const minDate =
-                item === "startDate"
-                  ? new Date()
-                  : new Date(watch("startDate"));
-              const maxDate =
-                item === "startDate" ? new Date(watch("endDate")) : undefined;
 
-              return (
-                <ControlledCalendar
-                  key={item}
-                  control={control}
-                  name={item}
-                  placeholder={t(item)}
-                  label={t(item)}
-                  className={"w-[200px]"}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                />
-              );
-            })}
-          </div>
-
-          <div className="flex flex-row gap-2 flex-wrap">
-            {["description"].map((item) => (
+            {[
+              {
+                name: "requiredPhotoCount",
+                type: "number",
+                label: "photoCount",
+              },
+            ].map((item) => (
               <ControlledInput
-                key={item}
-                type="textarea"
+                key={item.name}
                 control={control}
-                name={item}
-                placeholder={t(item)}
-                label={t(item)}
-                classNameContainer={"grow"}
+                name={item.name}
+                placeholder={t(item.label)}
+                label={t(item.label)}
+                className={"w-[200px] no-spinner"}
+                type={item.type}
               />
             ))}
           </div>
-          <DiscountConditionPriceController
-            control={control}
-            formPrices={watch("discountConditionLines")}
-          />
+          {["description"].map((item) => (
+            <ControlledInput
+              type="textarea"
+              classNameContainer="grow"
+              key={item}
+              control={control}
+              name={item}
+              placeholder={t(item)}
+              label={t(item)}
+            />
+          ))}
         </div>
       </Dialog>
     </div>
   );
 };
 
-export default AddDiscountCondition;
+export default AddInventoryRequirement;

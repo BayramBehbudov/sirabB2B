@@ -31,12 +31,12 @@ export const PhotosViewerDialog = ({ images = [] }) => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-3">
             {images.map((img) => (
               <div
-                key={img.id}
+                key={img.filePath + img.id}
                 className="flex flex-col items-center gap-2 border rounded-lg p-2 shadow-sm bg-white"
               >
                 <Image
-                  src={`${img.filePath}`}
-                  alt={img.fileName}
+                  src={`${img.filePath || ""}`}
+                  alt={img.fileName || ""}
                   preview
                   className="w-full h-40 object-cover rounded-md"
                   imageStyle={{

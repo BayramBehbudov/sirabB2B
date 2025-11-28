@@ -45,7 +45,6 @@ const UserGroups = () => {
     }
   };
 
-  // console.log(perms);
   useEffect(() => {
     if (!perms.ready) return;
     if (!isAllowed) return navigate("/not-allowed", { replace: true });

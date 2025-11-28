@@ -9,6 +9,7 @@ const ControlledSwitch = ({
   tooltip,
   className = "",
   disabled = false,
+  handleChange,
 }) => {
   const { t } = useTranslation();
   return (
@@ -25,6 +26,12 @@ const ControlledSwitch = ({
             tooltipOptions={{ position: "top" }}
             checked={field.value}
             {...field}
+            onChange={(e) => {
+              field.onChange(e.value);
+              if (handleChange) {
+                handleChange(e.value);
+              }
+            }}
             disabled={disabled}
           />
           {error && <small className="p-error">{t(error.message)}</small>}

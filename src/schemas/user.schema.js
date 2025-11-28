@@ -1,5 +1,16 @@
 import z from "zod";
-import { EmailSchema, PasswordSchemaControl, PhoneSchema, RequiredSchemaMin2, RequiredSchemaMin3 } from "./shared.schema";
+import { EmailSchema, PasswordSchemaControl, PhoneSchema, RequiredSchemaId, RequiredSchemaMin2, RequiredSchemaMin3, RequiredSchemaNumber } from "./shared.schema";
+export const DeliveryAddressesSchema = z.object({
+    deliveryAddressId: RequiredSchemaId,
+    title: RequiredSchemaMin3,
+    addressLine: RequiredSchemaMin3,
+    city: RequiredSchemaMin3,
+    district: RequiredSchemaMin3,
+    postalCode: RequiredSchemaMin3,
+    isDefault: z.boolean({ error: "errors.required" }).default(false),
+    loc_X: RequiredSchemaId,
+    loc_Y: RequiredSchemaId,
+});
 
 export const CustomerSchema =
     z.object({
@@ -11,6 +22,7 @@ export const CustomerSchema =
         contactPersonFirstName: RequiredSchemaMin3,
         contactPersonLastName: RequiredSchemaMin3,
         companyName: RequiredSchemaMin3,
+        deliveryAddresses: z.array(DeliveryAddressesSchema)
     });
 
 

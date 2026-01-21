@@ -147,7 +147,7 @@ const AddCustomer = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-2 overflow-y-auto scrollbar">
+    <div className="flex flex-col gap-6 overflow-y-auto scrollbar">
       <div className={`flex items-center justify-between`}>
         <div>
           <p className={`text-[1.5rem] font-bold`}>

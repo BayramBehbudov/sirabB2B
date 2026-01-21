@@ -18,6 +18,12 @@ export const PhoneSchema = z
     .regex(phoneRegex, { error: "errors.enterValidPhone" })
     .nonempty({ error: "errors.required" })
 
+export const PhoneSchemaOptional = z
+    .string()
+    .optional()
+    .refine((val) => !val || phoneRegex.test(val), { message: "errors.enterValidPhone" })
+
+
 export const EmailSchema = z
     .email({ error: "errors.emailInvalid" })
     .nonempty({ error: "errors.emailRequired" })

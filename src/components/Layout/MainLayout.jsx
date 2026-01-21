@@ -8,7 +8,7 @@ const MainLayout = () => {
   return (
     <div className="flex h-screen w-screen">
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
-      <div className={`flex-1 transition-all duration-300 p-1 overflow-auto`}>
+      <div className={`flex-1 transition-all duration-300 p-3 overflow-auto`}>
         <Outlet context={{ isSidebarOpen: isOpen }} />
       </div>
     </div>

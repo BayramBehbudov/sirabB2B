@@ -150,6 +150,14 @@ export default usePermissions
 // + Bildiriş tipi: Bildiriş tipi yeniləmək
 // + Bildiriş tipi: Bildiriş tipi silmək
 
+
+
+// + PrivacyDocument: Gizlilik şərti siyahısı
+// PrivacyDocument: Gizlilik şərti yaratmaq
+// PrivacyDocument: Gizlilik şərti yeniləmə
+// PrivacyDocument: Gizlilik şərti silmək
+// PrivacyDocument: Gizlilik şərti İd-yə görə baxmaq
+
 // + Məhsul kateqoriyası: Məhsul kateqoriyaları görmək
 // Məhsul kateqoriyası: Məhsul kateqoriyası görmək
 // + Məhsul kateqoriyası: Məhsul kateqoriyası yaratmaq
@@ -177,3 +185,4 @@ export default usePermissions
 // Vahid: Vahidi görmək
 // + Vahid: Vahid yaratma
 // + Vahid: Vahid yeniləmə
+

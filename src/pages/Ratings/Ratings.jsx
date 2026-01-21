@@ -4,7 +4,7 @@ const Ratings = () => {
   const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-5">
-      <div className={`flex items-center justify-between p-2`}>
+      <div className={`flex items-center justify-between`}>
         <div>
           <p className={`text-[1.5rem] font-bold`}>{t("ratings")}</p>
         </div>

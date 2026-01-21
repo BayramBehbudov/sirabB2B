@@ -31,6 +31,8 @@ const AddressesController = ({ control, formAddresses = [], setValue }) => {
                 loc_Y: 0,
                 deliveryAddressId: 0,
                 isDefault: false,
+                phoneNumber1: "",
+                phoneNumber2: "",
               })
             }
           />
@@ -47,6 +49,8 @@ const AddressesController = ({ control, formAddresses = [], setValue }) => {
                 loc_X: v?.lng ?? 0,
                 deliveryAddressId: 0,
                 isDefault: false,
+                phoneNumber1: "",
+                phoneNumber2: "",
               });
             }}
           />
@@ -75,7 +79,7 @@ const AddressesController = ({ control, formAddresses = [], setValue }) => {
                           if (idx !== index && addr.isDefault) {
                             setValue(
                               `deliveryAddresses.${idx}.isDefault`,
-                              false
+                              false,
                             );
                           }
                         });
@@ -118,6 +122,8 @@ const AddressesController = ({ control, formAddresses = [], setValue }) => {
                   { name: "postalCode", type: "text" },
                   { name: "loc_X", type: "number" },
                   { name: "loc_Y", type: "number" },
+                  { name: "phoneNumber1", type: "text" },
+                  { name: "phoneNumber2", type: "text" },
                 ].map((inp) => {
                   return (
                     <ControlledInput

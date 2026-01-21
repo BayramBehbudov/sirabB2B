@@ -35,6 +35,7 @@ import SaleConditions from "@/pages/SaleConditions/SaleConditions";
 import InventoryCheckRequirement from "@/pages/Inventory/InventoryCheckRequirement";
 import InventoryCheckAssignment from "@/pages/Inventory/assignment/InventoryCheckAssignment";
 import Popups from "@/pages/Popups/Popups";
+import PrivacyDocuments from "@/pages/Parameters/privacyDocuments/PrivacyDocuments";
 
 // qeyd permission all olan səhifələr  hamıya görünür
 const routes = [
@@ -98,6 +99,13 @@ const routes = [
                 label: "Sənəd tipləri",
                 component: DocumentTypes,
                 permission: "Sənəd növü: Sənəd növlərini görmək",
+
+            },
+            {
+                id: "5-2", path: "/privacy-documents",
+                label: "Gizlilik sənədləri",
+                component: PrivacyDocuments,
+                permission: "PrivacyDocument: Gizlilik şərti siyahısı",
 
             },
         ]

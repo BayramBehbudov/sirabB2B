@@ -27,7 +27,7 @@ export const PhoneSchemaOptional = z
 export const EmailSchema = z
     .email({ error: "errors.emailInvalid" })
     .nonempty({ error: "errors.emailRequired" })
-export const RequiredOptionalStrSchema = z.string({ error: "errors.required" }).optional()
+export const OptionalStrSchema = z.string({ error: "errors.required" }).optional()
 export const RequiredSchemaMin3 = z.string({ error: "errors.required" }).nonempty({ error: "errors.required" }).min(3, { error: 'errors.min3Chars' })
 export const RequiredSchemaMin2 = z.string({ error: "errors.required" }).nonempty({ error: "errors.required" }).min(2, { error: 'errors.min2Chars' })
 export const RequiredSchemaMin1 = z.string({ error: "errors.required" }).nonempty({ error: "errors.required" }).min(1, { error: 'errors.min1Chars' })

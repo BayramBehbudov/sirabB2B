@@ -150,7 +150,10 @@ export default usePermissions
 // + Bildiriş tipi: Bildiriş tipi yeniləmək
 // + Bildiriş tipi: Bildiriş tipi silmək
 
-
+// + PaymentType: Ödəniş növləri yaratmaq
+// + PaymentType: Ödəniş növləri siyahı görmək
+// PaymentType: Ödəniş növü görmək
+// + PaymentType: Ödəniş növləri yeniləmə
 
 // + PrivacyDocument: Gizlilik şərti siyahısı
 // PrivacyDocument: Gizlilik şərti yaratmaq

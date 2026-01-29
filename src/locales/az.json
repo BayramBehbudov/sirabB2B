@@ -1,4 +1,5 @@
 {
+  "paymentTypes":"Ödəniş növləri",
   "phoneNumber1": "Telefon nömrəsi 1",
   "phoneNumber2": "Telefon nömrəsi 2",
   "addPrivacyDocument": "Gizlilik sənədini əlavə et",
@@ -274,6 +275,7 @@
     "5": "Standart parametrlər",
     "5-1": "Sənəd tipləri",
     "5-2": "Gizlilik sənədləri",
+    "5-3": "Ödəniş növləri",
     "6": "Bildiriş göndərilməsi",
     "6-1": "Bildiriş tipləri",
     "6-2": "Bildiriş nümunələri",

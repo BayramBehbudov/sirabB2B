@@ -102,6 +102,7 @@ const AddDocumentType = ({ onSuccess, currentType }) => {
               type={input.type || "text"}
               className={"w-[250px]"}
               avtoValue={input.avtoValue}
+              placeholder={t('enter')}
             />
           ))}
 

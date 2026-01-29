@@ -82,7 +82,7 @@ const SetClaimGroupToUser = ({ userId }) => {
         visible={visible}
         onHide={() => setVisible(false)}
         header={t("setClaimGroupToUser")}
-        className="min-w-[800px]"
+        className="min-w-[80%]"
       >
         <div>
           <DataTable

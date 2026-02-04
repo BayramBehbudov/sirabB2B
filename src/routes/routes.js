@@ -37,6 +37,7 @@ import InventoryCheckAssignment from "@/pages/Inventory/assignment/InventoryChec
 import Popups from "@/pages/Popups/Popups";
 import PrivacyDocuments from "@/pages/Parameters/privacyDocuments/PrivacyDocuments";
 import PaymentTypes from "@/pages/Parameters/paymentTypes/PaymentTypes";
+import OrderStatuses from "@/pages/Parameters/orderStatuses/OrderStatuses";
 
 // qeyd permission all olan səhifələr  hamıya görünür
 const routes = [
@@ -112,6 +113,12 @@ const routes = [
                 label: "Ödəniş növləri",
                 component: PaymentTypes,
                 permission: "PaymentType: Ödəniş növləri siyahı görmək",
+            },
+            {
+                id: "5-4", path: "/order-statuses",
+                label: "Sifariş statusları",
+                component: OrderStatuses,
+                permission: "OrderStatus: Sifariş statusları görmək",
             },
         ]
     },

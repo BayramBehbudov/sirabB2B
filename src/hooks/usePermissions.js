@@ -150,6 +150,10 @@ export default usePermissions
 // + Bildiriş tipi: Bildiriş tipi yeniləmək
 // + Bildiriş tipi: Bildiriş tipi silmək
 
+// + OrderStatus: Sifariş statusları görmək
+// OrderStatus: Sifariş statusu görmək
+// + OrderStatus: Sifariş statusları yenilə
+
 // + PaymentType: Ödəniş növləri yaratmaq
 // + PaymentType: Ödəniş növləri siyahı görmək
 // PaymentType: Ödəniş növü görmək

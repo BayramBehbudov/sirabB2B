@@ -1,5 +1,9 @@
 {
-  "paymentTypes":"Ödəniş növləri",
+  "icon": "İkon",
+  "changeIcon": "İkonu dəyiş",
+  "changeStatusIcon": "Statusun ikonunu dəyiş",
+  "orderStatuses": "Sifariş statusları",
+  "paymentTypes": "Ödəniş növləri",
   "phoneNumber1": "Telefon nömrəsi 1",
   "phoneNumber2": "Telefon nömrəsi 2",
   "addPrivacyDocument": "Gizlilik sənədini əlavə et",
@@ -276,6 +280,7 @@
     "5-1": "Sənəd tipləri",
     "5-2": "Gizlilik sənədləri",
     "5-3": "Ödəniş növləri",
+    "5-4": "Sifariş statusları",
     "6": "Bildiriş göndərilməsi",
     "6-1": "Bildiriş tipləri",
     "6-2": "Bildiriş nümunələri",

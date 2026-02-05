@@ -153,7 +153,7 @@ const routes = [
                 id: "7-1", path: "/ratings/types",
                 label: "Qiymətləndirmə tipləri",
                 component: RatingTypes,
-                permission: "all",
+                permission: "OrderEvaluationType: OrderEvaluationType List",
             }
         ]
     },

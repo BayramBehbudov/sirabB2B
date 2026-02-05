@@ -22,10 +22,10 @@ const RatingTypes = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "Bildiriş tipi: Bildiriş tiplərini görmək",
-    create: "Bildiriş tipi: Bildiriş tipi yaratmaq",
-    update: "Bildiriş tipi: Bildiriş tipi yeniləmək",
-    delete: "Bildiriş tipi: Bildiriş tipi silmək",
+    show: "OrderEvaluationType: OrderEvaluationType List",
+    create: "OrderEvaluationType: OrderEvaluationType Create",
+    update: "OrderEvaluationType: OrderEvaluationType Update",
+    delete: "OrderEvaluationType: OrderEvaluationType Delete",
   });
 
   const isAllowed = perms.isAllowed("show");

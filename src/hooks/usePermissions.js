@@ -150,6 +150,13 @@ export default usePermissions
 // + Bildiriş tipi: Bildiriş tipi yeniləmək
 // + Bildiriş tipi: Bildiriş tipi silmək
 
+
+// + OrderEvaluationType: OrderEvaluationType List
+//  OrderEvaluationType: OrderEvaluationType Get
+// + OrderEvaluationType: OrderEvaluationType Create
+// + OrderEvaluationType: OrderEvaluationType Update
+// + OrderEvaluationType: OrderEvaluationType Delete
+
 // + OrderStatus: Sifariş statusları görmək
 // OrderStatus: Sifariş statusu görmək
 // + OrderStatus: Sifariş statusları yenilə

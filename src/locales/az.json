@@ -1,4 +1,8 @@
 {
+  "seri": "Sıra",
+  "seriAlreadyExists": "Bu sıra artıq mövcuddur",
+  "ratingTypes": "Qiymətləndirmə tipləri",
+  "addTypeInfo": "Tip məlumatlarını daxil edin",
   "icon": "İkon",
   "changeIcon": "İkonu dəyiş",
   "changeStatusIcon": "Statusun ikonunu dəyiş",
@@ -285,6 +289,7 @@
     "6-1": "Bildiriş tipləri",
     "6-2": "Bildiriş nümunələri",
     "7": "Qiymətləndirmələr",
+    "7-1": "Qiymətləndirmə tipləri",
     "8": "Satış şərtləri",
     "9": "Endirimlər",
     "10": "Bannerlər",

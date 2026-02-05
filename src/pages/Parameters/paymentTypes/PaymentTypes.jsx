@@ -62,7 +62,7 @@ const PaymentTypes = () => {
           lazy={false}
         >
           {["name", "description"].map((f) => {
-            return <Column field={f} header={t(f)} />;
+            return <Column key={f} field={f} header={t(f)} />;
           })}
 
           {hasAny && (

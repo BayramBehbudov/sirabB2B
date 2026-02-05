@@ -38,6 +38,7 @@ import Popups from "@/pages/Popups/Popups";
 import PrivacyDocuments from "@/pages/Parameters/privacyDocuments/PrivacyDocuments";
 import PaymentTypes from "@/pages/Parameters/paymentTypes/PaymentTypes";
 import OrderStatuses from "@/pages/Parameters/orderStatuses/OrderStatuses";
+import RatingTypes from "@/pages/Ratings/Rating-types/RatingTypes";
 
 // qeyd permission all olan səhifələr  hamıya görünür
 const routes = [
@@ -147,7 +148,14 @@ const routes = [
         label: "Qiymətləndirmələr",
         component: Ratings, icon: FaStar,
         permission: "all",
-        children: []
+        children: [
+            {
+                id: "7-1", path: "/ratings/types",
+                label: "Qiymətləndirmə tipləri",
+                component: RatingTypes,
+                permission: "all",
+            }
+        ]
     },
     {
         id: 8, path: "/sales-conditions",

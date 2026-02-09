@@ -14,17 +14,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* --scrollbar-thumb: #e2e2e2;
-  --scrollbar-thumb-hover: #e2e2e2;
   --scrollbar-track: rgba(0, 0, 0, 0.05);
-  --scrollbar-width: 1px; */
+  --scrollbar-width: 1px;
 }
 
-/* *,
+*,
 *::before,
 *::after {
   scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 *::-webkit-scrollbar {
@@ -34,24 +31,20 @@
 
 *::-webkit-scrollbar-track {
   background: var(--scrollbar-track);
-  border-radius: calc(var(--scrollbar-width) * 2);
+  border-radius: var(--scrollbar-width);
 }
 
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb);
-  border-radius: calc(var(--scrollbar-width) * 2);
+  border-radius: var(--scrollbar-width);
   border: 1px solid transparent;
   background-clip: padding-box;
 }
 
-*::-webkit-scrollbar-thumb:hover {
-  background-color: var(--scrollbar-thumb-hover);
-}
 
 *::-webkit-scrollbar-corner {
   background: var(--scrollbar-track);
-} */
+}
 
 .scrollbar-hidden {
   scrollbar-width: none;
@@ -182,10 +175,12 @@ button {
   box-shadow: none !important;
 }
 
+.p-datatable-tbody>tr {
+  cursor: auto;
+}
 
 .p-datatable-tbody>tr[role="row"]:hover {
   background-color: #effcfd;
-  cursor: auto;
 }
 
 .p-dialog {
@@ -215,4 +210,8 @@ button {
 
 .p-dialog-content {
   padding-block: 10px;
+}
+
+.divider {
+  border: 0.5px solid #096138;
 }

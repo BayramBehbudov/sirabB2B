@@ -147,7 +147,7 @@ const routes = [
         id: 7, path: "/ratings",
         label: "Qiymətləndirmələr",
         component: Ratings, icon: FaStar,
-        permission: "all",
+        permission: "OrderEvaluation: OrderEvaluation List",
         children: [
             {
                 id: "7-1", path: "/ratings/types",

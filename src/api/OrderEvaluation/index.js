@@ -1,5 +1,28 @@
 import api from "../axios";
 
+export const GetAllOrderEvaluations = async (data) => {
+    try {
+        // {
+        //   "pageNumber": 0,
+        //   "pageSize": 0,
+        //   "order": "string",
+        //   "orderColumn": "string",
+        //   "searchList": [
+        //     {
+        //       "colName": "string",
+        //       "value": "string"
+        //     }
+        //   ]
+        // }
+        const res = await api.post('OrderEvaluation/GetAllOrderEvaluations', data)
+        return res.data
+    } catch (error) {
+        console.log('error at GetAllOrderEvaluations', error)
+        throw error
+    }
+}
+
+
 export const GetAllOrderEvaluationType = async () => {
     try {
         const res = await api.get('OrderEvaluationType/GetAllOrderEvaluationType')

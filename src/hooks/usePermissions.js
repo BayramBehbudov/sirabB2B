@@ -150,7 +150,7 @@ export default usePermissions
 // + Bildiriş tipi: Bildiriş tipi yeniləmək
 // + Bildiriş tipi: Bildiriş tipi silmək
 
-
+// + OrderEvaluation: OrderEvaluation List
 // + OrderEvaluationType: OrderEvaluationType List
 //  OrderEvaluationType: OrderEvaluationType Get
 // + OrderEvaluationType: OrderEvaluationType Create

@@ -1,7 +1,7 @@
 import {
   DeleteOrderEvaluationType,
   GetAllOrderEvaluationType,
-} from "@/api/OrderEvaluationType";
+} from "@/api/OrderEvaluation";
 import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";

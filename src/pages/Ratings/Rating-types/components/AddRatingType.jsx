@@ -1,7 +1,7 @@
 import {
   CreateOrderEvaluationType,
   UpdateOrderEvaluationType,
-} from "@/api/OrderEvaluationType";
+} from "@/api/OrderEvaluation";
 import ControlledInput from "@/components/ui/ControlledInput";
 import { showToast } from "@/providers/ToastProvider";
 import {

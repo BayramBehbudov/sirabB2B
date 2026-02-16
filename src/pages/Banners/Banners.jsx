@@ -33,9 +33,9 @@ const Banners = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "Banner: Bannerlərin siyahısı",
-    create: "Banner: Banner yaratmaq",
-    update: "Banner: Banner yeniləmə",
+    show: "BANNER: BANNER_LIST",
+    create: "BANNER: CREATE_BANNER",
+    update: "BANNER: UPDATE_BANNER",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -116,7 +116,7 @@ const Banners = () => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
                         newFilter.searchList = newFilter.searchList.filter(
-                          (item) => item.colName !== c.field
+                          (item) => item.colName !== c.field,
                         );
                         if (v) {
                           newFilter.searchList.push({

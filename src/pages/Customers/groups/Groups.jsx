@@ -22,10 +22,10 @@ const CustomerGroups = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "B2BCustomerGroup: Müştəri qrupu siyahısı",
-    create: "B2BCustomerGroup: Müştəri qrupu yaratmaq",
-    update: "B2BCustomerGroup: Müştəri qrupu düzəliş etmək",
-    delete: "B2BCustomerGroup: Müştəri qrupu silmək",
+    show: "B2BCUSTOMER_GROUP: B2BCUSTOMER_GROUP_LIST",
+    create: "B2BCUSTOMER_GROUP: CREATE_B2BCUSTOMER_GROUP",
+    update: "B2BCUSTOMER_GROUP: UPDATE_B2BCUSTOMER_GROUP",
+    delete: "B2BCUSTOMER_GROUP: DELETE_B2BCUSTOMER_GROUP",
   });
 
   const isAllowed = perms.isAllowed("show");

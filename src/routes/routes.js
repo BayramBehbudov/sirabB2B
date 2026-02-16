@@ -54,13 +54,13 @@ const routes = [
         id: 2, path: "/customers",
         label: "Müştərilər",
         component: Customers, icon: FaUsers,
-        permission: "B2BMüştərilər: Müştərilər listi",
+        permission: "B2BCUSTOMER: B2BCUSTOMER_LIST",
         children: [
             {
                 id: "2-1", path: "/customers/groups",
                 label: "Müştəri qrupları",
                 component: CustomerGroups,
-                permission: "B2BCustomerGroup: Müştəri qrupu siyahısı",
+                permission: "B2BCUSTOMER_GROUP: B2BCUSTOMER_GROUP_LIST",
             },
         ],
     },
@@ -69,26 +69,26 @@ const routes = [
         id: 3, path: "/users",
         label: "İstifadəçilər",
         component: Users, icon: FaUserCog,
-        permission: "Auth: İstifadəçilər siyahısı",
+        permission: "AUTH: SYSTEM_USER_LIST",
         children: []
     },
     {
         id: 4, path: "/products",
         label: "Məhsullar",
         component: Products, icon: FaRegListAlt,
-        permission: "Məhsul: Məhsulları görmək",
+        permission: "PRODUCT: PRODUCT_LIST",
         children: [
             {
                 id: "4-1", path: "/product-categories",
                 label: "Məhsul kateqoriyaları",
                 component: ProductCategories,
-                permission: "Məhsul kateqoriyası: Məhsul kateqoriyaları görmək"
+                permission: "PRODUCT_CATEGORY: PRODUCT_CATEGORY_LIST"
             },
             {
                 id: "4-2", path: "/product-units",
                 label: "Məhsul vahidləri",
                 component: ProductUnits,
-                permission: "Vahid: Vahidləri görmək"
+                permission: "UNIT_DEFINITION: UNIT_DEFINITION_LIST"
             }]
     },
     {
@@ -101,25 +101,25 @@ const routes = [
                 id: "5-1", path: "/document-types",
                 label: "Sənəd tipləri",
                 component: DocumentTypes,
-                permission: "Sənəd növü: Sənəd növlərini görmək",
+                permission: "DOCUMENT_TYPE: DOCUMENT_TYPE_LIST",
             },
             {
                 id: "5-2", path: "/privacy-documents",
                 label: "Gizlilik sənədləri",
                 component: PrivacyDocuments,
-                permission: "PrivacyDocument: Gizlilik şərti siyahısı",
+                permission: "PRIVACY_DOCUMENT: PRIVACY_DOCUMENT_LIST",
             },
             {
                 id: "5-3", path: "/payment-types",
                 label: "Ödəniş növləri",
                 component: PaymentTypes,
-                permission: "PaymentType: Ödəniş növləri siyahı görmək",
+                permission: "PAYMENT_TYPE: PAYMENT_TYPE_LIST",
             },
             {
                 id: "5-4", path: "/order-statuses",
                 label: "Sifariş statusları",
                 component: OrderStatuses,
-                permission: "OrderStatus: Sifariş statusları görmək",
+                permission: "ORDER_STATUS: ORDER_STATUS_LIST",
             },
         ]
     },
@@ -127,19 +127,19 @@ const routes = [
         id: 6, path: "/notifications",
         component: Notifications, icon: FaBell,
         label: "Bildiriş göndərilməsi",
-        permission: "Bildiriş: Bildirişləri görmək",
+        permission: "NOTIFICATION: NOTIFICATION_LIST",
         children: [
             {
                 id: "6-1", path: "/notifications/types",
                 label: "Bildiriş tipləri",
                 component: NotificationTypes,
-                permission: "Bildiriş tipi: Bildiriş tiplərini görmək",
+                permission: "NOTIFICATION_TYPE: NOTIFICATION_TYPE_LIST",
             },
             {
                 id: "6-2", path: "/notifications/forms",
                 label: "Bildiriş formaları",
                 component: NotificationTemplates,
-                permission: "Bildiriş şablonu: Bildiriş şablonlarını görmək",
+                permission: "NOTIFICATION_TEMPLATE: NOTIFICATION_TEMPLATE_LIST",
             }
         ]
     },
@@ -147,13 +147,13 @@ const routes = [
         id: 7, path: "/ratings",
         label: "Qiymətləndirmələr",
         component: Ratings, icon: FaStar,
-        permission: "OrderEvaluation: OrderEvaluation List",
+        permission: "ORDER_EVALUATION: ORDER_EVALUATION_LIST",
         children: [
             {
                 id: "7-1", path: "/ratings/types",
                 label: "Qiymətləndirmə tipləri",
                 component: RatingTypes,
-                permission: "OrderEvaluationType: OrderEvaluationType List",
+                permission: "ORDER_EVALUATION_TYPE: ORDER_EVALUATION_TYPE_LIST",
             }
         ]
     },
@@ -161,48 +161,48 @@ const routes = [
         id: 8, path: "/sales-conditions",
         label: "Satış şərtləri",
         component: SaleConditions, icon: FaFileContract,
-        permission: "Satış şərti: Satış şərtlərini görmək",
+        permission: "SALE_CONDITION: SALE_CONDITION_LIST",
         children: []
     },
     {
         id: 9, path: "/discounts",
         label: "Endirimlər",
         component: Discounts, icon: FaTags,
-        permission: "Endirim şərti: Endirim şərtlərini görmək",
+        permission: "DISCOUNT_CONDITION: DISCOUNT_CONDITION_LIST",
         children: []
     },
     {
         id: 10, path: "/banners",
         label: "Bannerlər",
         component: Banners, icon: FaImage,
-        permission: "Banner: Bannerlərin siyahısı",
+        permission: "BANNER: BANNER_LIST",
         children: []
     },
     {
         id: 14, path: "/popups",
         label: "Popuplar",
         component: Popups, icon: FaRegFileImage,
-        permission: "PromoPopup: PromoPopupların siyahısı",
+        permission: "PROMO_POPUP: PROMO_POPUP_LIST",
         children: []
     },
     {
         id: 11, path: "/requests",
         label: "Qeydiyyat müraciətləri",
         component: Requests, icon: FaFileAlt,
-        permission: "Müştəri sənədi: Müştəri sənədlərini görmək",
+        permission: "CUSTOMER_UPLOAD_DOCUMENT: CUSTOMER_UPLOAD_DOCUMENT_LIST",
         children: []
     },
     {
         id: "12", path: "/inventory-check-requirement",
         label: "Inventar yoxlama tələbləri",
         component: InventoryCheckRequirement, icon: FaCalendarCheck,
-        permission: "Inventory: Inventar tapşırıqları siyahısı",
+        permission: "INVENTORY: INVENTORY_REQUIREMENT_LIST",
         children: [
             {
                 id: "12-1", path: "/inventory-check-assignment",
                 label: "İnventar yoxlama siyahısı",
                 component: InventoryCheckAssignment,
-                permission: "Inventory: Müştərilər üzrə yaradılan inventarların siyahısı",
+                permission: "INVENTORY: INVENTORY_LIST_CREATED_FOR_CUSTOMER",
             }
         ]
     },
@@ -210,7 +210,7 @@ const routes = [
         id: 13, path: "/claim-groups",
         label: "İcazə qrupları",
         component: ClaimGroups, icon: FaTerminal,
-        permission: "Auth: UserId-yə görə permission qrupların siyahısı",
+        permission: "AUTH: GET_CLAIM_GROUP_BY_USER_ID",
         children: []
     },
 ];

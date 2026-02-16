@@ -17,9 +17,9 @@ const ProductUnits = () => {
   const navigate = useNavigate();
 
   const perms = usePermissions({
-    show: "Vahid: Vahidləri görmək",
-    create: "Vahid: Vahid yaratma",
-    update: "Vahid: Vahid yeniləmə",
+    show: "UNIT_DEFINITION: UNIT_DEFINITION_LIST",
+    create: "UNIT_DEFINITION: CREATE_UNIT_DEFINITION",
+    update: "UNIT_DEFINITION: UPDATE_UNIT_DEFINITION",
   });
 
   const isAllowed = perms.isAllowed("show");

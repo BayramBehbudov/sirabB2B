@@ -27,9 +27,9 @@ const SaleConditions = () => {
   // qeyd yoxla gör uzun mətnlər cədvəllərdə necə görünür bütün səhifələri yoxla
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "Satış şərti: Satış şərtlərini görmək",
-    create: "Satış şərti: Satış şərti yaratmaq",
-    update: "Satış şərti: Satış şərti yeniləmə",
+    show: "SALE_CONDITION: SALE_CONDITION_LIST",
+    create: "SALE_CONDITION: CREATE_SALE_CONDITION",
+    update: "SALE_CONDITION: UPDATE_SALE_CONDITION",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -119,7 +119,7 @@ const SaleConditions = () => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
                         newFilter.searchList = newFilter.searchList.filter(
-                          (item) => item.colName !== c.field
+                          (item) => item.colName !== c.field,
                         );
                         if (v) {
                           newFilter.searchList.push({

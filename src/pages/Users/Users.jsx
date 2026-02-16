@@ -26,12 +26,12 @@ const Users = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "Auth: İstifadəçilər siyahısı",
-    create: "Auth: İstifadəçi yaratmaq",
-    update: "Auth: İstifadəçi yeniləmə",
-    permUpdate: "Auth: İstifadəçini permission qrupa əlavə et/sil",
-    passUpdate: "Auth: İstifadəçi şifrə yeniləmə",
-    status: "Auth: İstifadəçini deaktiv/aktiv etmək",
+    show: "AUTH: SYSTEM_USER_LIST",
+    create: "AUTH: CREATE_USER",
+    update: "AUTH: UPDATE_USER",
+    permUpdate: "AUTH: SET_USER_PERMISSION",
+    passUpdate: "AUTH: RESET_PASSWORD",
+    status: "AUTH: SET_SYSTEM_USER_STATUS",
   });
 
   const isAllowed = perms.isAllowed("show");

@@ -25,7 +25,7 @@ const CustomerSelectorDialog = ({
   const [filters, setFilters] = useState({});
   const { t } = useTranslation();
   const perms = usePermissions({
-    show: "B2BMüştərilər: Müştərilər listi",
+    show: "B2BCUSTOMER: B2BCUSTOMER_LIST",
   });
 
   const isAllowed = perms.isAllowed("show");

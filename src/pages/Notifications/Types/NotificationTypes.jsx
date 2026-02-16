@@ -28,10 +28,10 @@ const NotificationTypes = () => {
   const navigate = useNavigate();
 
   const perms = usePermissions({
-    show: "Bildiriş tipi: Bildiriş tiplərini görmək",
-    create: "Bildiriş tipi: Bildiriş tipi yaratmaq",
-    update: "Bildiriş tipi: Bildiriş tipi yeniləmək",
-    delete: "Bildiriş tipi: Bildiriş tipi silmək",
+    show: "NOTIFICATION_TYPE: NOTIFICATION_TYPE_LIST",
+    create: "NOTIFICATION_TYPE: CREATE_NOTIFICATION_TYPE",
+    update: "NOTIFICATION_TYPE: UPDATE_NOTIFICATION_TYPE",
+    delete: "NOTIFICATION_TYPE: DELETE_NOTIFICATION_TYPE",
   });
 
   const isAllowed = perms.isAllowed("show");

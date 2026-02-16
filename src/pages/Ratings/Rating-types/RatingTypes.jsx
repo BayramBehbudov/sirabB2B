@@ -22,10 +22,10 @@ const RatingTypes = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "OrderEvaluationType: OrderEvaluationType List",
-    create: "OrderEvaluationType: OrderEvaluationType Create",
-    update: "OrderEvaluationType: OrderEvaluationType Update",
-    delete: "OrderEvaluationType: OrderEvaluationType Delete",
+    show: "ORDER_EVALUATION_TYPE: ORDER_EVALUATION_TYPE_LIST",
+    create: "ORDER_EVALUATION_TYPE: CREATE_ORDER_EVALUATION_TYPE",
+    update: "ORDER_EVALUATION_TYPE: UPDATE_ORDER_EVALUATION_TYPE",
+    delete: "ORDER_EVALUATION_TYPE: DELETE_ORDER_EVALUATION_TYPE",
   });
 
   const isAllowed = perms.isAllowed("show");

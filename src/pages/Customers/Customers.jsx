@@ -31,14 +31,13 @@ const Customers = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "B2BMüştərilər: Müştərilər listi",
-    create: "B2BMüştərilər: B2BMüştəri yaratma",
-    passUpdate: "B2BMüştərilər: B2BMüştəri şifrə yeniləmə",
-    update: "B2BMüştərilər: Admin B2BMüştəri məlumatlarını yeniləmə",
-    confirm:
-      "B2BMüştərilər: Sirab tərəfindən B2BMüştəri məlumatlarını təsdiqləmə",
-    status: "B2BMüştərilər: Müştəri aktiv/deaktiv etmə",
-    showOne: "B2BMüştərilər: Müştəri məlumatı",
+    show: "B2BCUSTOMER: B2BCUSTOMER_LIST",
+    create: "B2BCUSTOMER: CREATE_B2BCUSTOMER",
+    passUpdate: "B2BCUSTOMER: UPDATE_B2BCUSTOMER_PASSWORD",
+    update: "B2BCUSTOMER: UPDATE_B2BCUSTOMER_PROFILE_ADMIN",
+    confirm: "B2BCUSTOMER: CONFIRM_B2BCUSTOMER_PROFILE",
+    status: "B2BCUSTOMER: SET_B2BCUSTOMER_STATUS",
+    showOne: "B2BCUSTOMER: B2BCUSTOMER_PROFILE_INFO",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -199,7 +198,7 @@ const Customers = () => {
                         onAccept={() => {
                           handleProfileConfirm(
                             b2BCustomerId,
-                            !isConfirmedByOperator
+                            !isConfirmedByOperator,
                           );
                         }}
                         disabled={!perms.confirm}

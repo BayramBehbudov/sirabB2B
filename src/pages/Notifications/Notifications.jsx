@@ -33,10 +33,10 @@ const Notifications = () => {
   const navigate = useNavigate();
 
   const perms = usePermissions({
-    show: "Bildiriş: Bildirişləri görmək",
-    create: "Bildiriş: Bildiriş yaratmaq",
-    update: "Bildiriş: Bildiriş yeniləmək",
-    delete: "Bildiriş: Bildiriş silmək",
+    show: "NOTIFICATION: NOTIFICATION_LIST",
+    create: "NOTIFICATION: CREATE_NOTIFICATION",
+    update: "NOTIFICATION: UPDATE_NOTIFICATION",
+    delete: "NOTIFICATION: DELETE_NOTIFICATION",
   });
 
   const isAllowed = perms.isAllowed("show");

@@ -34,7 +34,7 @@ const InventoryCheckAssignment = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "Inventory: Müştərilər üzrə yaradılan inventarların siyahısı",
+    show: "INVENTORY: INVENTORY_LIST_CREATED_FOR_CUSTOMER",
   });
   const isAllowed = perms.isAllowed("show");
 
@@ -158,7 +158,7 @@ const InventoryCheckAssignment = () => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
                         newFilter.searchList = newFilter.searchList.filter(
-                          (item) => item.colName !== c.fieldForSearch
+                          (item) => item.colName !== c.fieldForSearch,
                         );
                         if (v) {
                           newFilter.searchList.push({
@@ -173,7 +173,7 @@ const InventoryCheckAssignment = () => {
                     placeholder={t("search")}
                     value={
                       filter.searchList.find(
-                        (item) => item.colName === c.fieldForSearch
+                        (item) => item.colName === c.fieldForSearch,
                       )?.value
                     }
                     sort={

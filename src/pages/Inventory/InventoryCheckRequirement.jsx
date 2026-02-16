@@ -27,8 +27,8 @@ const InventoryCheckRequirement = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "Inventory: Inventar tapşırıqları siyahısı",
-    create: "Inventory: Inventar inventarı yaratmaq",
+    show: "INVENTORY: INVENTORY_REQUIREMENT_LIST",
+    create: "INVENTORY: CREATE_INVENTORY",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -105,7 +105,7 @@ const InventoryCheckRequirement = () => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
                         newFilter.searchList = newFilter.searchList.filter(
-                          (item) => item.colName !== c.field
+                          (item) => item.colName !== c.field,
                         );
                         if (v) {
                           newFilter.searchList.push({

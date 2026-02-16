@@ -35,7 +35,7 @@ const ProductSelectorDialog = ({
   const { t } = useTranslation();
 
   const perms = usePermissions({
-    show: "Məhsul: Məhsulları görmək",
+    show: "PRODUCT: PRODUCT_LIST",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -49,7 +49,7 @@ const ProductSelectorDialog = ({
         const existingIds = new Set(selectedProducts.map((p) => p.id));
         const productsMap = new Map(res.products.map((p) => [p.id, p]));
         const defaultSelectedMap = new Map(
-          defaultSelected.map((item) => [item.id, item])
+          defaultSelected.map((item) => [item.id, item]),
         );
         const updated = selectedProducts.map((p) => {
           if (defaultSelectedMap.has(p.id)) {
@@ -181,7 +181,7 @@ const ProductSelectorDialog = ({
                           setFilters((prev) => {
                             const newFilter = { ...prev };
                             newFilter.searchList = newFilter.searchList.filter(
-                              (item) => item.colName !== c
+                              (item) => item.colName !== c,
                             );
                             if (v) {
                               newFilter.searchList.push({
@@ -212,7 +212,7 @@ const ProductSelectorDialog = ({
                     }
                   />
                 );
-              }
+              },
             )}
           </DataTable>
         </DataTableContainer>

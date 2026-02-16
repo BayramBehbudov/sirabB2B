@@ -2,7 +2,7 @@ import { z } from "zod";
 import { RequiredSchemaId, RequiredSchemaNumber } from "./shared.schema";
 
 export const DiscountConditionLineSchema = z.object({
-    price: RequiredSchemaNumber,
+    discountPercentage: RequiredSchemaNumber,
     isVAT: z.boolean(),
     productId: RequiredSchemaId,
 });

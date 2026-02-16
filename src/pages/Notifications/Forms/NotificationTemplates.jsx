@@ -25,10 +25,10 @@ const NotificationTemplates = () => {
   const [totalRecords, setTotalRecords] = useState(0);
 
   const perms = usePermissions({
-    show: "Bildiriş şablonu: Bildiriş şablonlarını görmək",
-    create: "Bildiriş şablonu: Bildiriş şablonu yaratmaq",
-    update: "Bildiriş şablonu: Bildiriş şablonu yeniləmək",
-    delete: "Bildiriş şablonu: Bildiriş şablonu silmək",
+    show: "NOTIFICATION_TEMPLATE: NOTIFICATION_TEMPLATE_LIST",
+    create: "NOTIFICATION_TEMPLATE: CREATE_NOTIFICATION_TEMPLATE",
+    update: "NOTIFICATION_TEMPLATE: UPDATE_NOTIFICATION_TEMPLATE",
+    delete: "NOTIFICATION_TEMPLATE: DELETE_NOTIFICATION_TEMPLATE",
   });
 
   const isAllowed = perms.isAllowed("show");

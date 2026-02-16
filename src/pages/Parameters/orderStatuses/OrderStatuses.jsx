@@ -17,10 +17,10 @@ const OrderStatuses = () => {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
-  
+
   const perms = usePermissions({
-    show: "OrderStatus: Sifariş statusları görmək",
-    update: "OrderStatus: Sifariş statusları yenilə",
+    show: "ORDER_STATUS: ORDER_STATUS_LIST",
+    update: "ORDER_STATUS: UPDATE_ORDER_STATUS",
   });
 
   const isAllowed = perms.isAllowed("show");

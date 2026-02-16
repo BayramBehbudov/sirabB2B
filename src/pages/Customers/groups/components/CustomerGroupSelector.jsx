@@ -10,7 +10,7 @@ const CustomerGroupSelector = ({ control }) => {
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const perms = usePermissions({
-    show: "B2BCustomerGroup: Müştəri qrupu siyahısı",
+    show: "B2BCUSTOMER_GROUP: B2BCUSTOMER_GROUP_LIST",
   });
   const isAllowed = perms.isAllowed("show");
 

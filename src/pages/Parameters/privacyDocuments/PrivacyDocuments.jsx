@@ -17,9 +17,9 @@ const PrivacyDocuments = () => {
   const [documents, setDocuments] = useState([]);
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "PrivacyDocument: Gizlilik şərti siyahısı",
-    create: "PrivacyDocument: Gizlilik şərti yaratmaq",
-    delete: "PrivacyDocument: Gizlilik şərti silmək",
+    show: "PRIVACY_DOCUMENT: PRIVACY_DOCUMENT_LIST",
+    create: "PRIVACY_DOCUMENT: CREATE_PRIVACY_DOCUMENT",
+    delete: "PRIVACY_DOCUMENT: DELETE_PRIVACY_DOCUMENT",
   });
   const isAllowed = perms.isAllowed("show");
 

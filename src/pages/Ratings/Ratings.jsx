@@ -31,7 +31,7 @@ const Ratings = () => {
   const navigate = useNavigate();
 
   const perms = usePermissions({
-    show: "OrderEvaluation: OrderEvaluation List",
+    show: "ORDER_EVALUATION: ORDER_EVALUATION_LIST",
   });
   const isAllowed = perms.isAllowed("show");
 

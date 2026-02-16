@@ -92,7 +92,7 @@ const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
     <div>
       <Button
         tooltip={isEdit ? t("edit") : ""}
-        tooltipOptions={{ position: "top" }}
+        tooltipOptions={{ position: "left" }}
         icon={`pi ${isEdit ? "pi-pencil" : "pi-plus"}`}
         onClick={() => setVisible(true)}
         label={!isEdit && t("add")}

@@ -32,12 +32,12 @@ const AddProduct = () => {
   const isEdit = id && /^[1-9]\d*$/.test(id);
 
   const perms = usePermissions({
-    showAll: "Məhsul: Məhsulları görmək",
-    show: "Məhsul: Məhsulu görmək",
-    create: "Məhsul: Məhsul yaratmaq",
-    update: "Məhsul: Məhsul yeniləmə",
-    showCats: "Məhsul kateqoriyası: Məhsul kateqoriyaları görmək",
-    showUnits: "Vahid: Vahidləri görmək",
+    showAll: "PRODUCT: PRODUCT_LIST",
+    show: "PRODUCT: GET_PRODUCT_ID",
+    create: "PRODUCT: CREATE_PRODUCT",
+    update: "PRODUCT: UPDATE_PRODUCT",
+    showCats: "PRODUCT_CATEGORY: PRODUCT_CATEGORY_LIST",
+    showUnits: "UNIT_DEFINITION: UNIT_DEFINITION_LIST",
   });
 
   const hasShow = perms.isAllowed("show");
@@ -198,19 +198,20 @@ const AddProduct = () => {
       const deletedProductImageIds = editedProduct.productImages
         .filter(
           (image) =>
-            !formData.productImages.some((fImage) => fImage.id === image.id)
+            !formData.productImages.some((fImage) => fImage.id === image.id),
         )
         .map((image) => image.id);
 
       const deletedProductPriceIds = editedProduct.productPrices
         .filter(
           (price) =>
-            !formData.productPrices.some((fPrice) => fPrice.id === price.id)
+            !formData.productPrices.some((fPrice) => fPrice.id === price.id),
         )
         .map((price) => price.id);
       const deletedProductUnitIds = editedProduct.productUnits
         .filter(
-          (unit) => !formData.productUnits.some((fUnit) => fUnit.id === unit.id)
+          (unit) =>
+            !formData.productUnits.some((fUnit) => fUnit.id === unit.id),
         )
         .map((unit) => unit.id);
 

@@ -30,9 +30,9 @@ const Popups = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "PromoPopup: PromoPopupların siyahısı",
-    create: "PromoPopup: PromoPopup yaratmaq",
-    update: "PromoPopup: PromoPopup yeniləmə",
+    show: "PROMO_POPUP: PROMO_POPUP_LIST",
+    create: "PROMO_POPUP: CREATE_PROMO_POPUP",
+    update: "PROMO_POPUP: UPDATE_PROMO_POPUP",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -113,7 +113,7 @@ const Popups = () => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
                         newFilter.searchList = newFilter.searchList.filter(
-                          (item) => item.colName !== c.field
+                          (item) => item.colName !== c.field,
                         );
                         if (v) {
                           newFilter.searchList.push({

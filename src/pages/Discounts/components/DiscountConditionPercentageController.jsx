@@ -5,7 +5,7 @@ import { InputNumber } from "primereact/inputnumber";
 import { Controller, useFieldArray } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const DiscountConditionPriceController = ({ control, formPrices }) => {
+const DiscountConditionPercentageController = ({ control, formLines }) => {
   const { t } = useTranslation();
 
   const { fields, append, remove } = useFieldArray({
@@ -16,7 +16,7 @@ const DiscountConditionPriceController = ({ control, formPrices }) => {
 
   return (
     <div className="flex flex-col gap-3 border p-3 rounded-md border-gray-200">
-      <label className="font-bold">{t("prices")}:</label>
+      <label className="font-bold">{t("percentages")}:</label>
       <div className="flex flex-col gap-2 flex-wrap">
         {fields.map((item, index) => {
           return (
@@ -27,15 +27,20 @@ const DiscountConditionPriceController = ({ control, formPrices }) => {
               <ProductHandler
                 name={`discountConditionLines.${index}.productId`}
                 control={control}
-                disabledIds={formPrices.map((price) => price.productId)}
+                disabledIds={formLines.map((line) => line.productId)}
               />
               <Controller
                 control={control}
-                name={`discountConditionLines.${index}.price`}
-                render={({ field, fieldState: { error: priceError } }) => {
+                name={`discountConditionLines.${index}.discountPercentage`}
+                render={({
+                  field,
+                  fieldState: { error: discountPercentageError },
+                }) => {
                   return (
                     <div className="flex flex-col gap-1 max-w-[150px]">
-                      <label className="font-semibold">{t("price")}:</label>
+                      <label className="font-semibold">
+                        {t("discountPercentage")}:
+                      </label>
 
                       <InputNumber
                         {...field}
@@ -47,13 +52,13 @@ const DiscountConditionPriceController = ({ control, formPrices }) => {
                         }}
                         placeholder={t("enter")}
                         inputStyle={{
-                          borderColor: priceError ? "red" : "",
+                          borderColor: discountPercentageError ? "red" : "",
                         }}
                       />
 
-                      {priceError && (
+                      {discountPercentageError && (
                         <small className="p-error line-clamp-2">
-                          {t(priceError.message)}
+                          {t(discountPercentageError.message)}
                         </small>
                       )}
                     </div>
@@ -78,14 +83,14 @@ const DiscountConditionPriceController = ({ control, formPrices }) => {
                 {index + 1 === fields.length && (
                   <Button
                     disabled={
-                      !formPrices.every(
-                        (price) => price.price && price.productId
+                      !formLines.every(
+                        (line) => line.discountPercentage && line.productId,
                       )
                     }
                     icon="pi pi-plus"
                     onClick={() =>
                       append({
-                        price: null,
+                        discountPercentage: null,
                         productId: null,
                         isVAT: false,
                       })
@@ -101,4 +106,4 @@ const DiscountConditionPriceController = ({ control, formPrices }) => {
   );
 };
 
-export default DiscountConditionPriceController;
+export default DiscountConditionPercentageController

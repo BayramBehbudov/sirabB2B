@@ -26,10 +26,10 @@ const DocumentTypes = () => {
   const navigate = useNavigate();
 
   const perms = usePermissions({
-    show: "Sənəd növü: Sənəd növlərini görmək",
-    create: "Sənəd növü: Sənəd növü yaratmaq",
-    update: "Sənəd növü: Sənəd növünü yeniləmək",
-    delete: "Sənəd növü: Sənəd növünü silmək",
+    show: "DOCUMENT_TYPE: DOCUMENT_TYPE_LIST",
+    create: "DOCUMENT_TYPE: CREATE_DOCUMENT_TYPE",
+    update: "DOCUMENT_TYPE: UPDATE_DOCUMENT_TYPE",
+    delete: "DOCUMENT_TYPE: DELETE_DOCUMENT_TYPE",
   });
 
   const isAllowed = perms.isAllowed("show");

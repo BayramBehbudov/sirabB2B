@@ -17,9 +17,9 @@ const PaymentTypes = () => {
   const navigate = useNavigate();
 
   const perms = usePermissions({
-    show: "PaymentType: Ödəniş növləri siyahı görmək",
-    create: "PaymentType: Ödəniş növləri yaratmaq",
-    update: "PaymentType: Ödəniş növləri yeniləmə",
+    show: "PAYMENT_TYPE: PAYMENT_TYPE_LIST",
+    create: "PAYMENT_TYPE: CREATE_PAYMENT_TYPE",
+    update: "PAYMENT_TYPE: UPDATE_PAYMENT_TYPE",
   });
 
   const isAllowed = perms.isAllowed("show");

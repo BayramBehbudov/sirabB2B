@@ -31,10 +31,10 @@ const ProductCategories = () => {
   const navigate = useNavigate();
 
   const perms = usePermissions({
-    show: "Məhsul kateqoriyası: Məhsul kateqoriyaları görmək",
-    create: "Məhsul kateqoriyası: Məhsul kateqoriyası yaratmaq",
-    update: "Məhsul kateqoriyası: Məhsul kateqoriyası yeniləmə",
-    delete: "Məhsul kateqoriyası: Məhsul kateqoriyası silmə",
+    show: "PRODUCT_CATEGORY: PRODUCT_CATEGORY_LIST",
+    create: "PRODUCT_CATEGORY: CREATE_PRODUCT_CATEGORY",
+    update: "PRODUCT_CATEGORY: UPDATE_PRODUCT_CATEGORY",
+    delete: "PRODUCT_CATEGORY: DELETE_PRODUCT_CATEGORY",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -97,7 +97,7 @@ const ProductCategories = () => {
               setFilter((prev) => {
                 const newFilter = { ...prev };
                 newFilter.searchList = newFilter.searchList.filter(
-                  (item) => item.colName !== "name"
+                  (item) => item.colName !== "name",
                 );
                 if (v) {
                   newFilter.searchList.push({ colName: "name", value: v });

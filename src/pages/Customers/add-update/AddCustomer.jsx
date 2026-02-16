@@ -48,15 +48,15 @@ const AddCustomer = () => {
     resolver: zodResolver(
       isEdit
         ? CustomerSchema.extend(EmptySchema.shape)
-        : CustomerSchema.extend(PasswordSchema.shape)
+        : CustomerSchema.extend(PasswordSchema.shape),
     ),
     defaultValues,
   });
 
   const perms = usePermissions({
-    create: "B2BMüştərilər: B2BMüştəri yaratma",
-    update: "B2BMüştərilər: Admin B2BMüştəri məlumatlarını yeniləmə",
-    showOne: "B2BMüştərilər: Müştəri məlumatı",
+    create: "B2BCUSTOMER: CREATE_B2BCUSTOMER",
+    update: "B2BCUSTOMER: UPDATE_B2BCUSTOMER_PROFILE_ADMIN",
+    showOne: "B2BCUSTOMER: B2BCUSTOMER_PROFILE_INFO",
   });
 
   const hasUpdate = perms.isAllowed("update");
@@ -105,8 +105,8 @@ const AddCustomer = () => {
           .filter(
             (adr) =>
               !deliveryAddresses.some(
-                (ad) => ad.deliveryAddressId === adr.deliveryAddressId
-              )
+                (ad) => ad.deliveryAddressId === adr.deliveryAddressId,
+              ),
           )
           .map((a) => a.deliveryAddressId)
       : [];

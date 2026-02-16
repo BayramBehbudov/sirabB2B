@@ -28,9 +28,9 @@ const Products = () => {
   const navigate = useNavigate();
 
   const perms = usePermissions({
-    show: "Məhsul: Məhsulları görmək",
-    create: "Məhsul: Məhsul yaratmaq",
-    update: "Məhsul: Məhsul yeniləmə",
+    show: "PRODUCT: PRODUCT_LIST",
+    create: "PRODUCT: CREATE_PRODUCT",
+    update: "PRODUCT: UPDATE_PRODUCT",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -115,7 +115,7 @@ const Products = () => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
                         newFilter.searchList = newFilter.searchList.filter(
-                          (item) => item.colName !== c
+                          (item) => item.colName !== c,
                         );
                         if (v) {
                           newFilter.searchList.push({

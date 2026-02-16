@@ -10,7 +10,7 @@ import { Dialog } from "primereact/dialog";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import DiscountConditionPriceController from "./DiscountConditionPriceController";
+import DiscountConditionPercentageController from "./DiscountConditionPercentageController";
 import { CreateDiscountCondition } from "@/api/DiscountConditions";
 import { showToast } from "@/providers/ToastProvider";
 
@@ -25,12 +25,12 @@ const AddDiscountCondition = ({ onSuccess, condition, disabled }) => {
     endDate: condition?.endDate || "",
     description: condition?.description || "",
     discountConditionLines: condition?.discountConditionLines?.map((l) => ({
-      price: l.price,
+      discountPercentage: l.discountPercentage,
       isVAT: l.isVAT,
       productId: l.productId,
     })) || [
       {
-        price: null,
+        discountPercentage: null,
         isVAT: false,
         productId: null,
       },
@@ -93,7 +93,7 @@ const AddDiscountCondition = ({ onSuccess, condition, disabled }) => {
     <div>
       <Button
         tooltip={isEdit ? t("edit") : ""}
-        tooltipOptions={{ position: "top" }}
+        tooltipOptions={{ position: "left" }}
         icon={`pi ${isEdit ? "pi-pencil" : "pi-plus"}`}
         onClick={() => setVisible(true)}
         label={!isEdit && t("add")}
@@ -177,9 +177,9 @@ const AddDiscountCondition = ({ onSuccess, condition, disabled }) => {
               />
             ))}
           </div>
-          <DiscountConditionPriceController
+          <DiscountConditionPercentageController
             control={control}
-            formPrices={watch("discountConditionLines")}
+            formLines={watch("discountConditionLines")}
           />
         </div>
       </Dialog>

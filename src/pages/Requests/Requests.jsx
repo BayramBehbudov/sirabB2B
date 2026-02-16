@@ -28,8 +28,8 @@ const Requests = () => {
   const navigate = useNavigate();
 
   const perms = usePermissions({
-    show: "Müştəri sənədi: Müştəri sənədlərini görmək",
-    confirm: "Müştəri sənədi: Müştəri sənədini təsdiq və ya rədd etmək",
+    show: "CUSTOMER_UPLOAD_DOCUMENT: CUSTOMER_UPLOAD_DOCUMENT_LIST",
+    confirm: "CUSTOMER_UPLOAD_DOCUMENT: CONFIRM_CUSTOMER_UPLOAD_DOCUMENT",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -104,7 +104,7 @@ const Requests = () => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
                         newFilter.searchList = newFilter.searchList.filter(
-                          (item) => item.colName !== c
+                          (item) => item.colName !== c,
                         );
                         if (v) {
                           newFilter.searchList.push({ colName: c, value: v });

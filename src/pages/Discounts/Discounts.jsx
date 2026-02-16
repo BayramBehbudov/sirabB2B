@@ -26,9 +26,9 @@ const Discounts = () => {
   });
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "Endirim şərti: Endirim şərtlərini görmək",
-    create: "Endirim şərti: Endirim şərti yaratmaq",
-    update: "Endirim şərti: Endirim şərtlərini yeniləmək",
+    show: "DISCOUNT_CONDITION: DISCOUNT_CONDITION_LIST",
+    create: "DISCOUNT_CONDITION: CREATE_DISCOUNT_CONDITION",
+    update: "DISCOUNT_CONDITION: UPDATE_DISCOUNT_CONDITION",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -118,7 +118,7 @@ const Discounts = () => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
                         newFilter.searchList = newFilter.searchList.filter(
-                          (item) => item.colName !== c.field
+                          (item) => item.colName !== c.field,
                         );
                         if (v) {
                           newFilter.searchList.push({

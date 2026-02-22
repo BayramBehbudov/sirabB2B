@@ -36,7 +36,7 @@ export const CreateDiscountCondition = async (data) => {
     //     "description": "string",
     //     "discountConditionLines": [
     //       {
-    //         "price": 0,
+    //         "discountPercentage": 0,
     //         "isVAT": true,
     //         "productId": 0
     //       }
@@ -64,12 +64,13 @@ export const UpdateDiscountCondition = async (data) => {
     //     "discountConditionLines": [
     //       {
     //         "id": 0,
-    //         "price": 0,
+    //         "discountPercentage": 0,
     //         "isVAT": true,
     //         "productId": 0
     //       }
     //     ]
-    //   }
+    //   }{
+
 
     try {
         const res = await api.put(`DiscountCondition/UpdateDiscountCondition`, data);

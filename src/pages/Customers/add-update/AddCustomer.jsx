@@ -20,6 +20,8 @@ import {
   GetB2BCustomer,
 } from "@/api/B2BCustomer";
 import { showToast } from "@/providers/ToastProvider";
+import FilePicker from "@/components/ui/file/FilePicker";
+import { Image } from "primereact/image";
 
 const AddCustomer = () => {
   const { id } = useParams();
@@ -30,6 +32,7 @@ const AddCustomer = () => {
 
   const [loading, setLoading] = useState(false);
   const [customer, setCustomer] = useState(null);
+  const [picture, setPicture] = useState("");
 
   const defaultValues = {
     customerGroupId: 0,
@@ -41,6 +44,8 @@ const AddCustomer = () => {
     contactPersonLastName: "",
     companyName: "",
     deliveryAddresses: [],
+    profileImageFileName: "",
+    profileImageBase64: "",
     ...(isEdit ? {} : { password: "" }),
   };
 
@@ -76,6 +81,7 @@ const AddCustomer = () => {
     try {
       const res = await GetB2BCustomer(id);
       const data = res.data;
+
       const customerData = {
         customerGroupId: data.customerGroupId,
         erpId: data.erpId,
@@ -89,6 +95,7 @@ const AddCustomer = () => {
       };
       setCustomer(data);
       reset(customerData);
+      setPicture(data.profileImageFilePath);
     } catch (error) {
       showToast({
         severity: "error",
@@ -145,7 +152,6 @@ const AddCustomer = () => {
       setLoading(false);
     }
   };
-
   return (
     <div className="flex flex-col gap-6 overflow-y-auto scrollbar">
       <div className={`flex items-center justify-between`}>
@@ -154,7 +160,17 @@ const AddCustomer = () => {
             {t(isEdit ? "editCustomer" : "addCustomer")}
           </p>
         </div>
-        <div>
+        <div className="flex items-center gap-2 flex-row">
+          {picture && (
+            <Image
+              src={picture}
+              alt="Image"
+              width="50"
+              height="50"
+              preview
+              className="max-w-[50px] max-h-[50px] bg-red-50 rounded-full overflow-hidden"
+            />
+          )}
           <Button
             label={t("goBack")}
             icon="pi pi-arrow-left"
@@ -187,6 +203,18 @@ const AddCustomer = () => {
             avtoValue={input.avtoValue}
           />
         ))}
+        <FilePicker
+          label={t("profilePicture")}
+          accept={"image/*"}
+          className="rounded-sm md:w-[250px]"
+          multiple={false}
+          onChange={(v) => {
+            setValue("profileImageFileName", v[0].name);
+            setValue("profileImageBase64", v[0].base64.split(",")[1]);
+            setPicture(v[0].base64);
+          }}
+          value={[]}
+        />
       </div>
 
       <AddressesController

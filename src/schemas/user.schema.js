@@ -24,6 +24,8 @@ export const CustomerSchema =
         contactPersonFirstName: RequiredSchemaMin3,
         contactPersonLastName: RequiredSchemaMin3,
         companyName: RequiredSchemaMin3,
+        profileImageFileName: z.string().default("").optional(),
+        profileImageBase64: z.string().default("").optional(),
         deliveryAddresses: z.array(DeliveryAddressesSchema)
     });
 

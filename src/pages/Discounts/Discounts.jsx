@@ -151,7 +151,7 @@ const Discounts = () => {
             />
           ))}
 
-          <Column
+          {/* <Column
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">
@@ -165,7 +165,7 @@ const Discounts = () => {
                 </div>
               );
             }}
-          />
+          /> */}
         </DataTable>
       </DataTableContainer>
     </div>

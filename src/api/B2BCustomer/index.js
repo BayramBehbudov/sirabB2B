@@ -10,7 +10,9 @@ export const createB2BCustomer = async (data) => {
     //   "contactPersonFirstName": "string",
     //   "contactPersonLastName": "string",
     //   "companyName": "string",
-    //   "password": "string"
+    //   "password": "string",
+    //  "profileImageFileName": "string",
+    //  "profileImageBase64": "string",
     //   "createCustomerDeliveryAddresses": [
     //     {
     //       "title": "string",
@@ -54,7 +56,9 @@ export const editB2BCustomer = async (data) => {
     //   "email": "string",
     //   "contactPersonFirstName": "string",
     //   "contactPersonLastName": "string",
-    //   "companyName": "string"
+    //   "companyName": "string",
+    //   "profileImageFileName": "string",
+    //   "profileImageBase64": "string",
     //   "deletedCustomerDeliveryAddresses": [0],
     //   "updateCustomerDeliveryAddresses": [
     //      {

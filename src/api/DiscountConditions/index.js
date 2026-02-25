@@ -1,4 +1,3 @@
-'use server'
 import api from "../axios";
 
 export const GetAllDiscountConditions = async (payload) => {
@@ -14,7 +13,7 @@ export const GetAllDiscountConditions = async (payload) => {
     //       }
     //     ]
     //   }
-    
+
     try {
         const res = await api.post(`DiscountCondition/GetAllDashboardDiscountConditions`, payload);
         return res.data;

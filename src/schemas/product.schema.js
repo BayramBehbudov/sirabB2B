@@ -1,5 +1,5 @@
 import z from "zod";
-import { RequiredSchemaId, RequiredSchemaIntNumber, RequiredSchemaMin1, RequiredSchemaMin2, RequiredSchemaMin3, RequiredSchemaNumber } from "./shared.schema";
+import { OptionalStrSchema, RequiredSchemaId, RequiredSchemaIntNumber, RequiredSchemaMin1, RequiredSchemaMin2, RequiredSchemaMin3, RequiredSchemaNumber } from "./shared.schema";
 
 export const ProductCategorySchema = z.object({
     name: z.string({ error: "errors.nameRequired" }).nonempty({ error: "errors.nameRequired" }),
@@ -42,7 +42,7 @@ export const ProductImageSchema = z.object({
 
 
 export const ProductSchema = z.object({
-    erpId: RequiredSchemaMin3,
+    erpId: OptionalStrSchema,
     name: RequiredSchemaMin3,
     description: RequiredSchemaMin3,
     productCategoryId: RequiredSchemaNumber,

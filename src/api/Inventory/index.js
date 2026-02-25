@@ -1,4 +1,3 @@
-'use server'
 import api from "../axios";
 
 export const GetAllInventoryRequirements = async (payload) => {

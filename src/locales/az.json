@@ -1,4 +1,16 @@
 {
+  "paymentType":"Ödəniş növü",
+  "viewOrder": "Sifarişə bax",
+  "orderDetails":"{{orderCode}} nömrəli sifarişin təfərrüatları",
+  "totalTaxAmount": "ƏDV məbləği",
+  "totalNetAmount": "Net məbləğ",
+  "totalDiscountAmount": "Endirim məbləği",
+  "totalGrossAmount": "Ümumi məbləğ",
+  "note": "Qeyd",
+  "promoCode": "Promo kod",
+  "address": "Ünvan",
+  "orders": "Sifarişlər",
+  "beginDate": "Başlanğıc tarixi",
   "profilePicture": "Profil şəkli",
   "noAddedPhotos": "Əlavə edilmiş şəkil yoxdur",
   "orderEvaluationTypeName": "Qiymətləndirmə tipi",
@@ -312,6 +324,7 @@
     "12-1": "İnventar yoxlama siyahısı",
     "13": "İcazə qrupları",
     "14": "Popuplar",
+    "15": "Sifarişlər",
     "logout": "Çıxış"
   }
 }

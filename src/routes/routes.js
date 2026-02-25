@@ -21,7 +21,8 @@ import {
     FaRegListAlt,
     FaCalendarCheck,
     FaFileImage,
-    FaRegFileImage
+    FaRegFileImage,
+    FaList
 } from "react-icons/fa";
 import CustomerGroups from "@/pages/Customers/groups/Groups";
 import NotificationTypes from "@/pages/Notifications/Types/NotificationTypes";
@@ -39,6 +40,7 @@ import PrivacyDocuments from "@/pages/Parameters/privacyDocuments/PrivacyDocumen
 import PaymentTypes from "@/pages/Parameters/paymentTypes/PaymentTypes";
 import OrderStatuses from "@/pages/Parameters/orderStatuses/OrderStatuses";
 import RatingTypes from "@/pages/Ratings/Rating-types/RatingTypes";
+import Orders from "@/pages/Orders/Orders";
 
 // qeyd permission all olan səhifələr  hamıya görünür
 const routes = [
@@ -92,6 +94,13 @@ const routes = [
             }]
     },
     {
+        id: 15, path: "/orders",
+        label: "Sifarişlər",
+        component: Orders, icon: FaList,
+        permission: "ORDER: ORDER_LIST",
+        children: []
+    },
+    {
         id: 5, path: "/parameters",
         label: "Standart parametrlər",
         component: Parameters, icon: FaFileContract,
@@ -123,26 +132,26 @@ const routes = [
             },
         ]
     },
-    {
-        id: 6, path: "/notifications",
-        component: Notifications, icon: FaBell,
-        label: "Bildiriş göndərilməsi",
-        permission: "NOTIFICATION: NOTIFICATION_LIST",
-        children: [
-            {
-                id: "6-1", path: "/notifications/types",
-                label: "Bildiriş tipləri",
-                component: NotificationTypes,
-                permission: "NOTIFICATION_TYPE: NOTIFICATION_TYPE_LIST",
-            },
-            {
-                id: "6-2", path: "/notifications/forms",
-                label: "Bildiriş formaları",
-                component: NotificationTemplates,
-                permission: "NOTIFICATION_TEMPLATE: NOTIFICATION_TEMPLATE_LIST",
-            }
-        ]
-    },
+    // {
+    //     id: 6, path: "/notifications",
+    //     component: Notifications, icon: FaBell,
+    //     label: "Bildiriş göndərilməsi",
+    //     permission: "NOTIFICATION: NOTIFICATION_LIST",
+    //     children: [
+    //         {
+    //             id: "6-1", path: "/notifications/types",
+    //             label: "Bildiriş tipləri",
+    //             component: NotificationTypes,
+    //             permission: "NOTIFICATION_TYPE: NOTIFICATION_TYPE_LIST",
+    //         },
+    //         {
+    //             id: "6-2", path: "/notifications/forms",
+    //             label: "Bildiriş formaları",
+    //             component: NotificationTemplates,
+    //             permission: "NOTIFICATION_TEMPLATE: NOTIFICATION_TEMPLATE_LIST",
+    //         }
+    //     ]
+    // },
     {
         id: 7, path: "/ratings",
         label: "Qiymətləndirmələr",
@@ -192,20 +201,20 @@ const routes = [
         permission: "CUSTOMER_UPLOAD_DOCUMENT: CUSTOMER_UPLOAD_DOCUMENT_LIST",
         children: []
     },
-    {
-        id: "12", path: "/inventory-check-requirement",
-        label: "Inventar yoxlama tələbləri",
-        component: InventoryCheckRequirement, icon: FaCalendarCheck,
-        permission: "INVENTORY: INVENTORY_REQUIREMENT_LIST",
-        children: [
-            {
-                id: "12-1", path: "/inventory-check-assignment",
-                label: "İnventar yoxlama siyahısı",
-                component: InventoryCheckAssignment,
-                permission: "INVENTORY: INVENTORY_LIST_CREATED_FOR_CUSTOMER",
-            }
-        ]
-    },
+    // {
+    //     id: "12", path: "/inventory-check-requirement",
+    //     label: "Inventar yoxlama tələbləri",
+    //     component: InventoryCheckRequirement, icon: FaCalendarCheck,
+    //     permission: "INVENTORY: INVENTORY_REQUIREMENT_LIST",
+    //     children: [
+    //         {
+    //             id: "12-1", path: "/inventory-check-assignment",
+    //             label: "İnventar yoxlama siyahısı",
+    //             component: InventoryCheckAssignment,
+    //             permission: "INVENTORY: INVENTORY_LIST_CREATED_FOR_CUSTOMER",
+    //         }
+    //     ]
+    // },
     {
         id: 13, path: "/claim-groups",
         label: "İcazə qrupları",
@@ -213,6 +222,7 @@ const routes = [
         permission: "AUTH: GET_CLAIM_GROUP_BY_USER_ID",
         children: []
     },
+
 ];
 
 

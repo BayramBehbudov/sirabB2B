@@ -1,4 +1,3 @@
-'use server'
 import api from "../axios";
 
 export const GetAllBanners = async (payload) => {

@@ -1,4 +1,3 @@
-'use server'
 import api from "../axios";
 
 // products

@@ -1,4 +1,4 @@
-import { GetAllBanners } from "@/api/Banner";
+import { DeleteBanner, GetAllBanners } from "@/api/Banner";
 import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import usePermissions from "@/hooks/usePermissions";
 import TableHeader from "@/components/ui/TableHeader";
 import { PhotosViewerDialog } from "@/components/ui/file/PhotosViewerDialog";
+import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 
 const Banners = () => {
   const { t } = useTranslation();
@@ -30,12 +31,12 @@ const Banners = () => {
   });
 
   // qeyd sort və search yoxla
-
   const navigate = useNavigate();
   const perms = usePermissions({
     show: "BANNER: BANNER_LIST",
     create: "BANNER: CREATE_BANNER",
     update: "BANNER: UPDATE_BANNER",
+    delete: "BANNER: DELETE_BANNER",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -57,6 +58,27 @@ const Banners = () => {
     }
   };
 
+  const handleDelete = async (data) => {
+    if (!data?.id) return;
+    try {
+      setLoading(true);
+      const res = await DeleteBanner(data.id);
+      getBanners();
+      showToast({
+        severity: "success",
+        summary: t("success"),
+        detail: res?.message || "",
+      });
+    } catch (e) {
+      showToast({
+        severity: "error",
+        summary: t("error"),
+        detail: e?.response?.data?.message || t("unexpectedError"),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     if (!perms.ready) return;
     if (!isAllowed) return navigate("/not-allowed", { replace: true });
@@ -153,6 +175,9 @@ const Banners = () => {
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">
+                  {perms.delete && (
+                    <DeleteConfirm onConfirm={() => handleDelete(data)} />
+                  )}
                   <PhotosViewerDialog images={data.bannerImages} />
                   <CustomersViewDialog
                     customers={data.bannerCustomers}

@@ -12,8 +12,9 @@ import usePermissions from "@/hooks/usePermissions";
 import TableHeader from "@/components/ui/TableHeader";
 import { PhotosViewerDialog } from "@/components/ui/file/PhotosViewerDialog";
 import AddPopup from "./components/AddPopup";
-import { GetAllPromoPopups } from "@/api/Popup";
+import { DeletePromoPopUp, GetAllPromoPopups } from "@/api/Popup";
 import CustomersViewDialog from "../Customers/components/CustomersViewDialog";
+import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 
 const Popups = () => {
   const { t } = useTranslation();
@@ -33,6 +34,7 @@ const Popups = () => {
     show: "PROMO_POPUP: PROMO_POPUP_LIST",
     create: "PROMO_POPUP: CREATE_PROMO_POPUP",
     update: "PROMO_POPUP: UPDATE_PROMO_POPUP",
+    delete: "PROMO_POPUP: DELETE_PROMO_POPUP",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -54,6 +56,27 @@ const Popups = () => {
     }
   };
 
+  const handleDelete = async (data) => {
+    if (!data?.id) return;
+    try {
+      setLoading(true);
+      const res = await DeletePromoPopUp(data.id);
+      getPopups();
+      showToast({
+        severity: "success",
+        summary: t("success"),
+        detail: res?.message || "",
+      });
+    } catch (e) {
+      showToast({
+        severity: "error",
+        summary: t("error"),
+        detail: e?.response?.data?.message || t("unexpectedError"),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     if (!perms.ready) return;
     if (!isAllowed) return navigate("/not-allowed", { replace: true });
@@ -150,6 +173,9 @@ const Popups = () => {
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">
+                  {perms.delete && (
+                    <DeleteConfirm onConfirm={() => handleDelete(data)} />
+                  )}
                   <PhotosViewerDialog images={data.promoPopupImages} />
                   <CustomersViewDialog
                     customers={data.promoPopupCustomers}

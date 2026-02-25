@@ -89,3 +89,16 @@ export const PromoPopupUpdate = async (data) => {
         throw error;
     }
 };
+
+
+
+export const DeletePromoPopUp = async (id) => {
+
+    try {
+        const response = await api.put(`/PromoPopup/DeletePromoPopUp/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log('error at DeletePromoPopUp', error);
+        throw error;
+    }
+};

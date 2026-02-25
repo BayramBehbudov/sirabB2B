@@ -89,3 +89,15 @@ export const BannerUpdate = async (data) => {
         throw error;
     }
 };
+
+
+export const DeleteBanner = async (id) => {
+
+    try {
+        const response = await api.put(`/Banner/DeleteBanner/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log('error at DeleteBanner', error);
+        throw error;
+    }
+};

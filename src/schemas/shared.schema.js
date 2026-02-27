@@ -19,8 +19,8 @@ export const PhoneSchema = z
     .nonempty({ error: "errors.required" })
 
 export const PhoneSchemaOptional = z
-    .string()
-    .optional()
+    .string({ error: "errors.required" })
+    .optional().nullable()
     .refine((val) => !val || phoneRegex.test(val), { message: "errors.enterValidPhone" })
 
 

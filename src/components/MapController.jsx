@@ -10,7 +10,7 @@ import { showToast } from "@/providers/ToastProvider";
 const DEFAULT_LAT = 40.409264;
 const DEFAULT_LNG = 49.867092;
 
-const MapController = ({ locX, locY, onSelect }) => {
+const MapController = ({ locX, locY, onSelect, isEdit = false }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,20 +27,13 @@ const MapController = ({ locX, locY, onSelect }) => {
     };
   }, [locX, locY]);
 
-  const [markerPosition, setMarkerPosition] = useState(
-    // value?.lat && value?.lng
-    //   ? { lat: value.lat, lng: value.lng }
-    //   :
-    fallbackCoords
-  );
+  const [markerPosition, setMarkerPosition] = useState(fallbackCoords);
 
-  // useEffect(() => {
-  //   if (value?.lat && value?.lng) {
-  //     setMarkerPosition({ lat: value.lat, lng: value.lng });
-  //     setSelectedLocation(value);
-  //     setSearchValue(value.displayName ?? "");
-  //   }
-  // }, [value]);
+  useEffect(() => {
+    if (fallbackCoords?.lat && fallbackCoords?.lng) {
+      setMarkerPosition(fallbackCoords);
+    }
+  }, [fallbackCoords, visible]);
 
   const fetchAddressDetails = useCallback(async (lat, lng) => {
     const params = new URLSearchParams({
@@ -57,7 +50,7 @@ const MapController = ({ locX, locY, onSelect }) => {
         headers: {
           Accept: "application/json",
         },
-      }
+      },
     );
 
     if (!response.ok) return undefined;
@@ -94,7 +87,7 @@ const MapController = ({ locX, locY, onSelect }) => {
         setLoading(false);
       }
     },
-    [fetchAddressDetails]
+    [fetchAddressDetails],
   );
 
   const handleDialogOpen = () => {
@@ -104,7 +97,7 @@ const MapController = ({ locX, locY, onSelect }) => {
       if (selectedLocation?.lat && selectedLocation?.lng) {
         mapInstanceRef.current?.setView(
           { lat: selectedLocation.lat, lng: selectedLocation.lng },
-          16
+          16,
         );
       }
     }, 100);
@@ -142,7 +135,7 @@ const MapController = ({ locX, locY, onSelect }) => {
       });
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?${params.toString()}`,
-        { headers: { Accept: "application/json" } }
+        { headers: { Accept: "application/json" } },
       );
       if (!response.ok) return;
       const data = await response.json();
@@ -207,9 +200,11 @@ const MapController = ({ locX, locY, onSelect }) => {
   return (
     <div className="flex flex-col gap-2">
       <Button
-        icon={"pi pi-plus"}
-        label={t("searchOnMap")}
+        icon={"pi pi-map"}
+        label={isEdit ? undefined : t("searchOnMap")}
         onClick={handleDialogOpen}
+        tooltip={isEdit ? t("edit") : undefined}
+        tooltipOptions={{ position: "top" }}
       />
 
       <Dialog
@@ -279,7 +274,7 @@ const MapController = ({ locX, locY, onSelect }) => {
                           {row.value}
                         </span>
                       </div>
-                    )
+                    ),
                 )}
               </div>
             </div>

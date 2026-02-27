@@ -173,6 +173,7 @@ const ProductCategories = () => {
                   src={data?.filePath || ""}
                   preview
                   className="w-[50px] h-[50px]"
+                  imageClassName="w-[50px] h-[50px] object-contain"
                 />
               );
             }}

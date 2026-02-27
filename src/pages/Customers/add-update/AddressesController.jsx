@@ -2,12 +2,12 @@ import MapController from "@/components/MapController";
 import ControlledInput from "@/components/ui/ControlledInput";
 import ControlledSwitch from "@/components/ui/ControlledSwitch";
 import { Button } from "primereact/button";
-import { Controller, useFieldArray } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 const AddressesController = ({ control, formAddresses = [], setValue }) => {
   const { t } = useTranslation();
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: "deliveryAddresses",
     keyName: "fieldId",
@@ -67,7 +67,7 @@ const AddressesController = ({ control, formAddresses = [], setValue }) => {
                 <label className="font-bold">
                   {t(`addressCount`, { count: index + 1 })}
                 </label>
-                <div className="flex flex-row gap-5 items-center">
+                <div className="flex flex-row gap-3 items-center">
                   <ControlledSwitch
                     control={control}
                     name={`deliveryAddresses.${index}.isDefault`}
@@ -86,7 +86,22 @@ const AddressesController = ({ control, formAddresses = [], setValue }) => {
                       }
                     }}
                   />
-
+                  <MapController
+                    isEdit={true}
+                    onSelect={(v) => {
+                      console.log(item);
+                      update(index, {
+                        ...item,
+                        addressLine: v.displayName,
+                        city: v?.address?.city ?? "",
+                        postalCode: v?.address?.postcode ?? "",
+                        loc_Y: v?.lat ?? 0,
+                        loc_X: v?.lng ?? 0,
+                      });
+                    }}
+                    locX={item.loc_X}
+                    locY={item.loc_Y}
+                  />
                   <Button
                     icon="pi pi-trash"
                     tooltip={t("deleteAddress")}

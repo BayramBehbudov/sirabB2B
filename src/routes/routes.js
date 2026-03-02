@@ -41,6 +41,7 @@ import PaymentTypes from "@/pages/Parameters/paymentTypes/PaymentTypes";
 import OrderStatuses from "@/pages/Parameters/orderStatuses/OrderStatuses";
 import RatingTypes from "@/pages/Ratings/Rating-types/RatingTypes";
 import Orders from "@/pages/Orders/Orders";
+import ContactInfo from "@/pages/Parameters/contactInfo/ContactInfo";
 
 // qeyd permission all olan səhifələr  hamıya görünür
 const routes = [
@@ -130,6 +131,12 @@ const routes = [
                 component: OrderStatuses,
                 permission: "ORDER_STATUS: ORDER_STATUS_LIST",
             },
+            {
+                id: "5-5", path: "/contact-info",
+                label: "Əlaqə məlumatları",
+                component: ContactInfo,
+                permission: "CONTACT_DETAILS: CONTACT_DETAILS_LIST",
+            },
         ]
     },
     // {
@@ -201,20 +208,20 @@ const routes = [
         permission: "CUSTOMER_UPLOAD_DOCUMENT: CUSTOMER_UPLOAD_DOCUMENT_LIST",
         children: []
     },
-    // {
-    //     id: "12", path: "/inventory-check-requirement",
-    //     label: "Inventar yoxlama tələbləri",
-    //     component: InventoryCheckRequirement, icon: FaCalendarCheck,
-    //     permission: "INVENTORY: INVENTORY_REQUIREMENT_LIST",
-    //     children: [
-    //         {
-    //             id: "12-1", path: "/inventory-check-assignment",
-    //             label: "İnventar yoxlama siyahısı",
-    //             component: InventoryCheckAssignment,
-    //             permission: "INVENTORY: INVENTORY_LIST_CREATED_FOR_CUSTOMER",
-    //         }
-    //     ]
-    // },
+    {
+        id: "12", path: "/inventory-check-requirement",
+        label: "Inventar yoxlama tələbləri",
+        component: InventoryCheckRequirement, icon: FaCalendarCheck,
+        permission: "INVENTORY: INVENTORY_REQUIREMENT_LIST",
+        children: [
+            {
+                id: "12-1", path: "/inventory-check-assignment",
+                label: "İnventar yoxlama siyahısı",
+                component: InventoryCheckAssignment,
+                permission: "INVENTORY: INVENTORY_LIST_CREATED_FOR_CUSTOMER",
+            }
+        ]
+    },
     {
         id: 13, path: "/claim-groups",
         label: "İcazə qrupları",

@@ -25,6 +25,7 @@ const PermissionsSelector = ({ claimGroup }) => {
   const [totalRecords, setTotalRecords] = useState(0);
   const { t } = useTranslation();
 
+  // qeyd burada search db ilə deyil, cari səhifədəki data üçün lokal search edirəm
   const getPermissions = async () => {
     if (!claimGroup.id) return;
     try {

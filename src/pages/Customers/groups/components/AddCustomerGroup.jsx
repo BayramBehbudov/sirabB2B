@@ -28,7 +28,7 @@ const AddCustomerGroup = ({ group = null, onSuccess }) => {
         name: z
           .string({ error: "errors.required" })
           .nonempty({ error: "errors.required" }),
-      })
+      }),
     ),
     defaultValues: {
       name: group?.name || "",
@@ -55,7 +55,9 @@ const AddCustomerGroup = ({ group = null, onSuccess }) => {
         summary: t("error"),
         detail:
           error?.response?.data?.message ??
-          t("messages.customerGroupCreationError") + ". " + t("messages.tryAgain"),
+          t("messages.customerGroupCreationError") +
+            ". " +
+            t("messages.tryAgain"),
       });
     } finally {
       setLoading(false);
@@ -116,4 +118,4 @@ const AddCustomerGroup = ({ group = null, onSuccess }) => {
   );
 };
 
-export default AddCustomerGroup
+export default AddCustomerGroup;

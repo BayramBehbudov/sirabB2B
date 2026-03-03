@@ -14,6 +14,7 @@ import { showToast } from "@/providers/ToastProvider";
 import usePermissions from "@/hooks/usePermissions";
 import { useNavigate } from "react-router-dom";
 import AddCustomerGroup from "./components/AddCustomerGroup";
+import CustomerSelectorToGroup from "./components/CustomerSelectorToGroup";
 
 const CustomerGroups = () => {
   const { t } = useTranslation();
@@ -26,10 +27,11 @@ const CustomerGroups = () => {
     create: "B2BCUSTOMER_GROUP: CREATE_B2BCUSTOMER_GROUP",
     update: "B2BCUSTOMER_GROUP: UPDATE_B2BCUSTOMER_GROUP",
     delete: "B2BCUSTOMER_GROUP: DELETE_B2BCUSTOMER_GROUP",
+    getCustomers: "B2BCUSTOMER_GROUP: GET_B2BCUSTOMERS_BY_GROUP_ID",
   });
 
   const isAllowed = perms.isAllowed("show");
-  const hasAny = perms.hasAny(["update", "delete"]);
+  const hasAny = perms.hasAny(["update", "delete", "getCustomers"]);
 
   const getGroups = async () => {
     try {
@@ -39,7 +41,7 @@ const CustomerGroups = () => {
         setGroups(response);
       }
     } catch (error) {
-      setLoading(false);
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -109,6 +111,9 @@ const CustomerGroups = () => {
                   <div className="flex flex-row gap-2 justify-center">
                     {perms.update && (
                       <AddCustomerGroup group={row} onSuccess={getGroups} />
+                    )}
+                    {perms.getCustomers && (
+                      <CustomerSelectorToGroup group={row} />
                     )}
                     {perms.delete && (
                       <DeleteConfirm onConfirm={() => handleDelete(row.id)} />

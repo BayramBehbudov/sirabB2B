@@ -13,7 +13,6 @@ import {
 } from "@/api/B2BCustomer";
 import { SwitchConfirm } from "@/components/ui/dialogs/SwitchConfirm";
 import { showToast } from "@/providers/ToastProvider";
-import AddCustomer from "./components/AddCustomerlast";
 import usePermissions from "@/hooks/usePermissions";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";

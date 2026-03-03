@@ -1,4 +1,5 @@
 {
+  "addCustomerToGroup": "{{name}} qrupuna müştəri əlavə et",
   "contactInfo": "Əlaqə məlumatları",
   "whatsAppNumber": "WhatsApp nömrəsi",
   "callNumber": "Əlaqə nömrəsi",
@@ -219,6 +220,7 @@
   "customerSelect": "Müştəri seç",
   "customer": "Müştəri",
   "selected": "seçilib",
+  "unselected": "Seçilməyib",
   "search": "Axtar",
   "addFiles": "Faylları əlavə edin",
   "addFile": "Fayl əlavə edin",
@@ -247,6 +249,7 @@
   "setClaimGroupToUser": "İstifadəçiyə icazə qrupu təyin et",
   "addPermission": "İcazəni əlavə et",
   "removePermission": "İcazəni çıxart",
+  "remove": "Çıxart",
   "assignUser": "İstifadəçilərə təyin et",
   "goBack": "Geri qayıt",
   "notEntryAccess": "Giriş icazəsi yoxdur",

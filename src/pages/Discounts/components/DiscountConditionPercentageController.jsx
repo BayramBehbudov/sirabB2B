@@ -90,6 +90,7 @@ const DiscountConditionPercentageController = ({ control, formLines }) => {
                     icon="pi pi-plus"
                     onClick={() =>
                       append({
+                        id: 0,
                         discountPercentage: null,
                         productId: null,
                         isVAT: false,
@@ -106,4 +107,4 @@ const DiscountConditionPercentageController = ({ control, formLines }) => {
   );
 };
 
-export default DiscountConditionPercentageController
+export default DiscountConditionPercentageController;

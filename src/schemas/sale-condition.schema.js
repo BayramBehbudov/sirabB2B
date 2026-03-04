@@ -15,7 +15,6 @@ export const SaleConditionSchema = z.object({
     startDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.startDateRequired" }),
     endDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.endDateRequired" }),
     description: z.string().default(''),
-
     saleConditionLines: z
         .array(SaleConditionLineSchema)
         .nonempty({ message: "errors.required" }),

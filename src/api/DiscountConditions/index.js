@@ -27,21 +27,27 @@ export const GetAllDiscountConditions = async (payload) => {
 
 export const CreateDiscountCondition = async (data) => {
     // {
-    //     "b2BCustomerGroupIds": [0],
-    //     "b2BCustomerIds": [0],
-    //     "sendToAllCustomers": true,
-    //     "startDate": "2025-11-25T09:10:32.518Z",
-    //     "endDate": "2025-11-25T09:10:32.518Z",
+    //   "b2BCustomerGroupId": 0,
+    //   "b2BCustomerId": 0,
+    //     "startDate": "2026-03-04T11:34:54.858Z",
+    //     "endDate": "2026-03-04T11:34:54.858Z",
     //     "description": "string",
-    //     "discountConditionLines": [
-    //       {
-    //         "discountPercentage": 0,
-    //         "isVAT": true,
-    //         "productId": 0
-    //       }
-    //     ]
-    //   }
-
+    //   "clSpecode": "string",
+    //   "clSpecode1": "string",
+    //   "clSpecode2": "string",
+    //   "clSpecode3": "string",
+    //   "clSpecode4": "string",
+    //   "clSpecode5": "string",
+    //   "b2BCustomerType": "string",
+    //   "isActive": true,
+    //   "discountConditionLines": [
+    //     {
+    //       "discountPercentage": 0,
+    //       "isVAT": true,
+    //       "productId": 0
+    //     }
+    //   ]
+    // }
     try {
         const res = await api.post(`DiscountCondition/CreateDiscountCondition`, data);
         return res.data;
@@ -53,22 +59,33 @@ export const CreateDiscountCondition = async (data) => {
 
 export const UpdateDiscountCondition = async (data) => {
     // {
-    //     "id": 0,
-    //     "sendToAllCustomers": true,
-    //     "b2BCustomerGroupIds": [0],
-    //     "b2BCustomerIds": [0],
-    //     "startDate": "2025-11-25T09:11:11.254Z",
-    //     "endDate": "2025-11-25T09:11:11.254Z",
-    //     "description": "string",
-    //     "discountConditionLines": [
-    //       {
-    //         "id": 0,
-    //         "discountPercentage": 0,
-    //         "isVAT": true,
-    //         "productId": 0
-    //       }
-    //     ]
-    //   }{
+    //   "id": 0,
+    //   "b2BCustomerGroupId": 0,
+    //   "b2BCustomerId": 0,
+    //   "startDate": "2026-03-04T11:35:44.105Z",
+    //   "endDate": "2026-03-04T11:35:44.105Z",
+    //   "description": "string",
+    //   "clSpecode": "string",
+    //   "clSpecode1": "string",
+    //   "clSpecode2": "string",
+    //   "clSpecode3": "string",
+    //   "clSpecode4": "string",
+    //   "clSpecode5": "string",
+    //   "b2BCustomerType": "string",
+    //   "isActive": true,
+    //   "deletedLineIds": [
+    //     0
+    //   ],
+    //   "discountConditionLines": [
+    //     {
+    //       "id": 0,
+    //       "discountPercentage": 0,
+    //       "isVAT": true,
+    //       "productId": 0
+    //     }
+    //   ]
+    // }
+
 
 
     try {

@@ -55,30 +55,6 @@ const columns = [
   },
   {
     fieldKey: "orderInfo",
-    label: "totalNetAmount",
-    field: "totalNetAmount",
-    type: "number",
-  },
-  {
-    fieldKey: "orderInfo",
-    label: "totalDiscountAmount",
-    field: "totalDiscountAmount",
-    type: "number",
-  },
-  {
-    fieldKey: "orderInfo",
-    label: "totalTaxAmount",
-    field: "totalTaxAmount",
-    type: "number",
-  },
-  {
-    fieldKey: "orderInfo",
-    label: "totalGrossAmount",
-    field: "totalGrossAmount",
-    type: "number",
-  },
-  {
-    fieldKey: "orderInfo",
     label: "note",
     field: "note",
     type: "text",
@@ -88,6 +64,32 @@ const columns = [
     label: "promoCode",
     field: "promoCode",
     type: "text",
+  },
+  {
+    fieldKey: "orderInfo",
+    label: "totalGrossAmount",
+    field: "totalGrossAmount",
+    type: "number",
+  },
+  {
+    fieldKey: "orderInfo",
+    label: "totalTaxAmount",
+    field: "totalTaxAmount",
+    type: "number",
+  },
+
+  {
+    fieldKey: "orderInfo",
+    label: "totalDiscountAmount",
+    field: "totalDiscountAmount",
+    type: "number",
+  },
+
+  {
+    fieldKey: "orderInfo",
+    label: "totalNetAmount",
+    field: "totalNetAmount",
+    type: "number",
   },
   {
     fieldKey: "orderInfo",

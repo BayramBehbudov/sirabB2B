@@ -17,6 +17,8 @@ const CustomerSelectorDialog = ({
   onClose,
   selectedCustomerIds = [],
   handleSelect,
+  mode = "multiple",
+  required = true,
 }) => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -40,7 +42,7 @@ const CustomerSelectorDialog = ({
       "phoneNumber",
       "taxId",
     ],
-    []
+    [],
   );
 
   const getCustomers = async () => {
@@ -53,9 +55,11 @@ const CustomerSelectorDialog = ({
       setCustomers(res.b2BCustomers);
       setFilteredCustomers(res.b2BCustomers);
       const preselected = res.b2BCustomers.filter((c) =>
-        selectedCustomerIds.includes(c.b2BCustomerId)
+        selectedCustomerIds.includes(c.b2BCustomerId),
       );
-      setSelectedCustomers(preselected);
+      setSelectedCustomers(
+        mode === "single" ? preselected.slice(0, 1) : preselected,
+      );
     } catch (error) {
       console.log("error at getCustomers", error);
     } finally {
@@ -74,7 +78,7 @@ const CustomerSelectorDialog = ({
         filtered = filtered.filter((item) =>
           String(item[key] || "")
             .toLowerCase()
-            .includes(value.toLowerCase())
+            .includes(value.toLowerCase()),
         );
       }
     });
@@ -89,8 +93,19 @@ const CustomerSelectorDialog = ({
 
   const footer = (
     <div className="flex justify-end gap-2 mt-4">
+      {selectedCustomers.length > 0 && !required && (
+        <Button
+          label={t("clear")}
+          icon="pi pi-times"
+          className="p-button-text"
+          onClick={() => {
+            setSelectedCustomers([]);
+            setFilters({});
+          }}
+        />
+      )}
       <Button
-        label={t("cancel")}
+        label={t("close")}
         icon="pi pi-times"
         className="p-button-text"
         onClick={handleClose}
@@ -114,7 +129,7 @@ const CustomerSelectorDialog = ({
       header={
         <p className={`text-[1.5rem] font-bold`}>
           {selectedCustomers.length > 0
-            ? `${selectedCustomers.length} ${t("customer")} ${t("selected")}`
+            ? t("customerSelectedCount", { count: selectedCustomers.length })
             : t("customers")}
         </p>
       }
@@ -128,10 +143,22 @@ const CustomerSelectorDialog = ({
             value={filteredCustomers}
             {...tableStaticProps}
             lazy={false}
-            selection={selectedCustomers}
-            onSelectionChange={(e) => setSelectedCustomers(e.value)}
+            selection={
+              mode === "single"
+                ? selectedCustomers.length > 0
+                  ? selectedCustomers[0]
+                  : null
+                : selectedCustomers
+            }
+            onSelectionChange={(e) => {
+              if (mode === "single") {
+                setSelectedCustomers(e.value ? [e.value] : []);
+              } else {
+                setSelectedCustomers(e.value);
+              }
+            }}
           >
-            <Column selectionMode="multiple" headerStyle={{ width: "3rem" }} />
+            <Column selectionMode={mode} headerStyle={{ width: "3rem" }} />
 
             {columns.map((f) => {
               return (

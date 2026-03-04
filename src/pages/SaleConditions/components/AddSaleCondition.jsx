@@ -1,8 +1,6 @@
 import ControlledCalendar from "@/components/ui/ControlledCalendar";
 import ControlledInput from "@/components/ui/ControlledInput";
 import CustomerHandler from "@/pages/Banners/components/CustomerHandler";
-import SendToAllCustomersHandler from "@/pages/Banners/components/SendToAllCustomersHandler";
-import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
 import { SaleConditionSchema } from "@/schemas/sale-condition.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
@@ -11,8 +9,10 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import SaleConditionPriceController from "./SaleConditionPriceController";
-import { CreateSaleCondition } from "@/api/SaleConditions";
+import { CreateSaleCondition, UpdateSaleCondition } from "@/api/SaleConditions";
 import { showToast } from "@/providers/ToastProvider";
+import CustomerGroupSelector from "@/pages/Customers/groups/components/CustomerGroupSelector";
+import ControlledSwitch from "@/components/ui/ControlledSwitch";
 
 const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
   const { t } = useTranslation();
@@ -24,22 +24,31 @@ const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
     endDate: condition?.endDate || "",
     description: condition?.description || "",
     saleConditionLines: condition?.saleConditionLines?.map((l) => ({
+      id: l.lineId,
       price: l.price,
       isVAT: l.isVAT,
       productId: l.productId,
     })) || [
       {
+        id: 0,
         price: null,
         isVAT: false,
         productId: null,
       },
     ],
 
-    sendToAllCustomers: false,
-    b2BCustomerGroupIds: [],
-    b2BCustomerIds: [],
-  };
+    b2BCustomerGroupId: condition?.customerGroupId || null,
+    b2BCustomerId: condition?.b2BCustomerId || null,
 
+    clSpecode: condition?.clSpecode || "*",
+    clSpecode1: condition?.clSpecode1 || "*",
+    clSpecode2: condition?.clSpecode2 || "*",
+    clSpecode3: condition?.clSpecode3 || "*",
+    clSpecode4: condition?.clSpecode4 || "*",
+    clSpecode5: condition?.clSpecode5 || "*",
+    b2BCustomerType: condition?.b2BCustomerType || "*",
+    isActive: condition?.isActive ?? true,
+  };
   const {
     control,
     handleSubmit,
@@ -47,20 +56,29 @@ const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
     formState: { errors },
     watch,
     setValue,
-    trigger,
   } = useForm({
     resolver: zodResolver(SaleConditionSchema),
     defaultValues,
   });
+  const b2BCustomerId = watch("b2BCustomerId");
 
-  const sendToAllCustomers = watch("sendToAllCustomers");
-  const b2BCustomerIds = watch("b2BCustomerIds");
   const onSubmit = async (formData) => {
-    // qeyd edit yazılmayıb
-    if (isEdit) return;
     try {
       setLoading(true);
-      const res = await CreateSaleCondition(formData);
+      const res = isEdit
+        ? await UpdateSaleCondition({
+            ...formData,
+            id: condition.id,
+            deletedLineIds: (condition?.saleConditionLines ?? [])
+              .map((l) => {
+                if (
+                  !formData.saleConditionLines.some((sl) => sl.id === l.lineId)
+                )
+                  return l.lineId;
+              })
+              .filter((l) => l),
+          })
+        : await CreateSaleCondition(formData);
       showToast({
         severity: "success",
         summary: t("success"),
@@ -122,29 +140,26 @@ const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
       >
         <div className="flex flex-col gap-2">
           <div className="flex flex-row gap-2 flex-wrap">
-            <SendToAllCustomersHandler control={control} setValue={setValue} />
-            {!sendToAllCustomers && (
-              <CustomerGroupMultiSelector
-                fieldName="b2BCustomerGroupIds"
-                control={control}
-                trigger={trigger}
-              />
-            )}
-            {!sendToAllCustomers && (
-              <CustomerHandler
-                error={errors.b2BCustomerIds}
-                value={b2BCustomerIds}
-                setValue={setValue}
-                trigger={trigger}
-              />
-            )}
+            <CustomerGroupSelector
+              control={control}
+              field="b2BCustomerGroupId"
+              showClear={true}
+            />
+            <CustomerHandler
+              error={errors.b2BCustomerId}
+              value={b2BCustomerId ? [b2BCustomerId] : []}
+              setValue={setValue}
+              field="b2BCustomerId"
+              required={false}
+              mode="single"
+            />
             {["startDate", "endDate"].map((item) => {
               const minDate =
                 item === "startDate"
                   ? new Date()
                   : watch("startDate")
-                  ? new Date(watch("startDate"))
-                  : new Date();
+                    ? new Date(watch("startDate"))
+                    : new Date();
               const maxDate =
                 item === "startDate" ? new Date(watch("endDate")) : undefined;
 
@@ -161,6 +176,32 @@ const AddSaleCondition = ({ onSuccess, condition, disabled }) => {
                 />
               );
             })}
+
+            {[
+              { name: "clSpecode" },
+              { name: "clSpecode1" },
+              { name: "clSpecode2" },
+              { name: "clSpecode3" },
+              { name: "clSpecode4" },
+              { name: "clSpecode5" },
+              { name: "b2BCustomerType" },
+            ].map((input) => (
+              <ControlledInput
+                control={control}
+                key={input.name}
+                name={input.name}
+                placeholder={t("enter")}
+                label={t(input.name)}
+                type={"text"}
+                avtoValue={input.avtoValue}
+              />
+            ))}
+            <ControlledSwitch
+              label={t("isActive")}
+              control={control}
+              name={`isActive`}
+              placeholder={t("isActive")}
+            />
           </div>
 
           <div className="flex flex-row gap-2 flex-wrap">

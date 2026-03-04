@@ -5,7 +5,11 @@ import { useTranslation } from "react-i18next";
 import { getAllCustomerGroup } from "@/api/B2BCustomerGroup";
 import usePermissions from "@/hooks/usePermissions";
 
-const CustomerGroupSelector = ({ control }) => {
+const CustomerGroupSelector = ({
+  control,
+  field = "customerGroupId",
+  showClear = false,
+}) => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
@@ -35,26 +39,30 @@ const CustomerGroupSelector = ({ control }) => {
 
   return (
     <Controller
-      name="customerGroupId"
+      name={field}
       control={control}
-      render={({ field, fieldState: { error } }) => (
-        <div className={`flex flex-col gap-1 w-[250px]`}>
-          <label className={`font-semibold`}>{t("customerGroup")}</label>
-          <Dropdown
-            {...field}
-            emptyMessage={isAllowed ? t("dataNotFound") : t("notPermForList")}
-            options={groups.map((group) => ({
-              name: group.name,
-              value: group.id,
-            }))}
-            loading={loading}
-            optionLabel="name"
-            placeholder={t("customerGroup")}
-            className={error ? "p-invalid" : ""}
-          />
-          {error && <small className="p-error">{t(error.message)}</small>}
-        </div>
-      )}
+      render={({ field, fieldState: { error } }) => {
+        return (
+          <div className={`flex flex-col gap-1 w-[250px]`}>
+            <label className={`font-semibold`}>{t("customerGroup")}</label>
+            <Dropdown
+              value={field.value ?? undefined}
+              onChange={(e) => field.onChange(e?.value ?? null)}
+              emptyMessage={isAllowed ? t("dataNotFound") : t("notPermForList")}
+              options={groups.map((group) => ({
+                name: group.name,
+                value: group.id,
+              }))}
+              loading={loading}
+              optionLabel="name"
+              placeholder={t("customerGroup")}
+              className={error ? "p-invalid" : ""}
+              showClear={showClear}
+            />
+            {error && <small className="p-error">{t(error.message)}</small>}
+          </div>
+        );
+      }}
     />
   );
 };

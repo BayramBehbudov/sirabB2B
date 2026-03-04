@@ -1,7 +1,8 @@
 import { z } from "zod";
-import { RequiredSchemaId, RequiredSchemaNumber } from "./shared.schema";
+import { NullableSchemaId, RequiredSchemaId, RequiredSchemaNumber, SpecodeSchema } from "./shared.schema";
 
 export const SaleConditionLineSchema = z.object({
+    id: RequiredSchemaId,
     price: RequiredSchemaNumber,
     isVAT: z.boolean(),
     productId: RequiredSchemaId,
@@ -9,50 +10,21 @@ export const SaleConditionLineSchema = z.object({
 
 
 export const SaleConditionSchema = z.object({
-    b2BCustomerGroupIds: z
-        .array(z.number({ message: "errors.customerOrGroupRequired" })),
-    b2BCustomerIds: z
-        .array(z.number({ message: "errors.customerOrGroupRequired" })),
-    sendToAllCustomers: z.boolean({ message: "errors.customerTypeRequired" }),
+    b2BCustomerGroupId: NullableSchemaId,
+    b2BCustomerId: NullableSchemaId,
     startDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.startDateRequired" }),
     endDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.endDateRequired" }),
-    description: z
-        .string({ message: "errors.descriptionRequired" })
-        .min(1, { message: "errors.descriptionRequired" }),
-
+    description: z.string().default(''),
 
     saleConditionLines: z
         .array(SaleConditionLineSchema)
         .nonempty({ message: "errors.required" }),
-}).refine((data) => {
-    if (data.sendToAllCustomers) {
-        return (
-            data.b2BCustomerIds.length === 0 &&
-            data.b2BCustomerGroupIds.length === 0
-        );
-    }
-
-    return (
-        data.b2BCustomerIds.length > 0 ||
-        data.b2BCustomerGroupIds.length > 0
-    );
-}, {
-    path: ['b2BCustomerIds'],
-    message: 'errors.customerOrGroupRequired',
-}).refine((data) => {
-    if (data.sendToAllCustomers) {
-        return (
-            data.b2BCustomerIds.length === 0 &&
-            data.b2BCustomerGroupIds.length === 0
-        );
-    }
-    return (
-        data.b2BCustomerIds.length > 0 ||
-        data.b2BCustomerGroupIds.length > 0
-    );
-}, {
-    path: ['b2BCustomerGroupIds'],
-    message: 'errors.customerOrGroupRequired'
-});
-
-
+    clSpecode: SpecodeSchema,
+    clSpecode1: SpecodeSchema,
+    clSpecode2: SpecodeSchema,
+    clSpecode3: SpecodeSchema,
+    clSpecode4: SpecodeSchema,
+    clSpecode5: SpecodeSchema,
+    b2BCustomerType: SpecodeSchema,
+    isActive: z.boolean().default(true),
+})

@@ -53,6 +53,7 @@ const SaleConditions = () => {
   }, [isAllowed, perms.ready]);
 
   if (!isAllowed || !perms.ready) return null;
+
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between`}>
@@ -152,7 +153,7 @@ const SaleConditions = () => {
             />
           ))}
 
-          {/* <Column
+          <Column
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">
@@ -166,7 +167,7 @@ const SaleConditions = () => {
                 </div>
               );
             }}
-          /> */}
+          />
         </DataTable>
       </DataTableContainer>
     </div>

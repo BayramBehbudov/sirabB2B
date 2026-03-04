@@ -85,6 +85,7 @@ const SaleConditionPriceController = ({ control, formPrices }) => {
                     icon="pi pi-plus"
                     onClick={() =>
                       append({
+                        id: 0,
                         price: null,
                         productId: null,
                         isVAT: false,

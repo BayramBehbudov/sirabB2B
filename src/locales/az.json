@@ -1,4 +1,6 @@
 {
+  "clear":"Təmizlə",
+  "customerSelectedCount":"{{count}} müştəri seçilib",
   "addCustomerToGroup": "{{name}} qrupuna müştəri əlavə et",
   "contactInfo": "Əlaqə məlumatları",
   "whatsAppNumber": "WhatsApp nömrəsi",

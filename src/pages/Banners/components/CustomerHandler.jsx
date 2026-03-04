@@ -2,7 +2,15 @@ import CustomerSelectorDialog from "@/pages/Customers/components/CustomerSelecto
 import { Fragment, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const CustomerHandler = ({ error, value, setValue, trigger }) => {
+const CustomerHandler = ({
+  error,
+  value,
+  setValue,
+  trigger,
+  mode = "multiple",
+  required = true,
+  field = "b2BCustomerIds",
+}) => {
   const [showCustomers, setShowCustomers] = useState(false);
   const { t } = useTranslation();
   const btnRef = useRef(null);
@@ -24,7 +32,7 @@ const CustomerHandler = ({ error, value, setValue, trigger }) => {
             } line-clamp-1 font-normal`}
           >
             {value.length > 0
-              ? `${value.length} ${t("customer")} ${t("selected")}`
+              ? t("customerSelectedCount", { count: value.length })
               : t("customerSelect")}
           </span>
           <span className="pi pi-chevron-down"></span>
@@ -37,13 +45,18 @@ const CustomerHandler = ({ error, value, setValue, trigger }) => {
         visible={showCustomers}
         onClose={() => setShowCustomers(false)}
         handleSelect={(customers) => {
-          const ids = customers.map((c) => c.b2BCustomerId);
-          setValue("b2BCustomerIds", ids);
-          trigger?.(["b2BCustomerIds", "b2BCustomerGroupIds"]);
+          const ids =
+            mode === "single"
+              ? (customers[0]?.b2BCustomerId ?? null)
+              : (customers.map((c) => c.b2BCustomerId) ?? []);
+          setValue(field, ids);
+          trigger?.([field, "b2BCustomerGroupIds"]);
           if (btnRef.current) {
             btnRef.current.focus();
           }
         }}
+        required={required}
+        mode={mode}
         selectedCustomerIds={value}
       />
     </Fragment>

@@ -90,7 +90,7 @@ const CustomerSelectorToGroup = ({ group }) => {
       showToast({
         severity: "error",
         summary: t("error"),
-        detail: t("unexpectedError"),
+        detail: error?.response?.data?.message ?? t("unexpectedError"),
       });
     } finally {
       setLoading(false);
@@ -128,7 +128,6 @@ const CustomerSelectorToGroup = ({ group }) => {
         visible={visible}
         className={"max-w-[1100px] min-w-[500px]"}
         onHide={onClose}
-        showCloseIcon={false}
         draggable={false}
         footer={
           <div>

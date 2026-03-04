@@ -46,6 +46,13 @@ const AddCustomer = () => {
     deliveryAddresses: [],
     profileImageFileName: "",
     profileImageBase64: "",
+    clSpecode: "*",
+    clSpecode1: "*",
+    clSpecode2: "*",
+    clSpecode3: "*",
+    clSpecode4: "*",
+    clSpecode5: "*",
+    b2BCustomerType: "*",
     ...(isEdit ? {} : { password: "" }),
   };
 
@@ -92,6 +99,13 @@ const AddCustomer = () => {
         contactPersonLastName: data.contactPersonLastName,
         companyName: data.companyName,
         deliveryAddresses: data.deliveryAddresses || [],
+        clSpecode: data.clSpecode || "*",
+        clSpecode1: data.clSpecode1 || "*",
+        clSpecode2: data.clSpecode2 || "*",
+        clSpecode3: data.clSpecode3 || "*",
+        clSpecode4: data.clSpecode4 || "*",
+        clSpecode5: data.clSpecode5 || "*",
+        b2BCustomerType: data.b2BCustomerType || "*",
       };
       setCustomer(data);
       reset(customerData);
@@ -191,12 +205,19 @@ const AddCustomer = () => {
           { name: "erpId" },
           { name: "taxId" },
           { name: "companyName" },
+          { name: "clSpecode" },
+          { name: "clSpecode1" },
+          { name: "clSpecode2" },
+          { name: "clSpecode3" },
+          { name: "clSpecode4" },
+          { name: "clSpecode5" },
+          { name: "b2BCustomerType" },
         ].map((input) => (
           <ControlledInput
             control={control}
             key={input.name}
             name={input.name}
-            placeholder={t(input.name)}
+            placeholder={t("enter")}
             label={t(input.name)}
             type={input.type || "text"}
             className={"md:w-[250px]"}

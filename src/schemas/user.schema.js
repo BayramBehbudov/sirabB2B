@@ -1,5 +1,5 @@
 import z from "zod";
-import { EmailSchema, PasswordSchemaControl, PhoneSchema, RequiredSchemaId, RequiredSchemaMin2, RequiredSchemaMin3, PhoneSchemaOptional } from "./shared.schema";
+import { EmailSchema, PasswordSchemaControl, PhoneSchema, RequiredSchemaId, RequiredSchemaMin2, RequiredSchemaMin3, PhoneSchemaOptional, OptionalStrSchema, SpecodeSchema } from "./shared.schema";
 
 export const DeliveryAddressesSchema = z.object({
     deliveryAddressId: RequiredSchemaId,
@@ -17,16 +17,23 @@ export const DeliveryAddressesSchema = z.object({
 export const CustomerSchema =
     z.object({
         customerGroupId: z.number({ error: "errors.required" }),
-        erpId: RequiredSchemaMin2,
-        taxId: z.string().nonempty("errors.required").regex(/^\d{10}$/, "errors.invalidTAX"),
+        erpId: OptionalStrSchema,
+        taxId: z.string().optional().refine((val) => !val || /^\d{10}$/.test(val), { message: "errors.invalidTAX" }),
         phoneNumber: PhoneSchema,
         email: EmailSchema,
         contactPersonFirstName: RequiredSchemaMin3,
         contactPersonLastName: RequiredSchemaMin3,
-        companyName: RequiredSchemaMin3,
+        companyName: OptionalStrSchema,
         profileImageFileName: z.string().default("").optional(),
         profileImageBase64: z.string().default("").optional(),
-        deliveryAddresses: z.array(DeliveryAddressesSchema)
+        deliveryAddresses: z.array(DeliveryAddressesSchema),
+        clSpecode: SpecodeSchema,
+        clSpecode1: SpecodeSchema,
+        clSpecode2: SpecodeSchema,
+        clSpecode3: SpecodeSchema,
+        clSpecode4: SpecodeSchema,
+        clSpecode5: SpecodeSchema,
+        b2BCustomerType: SpecodeSchema,
     });
 
 

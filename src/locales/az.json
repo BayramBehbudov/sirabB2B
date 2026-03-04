@@ -259,6 +259,13 @@
   "errorOccurred": "Xəta baş verdi",
   "custmerGrupName": "Müştəri qrupu",
   "generalInformation": "Ümumi məlumatlar",
+  "clSpecode": "Xüsusi kod",
+  "clSpecode1": "Xüsusi kod 1",
+  "clSpecode2": "Xüsusi kod 2",
+  "clSpecode3": "Xüsusi kod 3",
+  "clSpecode4": "Xüsusi kod 4",
+  "clSpecode5": "Xüsusi kod 5",
+  "b2BCustomerType": "Müştəri tipi",
   "errors": {
     "required": "Bu sahə tələb edilir",
     "invalidNumber": "Düzgün rəqəm daxil edin",
@@ -296,7 +303,8 @@
     "notificationTypeRequired": "Bildiriş tipi seçilməyib",
     "duplicateUnit": "Eyni vahid təkrar istifadə edilə bilməz",
     "priceRequired": "Ən azı bir qiymət daxil edilməlidir",
-    "invalidPriority": "Müxtəlif qiymət vahidləri üçün eyni prioritet təkrar istifadə edilə bilməz, prioritet ardıcıl olmalıdır"
+    "invalidPriority": "Müxtəlif qiymət vahidləri üçün eyni prioritet təkrar istifadə edilə bilməz, prioritet ardıcıl olmalıdır",
+    "specodeRequired": "Bu sahə boş ola bilməz. Ən azı * olmalıdır"
   },
   "messages": {
     "customerGroupCreationError": "Müştəri qrupu yaradılan zaman xəta baş verdi",

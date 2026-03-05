@@ -9,7 +9,7 @@ import FilePicker from "@/components/ui/file/FilePicker";
 import FileScrollView from "@/components/ui/file/FileScrollView";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { showToast } from "@/providers/ToastProvider";
-import CustomerHandler from "@/pages/Banners/components/CustomerHandler";
+import CustomerHandler from "@/pages/Customers/components/CustomerHandler";
 import { PopupSchema } from "@/schemas/popups.schema";
 import { PromoPopupCreate, PromoPopupUpdate } from "@/api/Popup";
 import CustomerGroupSelector from "@/pages/Customers/groups/components/CustomerGroupSelector";

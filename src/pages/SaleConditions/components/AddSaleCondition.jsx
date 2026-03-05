@@ -1,6 +1,6 @@
 import ControlledCalendar from "@/components/ui/ControlledCalendar";
 import ControlledInput from "@/components/ui/ControlledInput";
-import CustomerHandler from "@/pages/Banners/components/CustomerHandler";
+import CustomerHandler from "@/pages/Customers/components/CustomerHandler";
 import { SaleConditionSchema } from "@/schemas/sale-condition.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";

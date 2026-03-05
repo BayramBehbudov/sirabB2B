@@ -6,14 +6,13 @@ import { Dialog } from "primereact/dialog";
 import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import CustomerHandler from "./CustomerHandler";
-import SendToAllCustomersHandler from "./SendToAllCustomersHandler";
+import CustomerHandler from "../../Customers/components/CustomerHandler";
 import FilePicker from "@/components/ui/file/FilePicker";
 import FileScrollView from "@/components/ui/file/FileScrollView";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BannerCreate, BannerUpdate } from "@/api/Banner";
 import { showToast } from "@/providers/ToastProvider";
-import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
+import CustomerGroupSelector from "@/pages/Customers/groups/components/CustomerGroupSelector";
 
 const AddBanner = ({ onSuccess, banner, disabled }) => {
   const { t } = useTranslation();
@@ -23,11 +22,8 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
   const defaultValues = {
     title: banner?.title || "",
     description: banner?.description || "",
-    sendToAllCustomers: banner?.sendToAllCustomers || false,
     startDate: banner?.startDate || "",
     endDate: banner?.endDate || "",
-    b2BCustomerIds: banner?.bannerCustomers?.map((c) => c.customerId) || [],
-    b2BCustomerGroupIds: [],
     bannerImageDtos:
       banner?.bannerImages?.map((i) => {
         return {
@@ -37,6 +33,17 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
           id: i.id,
         };
       }) || [],
+
+    b2BCustomerGroupId: banner?.customerGroupId || null,
+    b2BCustomerId: banner?.b2BCustomerId || null,
+    clSpecode: banner?.clSpecode || "*",
+    clSpecode1: banner?.clSpecode1 || "*",
+    clSpecode2: banner?.clSpecode2 || "*",
+    clSpecode3: banner?.clSpecode3 || "*",
+    clSpecode4: banner?.clSpecode4 || "*",
+    clSpecode5: banner?.clSpecode5 || "*",
+    b2BCustomerType: banner?.b2BCustomerType || "*",
+    isActive: banner?.isActive ?? true,
   };
 
   const {
@@ -46,13 +53,11 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
     setValue,
     watch,
     reset,
-    trigger,
   } = useForm({
     resolver: zodResolver(BannerSchema),
     defaultValues,
   });
-  const sendToAllCustomers = watch("sendToAllCustomers");
-  const b2BCustomerIds = watch("b2BCustomerIds");
+  const b2BCustomerId = watch("b2BCustomerId");
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -81,7 +86,7 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
           ? banner.bannerImages
               .filter(
                 (image) =>
-                  !formData.bannerImageDtos.some((i) => i.id === image.id)
+                  !formData.bannerImageDtos.some((i) => i.id === image.id),
               )
               .map((i) => i.id)
           : undefined;
@@ -150,30 +155,37 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
       >
         <div className="flex flex-col gap-5">
           <div className="flex flex-row gap-2 flex-wrap">
-            <SendToAllCustomersHandler control={control} setValue={setValue} />
-            {!sendToAllCustomers && (
-              <CustomerGroupMultiSelector
-                fieldName="b2BCustomerGroupIds"
-                control={control}
-                trigger={trigger}
-              />
-            )}
-            {!sendToAllCustomers && (
-              <CustomerHandler
-                error={errors.b2BCustomerIds}
-                value={b2BCustomerIds}
-                setValue={setValue}
-                trigger={trigger}
-              />
-            )}
-
-            {["title"].map((item) => (
+            <CustomerGroupSelector
+              control={control}
+              field="b2BCustomerGroupId"
+              showClear={true}
+            />
+            <CustomerHandler
+              error={errors.b2BCustomerId}
+              value={b2BCustomerId ? [b2BCustomerId] : []}
+              setValue={setValue}
+              field="b2BCustomerId"
+              required={false}
+              mode="single"
+            />
+            {[
+              { name: "title" },
+              { name: "clSpecode" },
+              { name: "clSpecode1" },
+              { name: "clSpecode2" },
+              { name: "clSpecode3" },
+              { name: "clSpecode4" },
+              { name: "clSpecode5" },
+              { name: "b2BCustomerType" },
+            ].map((input) => (
               <ControlledInput
-                key={item}
                 control={control}
-                name={item}
-                placeholder={t(item)}
-                label={t(item)}
+                key={input.name}
+                name={input.name}
+                placeholder={t("enter")}
+                label={t(input.name)}
+                type={"text"}
+                avtoValue={input.avtoValue}
                 className={"w-[200px]"}
               />
             ))}

@@ -1,7 +1,7 @@
 import { InventoryCheckRequirementAdd } from "@/api/Inventory";
 import ControlledInput from "@/components/ui/ControlledInput";
-import CustomerHandler from "@/pages/Banners/components/CustomerHandler";
-import SendToAllCustomersHandler from "@/pages/Banners/components/SendToAllCustomersHandler";
+import CustomerHandler from "@/pages/Customers/components/CustomerHandler";
+import SendToAllCustomersHandler from "@/pages/Customers/components/SendToAllCustomersHandler";
 import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
 import { showToast } from "@/providers/ToastProvider";
 import { InventoryRequirementSchema } from "@/schemas/inventory.schema";
@@ -40,7 +40,7 @@ const AddInventoryRequirement = ({ onSuccess, defaultReq, disabled }) => {
   });
   const sendToAllCustomers = watch("sendToAllCustomers");
   const b2BCustomerIds = watch("b2BCustomerIds");
-  
+
   const onSubmit = async (formData) => {
     // qeyd edit yazılmayıb
     if (isEdit) return;

@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { BannerCreate, BannerUpdate } from "@/api/Banner";
 import { showToast } from "@/providers/ToastProvider";
 import CustomerGroupSelector from "@/pages/Customers/groups/components/CustomerGroupSelector";
+import ControlledSwitch from "@/components/ui/ControlledSwitch";
 
 const AddBanner = ({ onSuccess, banner, disabled }) => {
   const { t } = useTranslation();
@@ -225,6 +226,12 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
               error={errors.bannerImageDtos}
               value={fields}
               accept={"image/*"}
+            />
+            <ControlledSwitch
+              label={t("isActive")}
+              control={control}
+              name={`isActive`}
+              placeholder={t("isActive")}
             />
           </div>
           {["description"].map((item) => (

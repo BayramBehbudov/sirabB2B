@@ -36,7 +36,7 @@ const columns = [
     type: "dropdown",
   },
   {
-    fieldKey: "orderInfo",
+    fieldKey: "customerDeliveryAddressInfo",
     label: "address",
     field: "customerDeliveryAddressTitle",
     type: "text",
@@ -168,7 +168,7 @@ const Orders = () => {
   }, [isAllowed, perms.ready]);
 
   if (!isAllowed || !perms.ready) return null;
-
+console.log(orders)
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between`}>

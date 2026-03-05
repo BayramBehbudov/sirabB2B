@@ -28,21 +28,24 @@ export const GetAllPromoPopups = async (payload) => {
 
 export const PromoPopupCreate = async (data) => {
     // {
-    //   "sendToAllCustomers": true,
     //   "title": "string",
     //   "description": "string",
-    //   "startDate": "2025-11-11T08:52:05.049Z",
-    //   "endDate": "2025-11-11T08:52:05.049Z",
-    //   "b2BCustomerIds": [
-    //     0
-    //   ],
-    //   "b2BCustomerGroupIds": [
-    //     0
-    //   ],
+    //   "startDate": "2026-03-05T07:26:58.236Z",
+    //   "endDate": "2026-03-05T07:26:58.236Z",
+    //   "b2BCustomerGroupId": 0,
+    //   "b2BCustomerId": 0,
+    //   "clSpecode": "string",
+    //   "clSpecode1": "string",
+    //   "clSpecode2": "string",
+    //   "clSpecode3": "string",
+    //   "clSpecode4": "string",
+    //   "clSpecode5": "string",
+    //   "b2BCustomerType": "string",
+    //   "isActive": true,
     //   "promoPopupImageDtos": [
     //     {
     //       "fileName": "string",
-    //       "base64": "string",
+    //       "base64": "string"
     //     }
     //   ]
     // }
@@ -59,26 +62,34 @@ export const PromoPopupCreate = async (data) => {
 
 
 export const PromoPopupUpdate = async (data) => {
+
     // {
-    //     "id": 0,
-    //     "title": "string",
-    //     "description": "string",
-    //     "sendToAllCustomers": true,
-    //     "startDate": "2025-11-25T09:19:49.160Z",
-    //     "endDate": "2025-11-25T09:19:49.160Z",
-    //     "b2BCustomerIds": [0],
-    //     "customerGroupIds": [0],
-    //     "promoPopupImageDtos": [
-    //       {
-    //         "id": 0,
-    //         "fileName": "string",
-    //         "base64": "string"
-    //       }
-    //     ]
-    //     "deletedPromoPopupImageIds": [
-    //       0
-    //     ]
-    //   }
+    //   "id": 0,
+    //   "b2BCustomerGroupId": 0,
+    //   "b2BCustomerId": 0,
+    //   "title": "string",
+    //   "description": "string",
+    //   "startDate": "2026-03-05T07:26:58.241Z",
+    //   "endDate": "2026-03-05T07:26:58.241Z",
+    //   "clSpecode": "string",
+    //   "clSpecode1": "string",
+    //   "clSpecode2": "string",
+    //   "clSpecode3": "string",
+    //   "clSpecode4": "string",
+    //   "clSpecode5": "string",
+    //   "b2BCustomerType": "string",
+    //   "isActive": true,
+    //   "promoPopupImageDtos": [
+    //     {
+    //       "id": 0,
+    //       "fileName": "string",
+    //       "base64": "string"
+    //     }
+    //   ],
+    //   "deletedPromoPopupImageIds": [
+    //     0
+    //   ]
+    // }
 
 
     try {

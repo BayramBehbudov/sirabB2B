@@ -8,8 +8,6 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import CustomersViewDialog from "../Customers/components/CustomersViewDialog";
 import AddBanner from "./components/AddBanner";
 import { useNavigate } from "react-router-dom";
 import usePermissions from "@/hooks/usePermissions";
@@ -179,10 +177,6 @@ const Banners = () => {
                     <DeleteConfirm onConfirm={() => handleDelete(data)} />
                   )}
                   <PhotosViewerDialog images={data.bannerImages} />
-                  <CustomersViewDialog
-                    customers={data.bannerCustomers}
-                    allCustomers={data.sendToAllCustomers}
-                  />
                   {perms.update && (
                     <AddBanner
                       onSuccess={() => getBanners()}

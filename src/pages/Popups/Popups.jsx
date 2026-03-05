@@ -13,7 +13,6 @@ import TableHeader from "@/components/ui/TableHeader";
 import { PhotosViewerDialog } from "@/components/ui/file/PhotosViewerDialog";
 import AddPopup from "./components/AddPopup";
 import { DeletePromoPopUp, GetAllPromoPopups } from "@/api/Popup";
-import CustomersViewDialog from "../Customers/components/CustomersViewDialog";
 import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 
 const Popups = () => {
@@ -177,10 +176,6 @@ const Popups = () => {
                     <DeleteConfirm onConfirm={() => handleDelete(data)} />
                   )}
                   <PhotosViewerDialog images={data.promoPopupImages} />
-                  <CustomersViewDialog
-                    customers={data.promoPopupCustomers}
-                    allCustomers={data.sendToAllCustomers}
-                  />
                   {perms.update && (
                     <AddPopup
                       onSuccess={() => getPopups()}

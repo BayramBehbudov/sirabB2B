@@ -9,11 +9,11 @@ import FilePicker from "@/components/ui/file/FilePicker";
 import FileScrollView from "@/components/ui/file/FileScrollView";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { showToast } from "@/providers/ToastProvider";
-import SendToAllCustomersHandler from "@/pages/Banners/components/SendToAllCustomersHandler";
-import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
 import CustomerHandler from "@/pages/Banners/components/CustomerHandler";
 import { PopupSchema } from "@/schemas/popups.schema";
 import { PromoPopupCreate, PromoPopupUpdate } from "@/api/Popup";
+import CustomerGroupSelector from "@/pages/Customers/groups/components/CustomerGroupSelector";
+import ControlledSwitch from "@/components/ui/ControlledSwitch";
 
 const AddPopup = ({ onSuccess, popup, disabled }) => {
   const { t } = useTranslation();
@@ -21,13 +21,10 @@ const AddPopup = ({ onSuccess, popup, disabled }) => {
   const [loading, setLoading] = useState(false);
   const isEdit = !!popup;
   const defaultValues = {
-    sendToAllCustomers: popup?.sendToAllCustomers || false,
     title: popup?.title || "",
     description: popup?.description || "",
     startDate: popup?.startDate || "",
     endDate: popup?.endDate || "",
-    b2BCustomerIds: popup?.promoPopupCustomers?.map((c) => c.customerId) || [],
-    b2BCustomerGroupIds: [],
     promoPopupImageDtos:
       popup?.promoPopupImages?.map((i) => {
         return {
@@ -37,6 +34,17 @@ const AddPopup = ({ onSuccess, popup, disabled }) => {
           id: i.id,
         };
       }) || [],
+
+    b2BCustomerGroupId: popup?.customerGroupId || null,
+    b2BCustomerId: popup?.b2BCustomerId || null,
+    clSpecode: popup?.clSpecode || "*",
+    clSpecode1: popup?.clSpecode1 || "*",
+    clSpecode2: popup?.clSpecode2 || "*",
+    clSpecode3: popup?.clSpecode3 || "*",
+    clSpecode4: popup?.clSpecode4 || "*",
+    clSpecode5: popup?.clSpecode5 || "*",
+    b2BCustomerType: popup?.b2BCustomerType || "*",
+    isActive: popup?.isActive ?? true,
   };
   const {
     handleSubmit,
@@ -45,19 +53,17 @@ const AddPopup = ({ onSuccess, popup, disabled }) => {
     setValue,
     watch,
     reset,
-    trigger,
   } = useForm({
     resolver: zodResolver(PopupSchema),
     defaultValues,
   });
-  const sendToAllCustomers = watch("sendToAllCustomers");
-  const b2BCustomerIds = watch("b2BCustomerIds");
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "promoPopupImageDtos",
     keyName: "fieldId",
   });
+  const b2BCustomerId = watch("b2BCustomerId");
 
   useEffect(() => {
     reset(defaultValues);
@@ -80,7 +86,7 @@ const AddPopup = ({ onSuccess, popup, disabled }) => {
           ? popup.promoPopupImages
               .filter(
                 (image) =>
-                  !formData.promoPopupImageDtos.some((i) => i.id === image.id)
+                  !formData.promoPopupImageDtos.some((i) => i.id === image.id),
               )
               .map((i) => i.id)
           : undefined;
@@ -149,30 +155,37 @@ const AddPopup = ({ onSuccess, popup, disabled }) => {
       >
         <div className="flex flex-col gap-5">
           <div className="flex flex-row gap-2 flex-wrap">
-            <SendToAllCustomersHandler control={control} setValue={setValue} />
-            {!sendToAllCustomers && (
-              <CustomerGroupMultiSelector
-                fieldName="b2BCustomerGroupIds"
-                control={control}
-                trigger={trigger}
-              />
-            )}
-            {!sendToAllCustomers && (
-              <CustomerHandler
-                error={errors.b2BCustomerIds}
-                value={b2BCustomerIds}
-                setValue={setValue}
-                trigger={trigger}
-              />
-            )}
-
-            {["title"].map((item) => (
+            <CustomerGroupSelector
+              control={control}
+              field="b2BCustomerGroupId"
+              showClear={true}
+            />
+            <CustomerHandler
+              error={errors.b2BCustomerId}
+              value={b2BCustomerId ? [b2BCustomerId] : []}
+              setValue={setValue}
+              field="b2BCustomerId"
+              required={false}
+              mode="single"
+            />
+            {[
+              { name: "title" },
+              { name: "clSpecode" },
+              { name: "clSpecode1" },
+              { name: "clSpecode2" },
+              { name: "clSpecode3" },
+              { name: "clSpecode4" },
+              { name: "clSpecode5" },
+              { name: "b2BCustomerType" },
+            ].map((input) => (
               <ControlledInput
-                key={item}
                 control={control}
-                name={item}
-                placeholder={t(item)}
-                label={t(item)}
+                key={input.name}
+                name={input.name}
+                placeholder={t("enter")}
+                label={t(input.name)}
+                type={"text"}
+                avtoValue={input.avtoValue}
                 className={"w-[200px]"}
               />
             ))}
@@ -213,6 +226,12 @@ const AddPopup = ({ onSuccess, popup, disabled }) => {
               error={errors.promoPopupImageDtos}
               value={fields}
               accept={"image/*"}
+            />
+            <ControlledSwitch
+              label={t("isActive")}
+              control={control}
+              name={`isActive`}
+              placeholder={t("isActive")}
             />
           </div>
           {["description"].map((item) => (

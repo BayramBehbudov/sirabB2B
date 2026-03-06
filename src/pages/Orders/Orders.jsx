@@ -168,7 +168,6 @@ const Orders = () => {
   }, [isAllowed, perms.ready]);
 
   if (!isAllowed || !perms.ready) return null;
-console.log(orders)
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between`}>

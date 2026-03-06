@@ -10,7 +10,14 @@ import { showToast } from "@/providers/ToastProvider";
 const DEFAULT_LAT = 40.409264;
 const DEFAULT_LNG = 49.867092;
 
-const MapController = ({ locX, locY, onSelect, isEdit = false }) => {
+const MapController = ({
+  locX,
+  locY,
+  onSelect,
+  isEdit = false,
+  isShow = false,
+  btnProps = {},
+}) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -205,6 +212,7 @@ const MapController = ({ locX, locY, onSelect, isEdit = false }) => {
         onClick={handleDialogOpen}
         tooltip={isEdit ? t("edit") : undefined}
         tooltipOptions={{ position: "top" }}
+        {...btnProps}
       />
 
       <Dialog
@@ -215,33 +223,37 @@ const MapController = ({ locX, locY, onSelect, isEdit = false }) => {
         footer={
           <div className="flex justify-end gap-4">
             <Button
-              label={t("cancel")}
+              label={t("close")}
               className="!w-[150px]"
               onClick={handleDialogClose}
               severity="secondary"
             />
-            <Button
-              label={t("confirm")}
-              className="!w-[150px]"
-              onClick={handleSelect}
-              disabled={!selectedLocation || loading}
-              loading={loading}
-            />
+            {!isShow && (
+              <Button
+                label={t("confirm")}
+                className="!w-[150px]"
+                onClick={handleSelect}
+                disabled={!selectedLocation || loading}
+                loading={loading}
+              />
+            )}
           </div>
         }
       >
         <div className="flex flex-col gap-4">
-          <AutoComplete
-            value={searchValue}
-            suggestions={searchResults}
-            completeMethod={(event) => searchLocations(event.query)}
-            field="label"
-            onChange={(e) => setSearchValue(e.value)}
-            onSelect={handleSearchSelect}
-            placeholder={t("search")}
-            className="w-full p-2"
-            dropdown
-          />
+          {!isShow && (
+            <AutoComplete
+              value={searchValue}
+              suggestions={searchResults}
+              completeMethod={(event) => searchLocations(event.query)}
+              field="label"
+              onChange={(e) => setSearchValue(e.value)}
+              onSelect={handleSearchSelect}
+              placeholder={t("search")}
+              className="w-full p-2"
+              dropdown
+            />
+          )}
 
           <div className="h-[420px] w-full overflow-hidden rounded-lg border border-slate-200">
             {visible && (
@@ -250,11 +262,12 @@ const MapController = ({ locX, locY, onSelect, isEdit = false }) => {
                 mapInstanceRef={mapInstanceRef}
                 setMarkerPosition={setMarkerPosition}
                 updateSelectedLocation={updateSelectedLocation}
+                isShow={isShow}
               />
             )}
           </div>
 
-          {selectedLocation && (
+          {selectedLocation && !isShow && (
             <div className="rounded-lg border border-slate-200 p-4 text-slate-700 bg-gray-50">
               <p className="mb-5 font-semibold text-xl text-gray-700">
                 {t("addressDetails")}

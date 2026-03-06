@@ -44,9 +44,11 @@ const MapPicker = ({
   setMarkerPosition,
   updateSelectedLocation,
   mapInstanceRef,
+  isShow = false,
 }) => {
   const handleMarkerMove = useCallback(
     async ({ lat, lng }) => {
+      if (isShow) return;
       setMarkerPosition({ lat, lng });
       if (mapInstanceRef.current) {
         mapInstanceRef.current.flyTo(
@@ -54,12 +56,12 @@ const MapPicker = ({
           mapInstanceRef.current.getZoom(),
           {
             duration: 0.5,
-          }
+          },
         );
       }
       await updateSelectedLocation(lat, lng);
     },
-    [updateSelectedLocation]
+    [updateSelectedLocation, isShow],
   );
 
   return (
@@ -76,7 +78,7 @@ const MapPicker = ({
       />
       <Marker
         position={markerPosition}
-        draggable
+        draggable={!isShow}
         icon={markerIcon}
         eventHandlers={{
           dragend: async (e) => {
@@ -88,7 +90,7 @@ const MapPicker = ({
           },
         }}
       />
-      <MapClickHandler onSelectCoords={handleMarkerMove} />
+      {!isShow && <MapClickHandler onSelectCoords={handleMarkerMove} />}
     </MapContainer>
   );
 };

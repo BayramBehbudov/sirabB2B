@@ -12,9 +12,7 @@ export const PopupImageSchema = z.object({
 });
 
 export const PopupSchema = z.object({
-    title: z
-        .string({ message: "errors.titleRequired" })
-        .min(1, { message: "errors.titleRequired" }),
+    title: z.string().default(''),
     description: z.string().default(''),
     startDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.startDateRequired" }),
     endDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.endDateRequired" }),

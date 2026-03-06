@@ -1,4 +1,6 @@
 {
+  "orderPrice": "Sifariş məbləği",
+  "minimumOrderPrice": "Minimum sifariş məbləği",
   "clear": "Təmizlə",
   "customerSelectedCount": "{{count}} müştəri seçilib",
   "addCustomerToGroup": "{{name}} qrupuna müştəri əlavə et",
@@ -329,6 +331,7 @@
     "5-3": "Ödəniş növləri",
     "5-4": "Sifariş statusları",
     "5-5": "Əlaqə məlumatları",
+    "5-6": "Minimum sifariş məbləği",
     "6": "Bildiriş göndərilməsi",
     "6-1": "Bildiriş tipləri",
     "6-2": "Bildiriş nümunələri",

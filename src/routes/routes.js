@@ -42,6 +42,7 @@ import OrderStatuses from "@/pages/Parameters/orderStatuses/OrderStatuses";
 import RatingTypes from "@/pages/Ratings/Rating-types/RatingTypes";
 import Orders from "@/pages/Orders/Orders";
 import ContactInfo from "@/pages/Parameters/contactInfo/ContactInfo";
+import MinimumOrderPrice from "@/pages/Parameters/MinimumOrderPrice/MinimumOrderPrice";
 
 // qeyd permission all olan səhifələr  hamıya görünür
 const routes = [
@@ -136,6 +137,12 @@ const routes = [
                 label: "Əlaqə məlumatları",
                 component: ContactInfo,
                 permission: "CONTACT_DETAILS: CONTACT_DETAILS_LIST",
+            },
+            {
+                id: "5-6", path: "/minimum-order-price",
+                label: "Minimum sifariş məbləği",
+                component: MinimumOrderPrice,
+                permission: "MINIMUM_ORDER_PRICE: MINIMUM_ORDER_PRICE_LIST",
             },
         ]
     },

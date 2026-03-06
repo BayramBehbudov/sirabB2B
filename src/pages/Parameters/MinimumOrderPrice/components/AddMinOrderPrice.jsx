@@ -1,27 +1,37 @@
-import { CreatePaymentType, UpdatePaymentType } from "@/api/PaymentTypes";
+import {
+  CreateMinimumOrderPrice,
+  UpdateMinimumOrderPrice,
+} from "@/api/MinimumOrderPrice";
 import ControlledInput from "@/components/ui/ControlledInput";
-import FilePicker from "@/components/ui/file/FilePicker";
+import CustomerHandler from "@/pages/Customers/components/CustomerHandler";
+import CustomerGroupSelector from "@/pages/Customers/groups/components/CustomerGroupSelector";
 import { showToast } from "@/providers/ToastProvider";
-import { PaymentTypeSchema } from "@/schemas/payment-type.schema";
+import { MinOrderPriceSchema } from "@/schemas/minimum-order-price.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { Image } from "primereact/image";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const AddPaymentType = ({ onSuccess, currentType }) => {
+const AddMinOrderPrice = ({ onSuccess, currentData }) => {
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const { t } = useTranslation();
-  const isEdit = !!currentType;
+  const isEdit = !!currentData;
+  //   control fields
   const defaultValues = {
-    id: currentType?.id || 0,
-    name: currentType?.name || "",
-    description: currentType?.description || "",
-    fileName: currentType?.fileName || "",
-    base64: "",
+    id: currentData?.id || 0,
+    orderPrice: currentData?.orderPrice || 0,
+    customerGroupId: currentData?.customerGroupId || null,
+    b2BCustomerId: currentData?.b2BCustomerId || null,
+    clSpecode: currentData?.clSpecode || "*",
+    clSpecode1: currentData?.clSpecode1 || "*",
+    clSpecode2: currentData?.clSpecode2 || "*",
+    clSpecode3: currentData?.clSpecode3 || "*",
+    clSpecode4: currentData?.clSpecode4 || "*",
+    clSpecode5: currentData?.clSpecode5 || "*",
+    b2BCustomerType: currentData?.b2BCustomerType || "*",
   };
   const {
     control,
@@ -29,16 +39,12 @@ const AddPaymentType = ({ onSuccess, currentType }) => {
     reset,
     setValue,
     watch,
-    formState: { isDirty },
+    formState: { isDirty, errors },
   } = useForm({
-    resolver: zodResolver(PaymentTypeSchema),
+    resolver: zodResolver(MinOrderPriceSchema),
     defaultValues,
   });
-
-  const base64 = watch("base64");
-  const previewUri = base64
-    ? `data:image/png;base64,${base64}`
-    : currentType?.filePath;
+  const b2BCustomerId = watch("b2BCustomerId");
 
   const onClose = () => {
     reset(defaultValues);
@@ -48,9 +54,8 @@ const AddPaymentType = ({ onSuccess, currentType }) => {
     setLoading(true);
     try {
       const res = isEdit
-        ? await UpdatePaymentType(formData)
-        : await CreatePaymentType(formData);
-
+        ? await UpdateMinimumOrderPrice(formData)
+        : await CreateMinimumOrderPrice(formData);
       showToast({
         severity: "success",
         summary: t("success"),
@@ -59,7 +64,7 @@ const AddPaymentType = ({ onSuccess, currentType }) => {
       onClose();
       onSuccess?.();
     } catch (error) {
-      console.log("error at CreatePaymentType", error);
+      console.log("error at CreateMinimumOrderPrice", error);
       showToast({
         severity: "error",
         summary: t("error"),
@@ -72,7 +77,7 @@ const AddPaymentType = ({ onSuccess, currentType }) => {
 
   useEffect(() => {
     reset(defaultValues);
-  }, [currentType, reset]);
+  }, [currentData, reset]);
 
   return (
     <div>
@@ -99,7 +104,7 @@ const AddPaymentType = ({ onSuccess, currentType }) => {
               label={t("save")}
               className={`w-[150px]`}
               onClick={handleSubmit(onSubmit)}
-              disabled={loading || !isDirty}
+              disabled={loading}
               loading={loading}
             />
           </div>
@@ -107,59 +112,45 @@ const AddPaymentType = ({ onSuccess, currentType }) => {
       >
         <div className={"flex flex-col gap-3"}>
           <div className={"flex flex-row flex-wrap gap-3 py-2"}>
-            {[{ name: "name" }, { name: "description" }].map((input) => (
+            <CustomerGroupSelector
+              control={control}
+              field="customerGroupId"
+              showClear={true}
+            />
+            <CustomerHandler
+              error={errors.b2BCustomerId}
+              value={b2BCustomerId ? [b2BCustomerId] : []}
+              setValue={setValue}
+              field="b2BCustomerId"
+              required={false}
+              mode="single"
+            />
+            {[
+              { name: "orderPrice", type: "number" },
+              { name: "clSpecode" },
+              { name: "clSpecode1" },
+              { name: "clSpecode2" },
+              { name: "clSpecode3" },
+              { name: "clSpecode4" },
+              { name: "clSpecode5" },
+              { name: "b2BCustomerType" },
+            ].map((input) => (
               <ControlledInput
                 control={control}
                 key={input.name}
                 name={input.name}
                 label={t(input.name)}
                 type={input.type || "text"}
-                className={"w-[250px]"}
+                className={"w-[250px] no-spinner"}
                 avtoValue={input.avtoValue}
                 placeholder={t("enter")}
               />
             ))}
-            <Controller
-              name="base64"
-              control={control}
-              render={({
-                field: { value, onChange },
-                fieldState: { error },
-              }) => {
-                return (
-                  <FilePicker
-                    label={t("document")}
-                    placeholder={t("addFile")}
-                    onChange={(files) => {
-                      const formatted = files.map((file) => {
-                        return {
-                          fileName: file.name,
-                          base64: file.base64.split(",")[1],
-                        };
-                      });
-                      onChange(formatted[0]?.base64 || "");
-                      setValue("fileName", formatted[0]?.fileName || "");
-                    }}
-                    error={error}
-                    value={value ? [value] : []}
-                    multiple={false}
-                    accept={"image/*"}
-                  />
-                );
-              }}
-            />
           </div>
-          {previewUri && (
-            <Image
-              imageClassName="w-[32px] h-[32px]"
-              className="bg-[#DEF4FF] p-3 rounded-full w-fit h-fit"
-              src={previewUri}
-            />
-          )}
         </div>
       </Dialog>
     </div>
   );
 };
 
-export default AddPaymentType;
+export default AddMinOrderPrice;

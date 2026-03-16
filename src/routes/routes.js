@@ -219,7 +219,7 @@ const routes = [
         id: "12", path: "/inventory-check-requirement",
         label: "Inventar yoxlama tələbləri",
         component: InventoryCheckRequirement, icon: FaCalendarCheck,
-        permission: "INVENTORY: INVENTORY_REQUIREMENT_LIST",
+        permission: "INVENTORY: INVENTORY_CHECK_REQUIREMENT_LIST",
         children: [
             {
                 id: "12-1", path: "/inventory-check-assignment",

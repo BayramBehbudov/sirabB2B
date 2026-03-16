@@ -1,8 +1,12 @@
-import { InventoryCheckRequirementAdd } from "@/api/Inventory";
+import {
+  CreateInventoryCheckRequirement,
+  UpdateInventoryCheckRequirement,
+} from "@/api/Inventory";
+import ControlledCalendar from "@/components/ui/ControlledCalendar";
 import ControlledInput from "@/components/ui/ControlledInput";
+import ControlledSwitch from "@/components/ui/ControlledSwitch";
 import CustomerHandler from "@/pages/Customers/components/CustomerHandler";
-import SendToAllCustomersHandler from "@/pages/Customers/components/SendToAllCustomersHandler";
-import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
+import CustomerGroupSelector from "@/pages/Customers/groups/components/CustomerGroupSelector";
 import { showToast } from "@/providers/ToastProvider";
 import { InventoryRequirementSchema } from "@/schemas/inventory.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,11 +23,22 @@ const AddInventoryRequirement = ({ onSuccess, defaultReq, disabled }) => {
   const isEdit = !!defaultReq;
 
   const defaultValues = {
-    requiredPhotoCount: 1,
-    description: "",
-    sendToAllCustomers: false,
-    b2BCustomerIds: [],
-    b2BCustomerGroupIds: [],
+    requiredPhotoCount: defaultReq?.requiredPhotoCount || 1,
+    description: defaultReq?.description || "",
+    erpCode: defaultReq?.erpCode || "",
+    serialCode: defaultReq?.serialCode || "",
+    startDate: defaultReq?.startDate || "",
+    endDate: defaultReq?.endDate || "",
+    customerGroupId: defaultReq?.customerGroupId || null,
+    b2BCustomerId: defaultReq?.b2BCustomerId || null,
+    clSpecode: defaultReq?.clSpecode || "*",
+    clSpecode1: defaultReq?.clSpecode1 || "*",
+    clSpecode2: defaultReq?.clSpecode2 || "*",
+    clSpecode3: defaultReq?.clSpecode3 || "*",
+    clSpecode4: defaultReq?.clSpecode4 || "*",
+    clSpecode5: defaultReq?.clSpecode5 || "*",
+    b2BCustomerType: defaultReq?.b2BCustomerType || "*",
+    isActive: defaultReq?.isActive ?? true,
   };
 
   const {
@@ -33,20 +48,21 @@ const AddInventoryRequirement = ({ onSuccess, defaultReq, disabled }) => {
     setValue,
     watch,
     reset,
-    trigger,
   } = useForm({
     resolver: zodResolver(InventoryRequirementSchema),
     defaultValues,
   });
-  const sendToAllCustomers = watch("sendToAllCustomers");
-  const b2BCustomerIds = watch("b2BCustomerIds");
+  const b2BCustomerId = watch("b2BCustomerId");
 
   const onSubmit = async (formData) => {
-    // qeyd edit yazılmayıb
-    if (isEdit) return;
     try {
       setLoading(true);
-      const res = await InventoryCheckRequirementAdd(formData);
+      const res = isEdit
+        ? await UpdateInventoryCheckRequirement({
+            ...formData,
+            id: defaultReq.id,
+          })
+        : await CreateInventoryCheckRequirement(formData);
       showToast({
         severity: "success",
         summary: t("success"),
@@ -75,7 +91,7 @@ const AddInventoryRequirement = ({ onSuccess, defaultReq, disabled }) => {
     <div>
       <Button
         tooltip={isEdit ? t("edit") : ""}
-        tooltipOptions={{ position: "top" }}
+        tooltipOptions={{ position: "left" }}
         icon={`pi ${isEdit ? "pi-pencil" : "pi-plus"}`}
         onClick={() => setVisible(true)}
         label={!isEdit && t("add")}
@@ -105,23 +121,40 @@ const AddInventoryRequirement = ({ onSuccess, defaultReq, disabled }) => {
       >
         <div className="flex flex-col gap-5">
           <div className="flex flex-row gap-2 flex-wrap">
-            <SendToAllCustomersHandler control={control} setValue={setValue} />
-            {!sendToAllCustomers && (
-              <CustomerGroupMultiSelector
-                fieldName="b2BCustomerGroupIds"
-                control={control}
-                trigger={trigger}
-              />
-            )}
-            {!sendToAllCustomers && (
-              <CustomerHandler
-                error={errors.b2BCustomerIds}
-                value={b2BCustomerIds}
-                setValue={setValue}
-                trigger={trigger}
-              />
-            )}
+            <CustomerGroupSelector
+              control={control}
+              field="customerGroupId"
+              showClear={true}
+            />
 
+            <CustomerHandler
+              error={errors.b2BCustomerId}
+              value={b2BCustomerId ? [b2BCustomerId] : []}
+              setValue={setValue}
+              field="b2BCustomerId"
+              required={false}
+              mode="single"
+            />
+            {["startDate", "endDate"].map((item) => {
+              const minDate =
+                item === "startDate"
+                  ? new Date()
+                  : new Date(watch("startDate"));
+              const maxDate =
+                item === "startDate" ? new Date(watch("endDate")) : undefined;
+              return (
+                <ControlledCalendar
+                  key={item}
+                  control={control}
+                  name={item}
+                  placeholder={t(item)}
+                  label={t(item)}
+                  className={"w-[200px]"}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                />
+              );
+            })}
             {[
               {
                 name: "requiredPhotoCount",
@@ -139,6 +172,35 @@ const AddInventoryRequirement = ({ onSuccess, defaultReq, disabled }) => {
                 type={item.type}
               />
             ))}
+            {[
+              { name: "clSpecode" },
+              { name: "clSpecode1" },
+              { name: "clSpecode2" },
+              { name: "clSpecode3" },
+              { name: "clSpecode4" },
+              { name: "clSpecode5" },
+              { name: "b2BCustomerType" },
+              { name: "erpCode" },
+              { name: "serialCode" },
+            ].map((input) => (
+              <ControlledInput
+                control={control}
+                key={input.name}
+                name={input.name}
+                placeholder={t("enter")}
+                label={t(input.name)}
+                type={"text"}
+                avtoValue={input.avtoValue}
+                className={"w-[200px]"}
+              />
+            ))}
+
+            <ControlledSwitch
+              label={t("isActive")}
+              control={control}
+              name={`isActive`}
+              placeholder={t("isActive")}
+            />
           </div>
           {["description"].map((item) => (
             <ControlledInput

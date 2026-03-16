@@ -1,46 +1,21 @@
 import { z } from "zod";
-import { RequiredSchemaIntNumber } from "./shared.schema";
-
+import { NullableSchemaId, RequiredSchemaIntNumber, SpecodeSchema } from "./shared.schema";
 
 export const InventoryRequirementSchema = z.object({
-    sendToAllCustomers: z.boolean({ message: "errors.customerTypeRequired" }),
-    description: z
-        .string({ message: "errors.descriptionRequired" })
-        .min(1, { message: "errors.descriptionRequired" }),
-    b2BCustomerIds: z
-        .array(z.number({ message: "errors.customerOrGroupRequired" })),
-    b2BCustomerGroupIds: z
-        .array(z.number({ message: "errors.customerOrGroupRequired" })),
-    requiredPhotoCount: RequiredSchemaIntNumber
+    description: z.string().default(''),
+    erpCode: z.string().default(''),
+    serialCode: z.string().default(''),
+    requiredPhotoCount: RequiredSchemaIntNumber,
+    startDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.startDateRequired" }),
+    endDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.endDateRequired" }),
+    customerGroupId: NullableSchemaId,
+    b2BCustomerId: NullableSchemaId,
+    clSpecode: SpecodeSchema,
+    clSpecode1: SpecodeSchema,
+    clSpecode2: SpecodeSchema,
+    clSpecode3: SpecodeSchema,
+    clSpecode4: SpecodeSchema,
+    clSpecode5: SpecodeSchema,
+    b2BCustomerType: SpecodeSchema,
+    isActive: z.boolean().default(true),
 })
-    .refine((data) => {
-        if (data.sendToAllCustomers) {
-            return (
-                data.b2BCustomerIds.length === 0 &&
-                data.b2BCustomerGroupIds.length === 0
-            );
-        }
-
-        return (
-            data.b2BCustomerIds.length > 0 ||
-            data.b2BCustomerGroupIds.length > 0
-        );
-    }, {
-        path: ['b2BCustomerIds'],
-        message: 'errors.customerOrGroupRequired',
-    }).refine((data) => {
-        if (data.sendToAllCustomers) {
-            return (
-                data.b2BCustomerIds.length === 0 &&
-                data.b2BCustomerGroupIds.length === 0
-            );
-        }
-        return (
-            data.b2BCustomerIds.length > 0 ||
-            data.b2BCustomerGroupIds.length > 0
-        );
-    }, {
-        path: ['b2BCustomerGroupIds'],
-        message: 'errors.customerOrGroupRequired'
-    });
-

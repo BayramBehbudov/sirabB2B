@@ -43,7 +43,7 @@ const CustomerGroupSelector = ({
       control={control}
       render={({ field, fieldState: { error } }) => {
         return (
-          <div className={`flex flex-col gap-1 w-[250px]`}>
+          <div className={`flex flex-col gap-1 w-[200px]`}>
             <label className={`font-semibold`}>{t("customerGroup")}</label>
             <Dropdown
               value={field.value ?? undefined}

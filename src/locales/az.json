@@ -1,4 +1,6 @@
 {
+  "serialCode": "Seriya №",
+  "erpCode": "ERP №",
   "orderPrice": "Sifariş məbləği",
   "minimumOrderPrice": "Minimum sifariş məbləği",
   "clear": "Təmizlə",

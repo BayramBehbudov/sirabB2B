@@ -15,7 +15,6 @@ const InventoryCheckRequirement = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [inventoryRequirements, setInventoryRequirements] = useState([]);
-
   const [totalRecords, setTotalRecords] = useState(0);
   const [filter, setFilter] = useState({
     pageNumber: 1,
@@ -27,8 +26,9 @@ const InventoryCheckRequirement = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "INVENTORY: INVENTORY_REQUIREMENT_LIST",
-    create: "INVENTORY: CREATE_INVENTORY",
+    show: "INVENTORY: INVENTORY_CHECK_REQUIREMENT_LIST",
+    create: "INVENTORY: CREATE_INVENTORY_CHECK_REQUIREMENT",
+    update: "INVENTORY: UPDATE_INVENTORY_CHECK_REQUIREMENT",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -91,14 +91,56 @@ const InventoryCheckRequirement = () => {
           }}
         >
           {[
+            {
+              label: "groupName",
+              field: "customerGroupName",
+              type: "text",
+            },
+            {
+              label: "companyName",
+              field: "b2BCustomerCompanyName",
+              type: "text",
+            },
+            {
+              label: "b2BCustomerType",
+              field: "b2BCustomerType",
+              type: "text",
+            },
+            { label: "clSpecode", field: "clSpecode", type: "text" },
+            { label: "clSpecode1", field: "clSpecode1", type: "text" },
+            { label: "clSpecode2", field: "clSpecode2", type: "text" },
+            { label: "clSpecode3", field: "clSpecode3", type: "text" },
+            { label: "clSpecode4", field: "clSpecode4", type: "text" },
+            { label: "clSpecode5", field: "clSpecode5", type: "text" },
+            { label: "endDate", field: "endDate", type: "date" },
+            { label: "startDate", field: "startDate", type: "date" },
+            { label: "serialCode", field: "serialCode", type: "text" },
+            { label: "erpCode", field: "erpCode", type: "text" },
             { label: "description", field: "description", type: "text" },
             { label: "photoCount", field: "requiredPhotoCount", type: "text" },
+            {
+              label: "isActive",
+              field: "isActive",
+              type: "dropdown",
+              options: [
+                { label: t("yes"), value: "true" },
+                { label: t("no"), value: "false" },
+              ],
+            },
           ].map((c) => (
             <Column
               field={c.field}
+              body={(col) => {
+                const v = col[c.field];
+                if (c.field === "isActive") {
+                  return v ? t("yes") : t("no");
+                }
+                return v;
+              }}
               header={() => {
                 return (
                   <TableHeader
+                    dropdownOptions={c.options}
                     type={c.type}
                     handleSearch={getInventory}
                     onChange={(v) => {
@@ -137,6 +179,21 @@ const InventoryCheckRequirement = () => {
               }}
             />
           ))}
+          <Column
+            body={(data) => {
+              return (
+                <div className="flex flex-row gap-2">
+                  {perms.update && (
+                    <AddInventoryRequirement
+                      defaultReq={data}
+                      disabled={!perms.update}
+                      onSuccess={getInventory}
+                    />
+                  )}
+                </div>
+              );
+            }}
+          />
         </DataTable>
       </DataTableContainer>
     </div>

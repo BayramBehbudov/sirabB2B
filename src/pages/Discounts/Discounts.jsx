@@ -52,7 +52,7 @@ const Discounts = () => {
   }, [isAllowed, perms.ready]);
 
   if (!isAllowed || !perms.ready) return null;
-  console.log(discounts)
+
   return (
     <div className="flex flex-col gap-5">
       <div className={`flex items-center justify-between`}>
@@ -75,6 +75,7 @@ const Discounts = () => {
           {...tableStaticProps}
           first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
+          scrollable
           rows={filter.pageSize}
           onPage={(e) => {
             const newPage = {
@@ -153,6 +154,10 @@ const Discounts = () => {
           ))}
 
           <Column
+            frozen
+            alignFrozen="right"
+            header="#"
+            alignHeader="center"
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">

@@ -81,6 +81,7 @@ const Products = () => {
         <DataTable
           value={products}
           loading={loading}
+          scrollable
           {...tableStaticProps}
           first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
@@ -150,7 +151,10 @@ const Products = () => {
 
           {hasAny && (
             <Column
-              header={"#"}
+              frozen
+              alignFrozen="right"
+              header="#"
+              alignHeader="center"
               body={(data) => {
                 return (
                   <div className="flex flex-row gap-2">

@@ -73,6 +73,7 @@ const SaleConditions = () => {
         <DataTable
           value={conditions}
           loading={loading}
+          scrollable
           {...tableStaticProps}
           first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
@@ -154,6 +155,10 @@ const SaleConditions = () => {
           ))}
 
           <Column
+            frozen
+            alignFrozen="right"
+            header="#"
+            alignHeader="center"
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">

@@ -12,7 +12,7 @@ import { InventoryRequirementSchema } from "@/schemas/inventory.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -86,6 +86,11 @@ const AddInventoryRequirement = ({ onSuccess, defaultReq, disabled }) => {
     setVisible(false);
     reset(defaultValues);
   };
+  useEffect(() => {
+    if (visible) {
+      reset(defaultValues);
+    }
+  }, [visible, defaultReq]);
 
   return (
     <div>

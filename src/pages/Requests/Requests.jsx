@@ -69,6 +69,7 @@ const Requests = () => {
         <DataTable
           loading={loading}
           value={requests}
+          scrollable
           {...tableStaticProps}
           first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
@@ -135,7 +136,10 @@ const Requests = () => {
           ))}
           {hasAny && (
             <Column
-              header={""}
+              frozen
+              alignFrozen="right"
+              header="#"
+              alignHeader="center"
               body={(row) => {
                 return (
                   <div className="flex flex-row gap-2">

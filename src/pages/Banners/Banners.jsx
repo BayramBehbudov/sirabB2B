@@ -102,6 +102,7 @@ const Banners = () => {
           first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
           rows={filter.pageSize}
+          scrollable
           onPage={(e) => {
             const newPage = {
               pageNumber: e.page + 1,
@@ -170,6 +171,10 @@ const Banners = () => {
           ))}
 
           <Column
+            frozen
+            alignFrozen="right"
+            header="#"
+            alignHeader="center"
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">

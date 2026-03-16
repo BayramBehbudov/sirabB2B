@@ -89,6 +89,7 @@ const InventoryCheckRequirement = () => {
               return newFilter;
             });
           }}
+          scrollable
         >
           {[
             {
@@ -180,6 +181,10 @@ const InventoryCheckRequirement = () => {
             />
           ))}
           <Column
+            frozen
+            alignFrozen="right"
+            header="#"
+            alignHeader="center"
             body={(data) => {
               return (
                 <div className="flex flex-row gap-2">

@@ -99,6 +99,7 @@ const InventoryCheckAssignment = () => {
           {...tableStaticProps}
           first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
+          scrollable
           rows={filter.pageSize}
           onPage={(e) => {
             const newPage = {
@@ -196,6 +197,10 @@ const InventoryCheckAssignment = () => {
             />
           ))}
           <Column
+            frozen
+            alignFrozen="right"
+            header="#"
+            alignHeader="center"
             body={(data) => {
               const disabled = data.processStatus === 3;
               return (

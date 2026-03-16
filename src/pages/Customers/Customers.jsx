@@ -133,6 +133,7 @@ const Customers = () => {
         <DataTable
           loading={loading}
           value={customers}
+          scrollable
           {...tableStaticProps}
           first={page.pageNumber * page.pageSize - page.pageSize}
           totalRecords={totalRecords}
@@ -161,6 +162,8 @@ const Customers = () => {
             <Column
               header={"#"}
               alignHeader="center"
+              frozen
+              alignFrozen="right"
               body={(data) => {
                 const {
                   b2BCustomerId,

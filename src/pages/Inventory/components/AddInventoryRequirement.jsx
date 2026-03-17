@@ -164,7 +164,7 @@ const AddInventoryRequirement = ({ onSuccess, defaultReq, disabled }) => {
               {
                 name: "requiredPhotoCount",
                 type: "number",
-                label: "photoCount",
+                label: "requiredPhotoCount",
               },
             ].map((item) => (
               <ControlledInput

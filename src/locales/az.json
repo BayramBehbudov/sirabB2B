@@ -75,7 +75,7 @@
   "customerAddresses": "Müştəri ünvanları",
   "inventoryCheckRequirement": "İnventar yoxlama tələbləri",
   "inventoryCheckAssignment": "İnventar yoxlama siyahısı",
-  "photoCount": "Şəkil sayı",
+  "requiredPhotoCount": "Tələb olunan şəkil sayı",
   "dataNotFound": "Siyahıda göstəriləcək məlumat tapılmadı",
   "notPermForList": "Siyahını görmək üçün icazəniz yoxdur",
   "process": "Mərhələ",

@@ -118,7 +118,7 @@ const InventoryCheckRequirement = () => {
             { label: "serialCode", field: "serialCode", type: "text" },
             { label: "erpCode", field: "erpCode", type: "text" },
             { label: "description", field: "description", type: "text" },
-            { label: "photoCount", field: "requiredPhotoCount", type: "text" },
+            { label: "requiredPhotoCount", field: "requiredPhotoCount", type: "text" },
             {
               label: "isActive",
               field: "isActive",

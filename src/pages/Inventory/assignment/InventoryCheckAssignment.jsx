@@ -1,7 +1,4 @@
-import {
-  GetAllInventoryAssignments,
-  UpdateInventoryCheckAssignment,
-} from "@/api/Inventory";
+import { GetAllInventoryAnswers, UpdateInventoryAnswer } from "@/api/Inventory";
 import ConfirmationDialog from "@/components/ui/dialogs/ConfirmationDialog";
 import RejectConfirmWithReason from "@/components/ui/dialogs/RejectConfirmWithReason";
 import { PhotosViewerDialog } from "@/components/ui/file/PhotosViewerDialog";
@@ -9,9 +6,11 @@ import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
 import TableHeader from "@/components/ui/TableHeader";
+import { formatDate } from "@/helper/DateFormatter";
 import usePermissions from "@/hooks/usePermissions";
 import { showToast } from "@/providers/ToastProvider";
 import { inventoryAssignmentStatus } from "@/static/static-data";
+import { Badge } from "primereact/badge";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Tooltip } from "primereact/tooltip";
@@ -34,15 +33,17 @@ const InventoryCheckAssignment = () => {
 
   const navigate = useNavigate();
   const perms = usePermissions({
-    show: "INVENTORY: INVENTORY_LIST_CREATED_FOR_CUSTOMER",
+    show: "INVENTORY: INVENTORY_CUSTOMER_ANSWER_LIST",
+    update: "INVENTORY: UPDATE_INVENTORY_ANSWER",
   });
   const isAllowed = perms.isAllowed("show");
+  const isUpdateAllowed = perms.isAllowed("update");
 
   const getInventory = async (payload = filter) => {
     try {
       setLoading(true);
-      const res = await GetAllInventoryAssignments(payload);
-      setInventoryAssignments(res.inventoryAssignments);
+      const res = await GetAllInventoryAnswers(payload);
+      setInventoryAssignments(res.inventoryCustomerAnswers);
       setTotalRecords(res.pageInfo.totalItems);
     } catch (error) {
       console.log("error at getInventory", error);
@@ -50,12 +51,13 @@ const InventoryCheckAssignment = () => {
       setLoading(false);
     }
   };
-  const updateInventory = async ({ id, isConfirmed }) => {
+  const updateInventory = async ({ id, isConfirmed, rejectNote }) => {
     try {
       setLoading(true);
-      const res = await UpdateInventoryCheckAssignment({
-        inventoryCheckAssignmentId: id,
+      const res = await UpdateInventoryAnswer({
+        id,
         isConfirmed,
+        rejectNote,
       });
       showToast({
         severity: "success",
@@ -116,21 +118,69 @@ const InventoryCheckAssignment = () => {
           {[
             {
               label: "companyName",
-              fieldForSearch: "companyName",
-              field: "b2BCustomer.companyName",
+              field: "b2BCustomerCompanyName",
+              type: "text",
+              options: [],
+            },
+            {
+              label: "phoneNumber",
+              field: "b2BCustomerPhoneNumber",
+              type: "text",
+              options: [],
+            },
+            {
+              label: "email",
+              field: "b2BCustomerEmail",
+              type: "text",
+              options: [],
+            },
+            {
+              label: "erpCode",
+              field: "inventoryCheckRequirementErpCode",
+              type: "text",
+              options: [],
+            },
+            {
+              label: "serialCode",
+              field: "inventoryCheckRequirementSerialCode",
               type: "text",
               options: [],
             },
             {
               label: "description",
-              fieldForSearch: "description",
-              field: "inventoryCheckRequirement.description",
+              field: "inventoryCheckRequirementDescription",
               type: "text",
               options: [],
             },
             {
+              label: "confirmStatus",
+              field: "isConfirmed",
+              type: "dropdown",
+              options: [
+                {
+                  label: t("confirmed"),
+                  value: "true",
+                },
+                {
+                  label: t("notConfirmed"),
+                  value: "false",
+                },
+              ],
+            },
+            {
+              label: "rejectReason",
+              field: "rejectNote",
+              type: "text",
+              options: [],
+            },
+            {
+              label: "completedAt",
+              field: "completedAt",
+              type: "date",
+              options: [],
+            },
+            {
               label: "process",
-              fieldForSearch: "processStatus",
               field: "processStatus",
               type: "dropdown",
               options: Object.keys(inventoryAssignmentStatus).map((k) => ({
@@ -147,7 +197,22 @@ const InventoryCheckAssignment = () => {
                       const value = row[c.field];
                       return t(inventoryAssignmentStatus[value]);
                     }
-                  : undefined
+                  : c.field === "isConfirmed"
+                    ? (row) => {
+                        const value = row[c.field];
+                        return (
+                          <Badge
+                            value={t(value ? "confirmed" : "notConfirmed")}
+                            severity={value ? "success" : "danger"}
+                          />
+                        );
+                      }
+                    : c.field === "completedAt"
+                      ? (row) => {
+                          const value = row[c.field];
+                          return value ? formatDate(value) : "";
+                        }
+                      : undefined
               }
               header={() => {
                 return (
@@ -159,11 +224,11 @@ const InventoryCheckAssignment = () => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
                         newFilter.searchList = newFilter.searchList.filter(
-                          (item) => item.colName !== c.fieldForSearch,
+                          (item) => item.colName !== c.field,
                         );
                         if (v) {
                           newFilter.searchList.push({
-                            colName: c.fieldForSearch,
+                            colName: c.field,
                             value: v,
                           });
                         }
@@ -173,19 +238,14 @@ const InventoryCheckAssignment = () => {
                     label={t(c.label)}
                     placeholder={t("search")}
                     value={
-                      filter.searchList.find(
-                        (item) => item.colName === c.fieldForSearch,
-                      )?.value
+                      filter.searchList.find((item) => item.colName === c.field)
+                        ?.value
                     }
-                    sort={
-                      filter.orderColumn === c.fieldForSearch
-                        ? filter.order
-                        : ""
-                    }
+                    sort={filter.orderColumn === c.field ? filter.order : ""}
                     handleSort={(s) => {
                       setFilter((prev) => {
                         const newFilter = { ...prev };
-                        newFilter.orderColumn = c.fieldForSearch;
+                        newFilter.orderColumn = c.field;
                         newFilter.order = s;
                         getInventory(newFilter);
                         return newFilter;
@@ -206,28 +266,38 @@ const InventoryCheckAssignment = () => {
               return (
                 <div className="flex flex-row gap-2">
                   <PhotosViewerDialog images={data.inventoryPhotos} />
-                  <div
-                    className="flex flex-row gap-2 buttons-container"
-                    data-pr-tooltip={
-                      disabled ? t("documentConfirmed") : undefined
-                    }
-                    data-pr-position="top"
-                  >
-                    <ConfirmationDialog
-                      onConfirm={() => {
-                        updateInventory({ id: data.id, isConfirmed: true });
-                      }}
-                      disabled={disabled}
-                    />
-                    <RejectConfirmWithReason
-                      requiredReason={false}
-                      disabled={disabled}
-                      onConfirm={() => {
-                        updateInventory({ id: data.id, isConfirmed: false });
-                      }}
-                    />
-                    <Tooltip target=".buttons-container" />
-                  </div>
+                  {isUpdateAllowed && (
+                    <div
+                      className="flex flex-row gap-2 buttons-container"
+                      data-pr-tooltip={
+                        disabled ? t("documentConfirmed") : undefined
+                      }
+                      data-pr-position="top"
+                    >
+                      <ConfirmationDialog
+                        onConfirm={() => {
+                          updateInventory({
+                            id: data.id,
+                            isConfirmed: true,
+                            rejectNote: "",
+                          });
+                        }}
+                        disabled={disabled}
+                      />
+                      <RejectConfirmWithReason
+                        disabled={disabled}
+                        onConfirm={(reason) => {
+                          if (!reason) return;
+                          updateInventory({
+                            id: data.id,
+                            isConfirmed: false,
+                            rejectNote: reason,
+                          });
+                        }}
+                      />
+                      <Tooltip target=".buttons-container" />
+                    </div>
+                  )}
                 </div>
               );
             }}

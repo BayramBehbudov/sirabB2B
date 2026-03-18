@@ -81,7 +81,7 @@ export const UpdateInventoryCheckRequirement = async (data) => {
 
 
 
-export const GetAllInventoryAssignments = async (payload) => {
+export const GetAllInventoryAnswers = async (payload) => {
     // {
     //     "pageNumber": 0,
     //     "pageSize": 0,
@@ -95,29 +95,32 @@ export const GetAllInventoryAssignments = async (payload) => {
     //     ]
     //   }
 
+
+
     try {
-        const res = await api.post(`InventoryCheckRequirement/GetAllInventaryAssignments`, payload);
+        const res = await api.post(`InventoryCheckRequirement/GetAllInventoryAnswers`, payload);
         return res.data;
     } catch (error) {
-        console.log('error at GetAllInventoryAssignments', error);
+        console.log('error at GetAllInventoryAnswers', error);
         throw error;
     }
 };
 
 
 
-export const UpdateInventoryCheckAssignment = async (data) => {
+export const UpdateInventoryAnswer = async (data) => {
+
     // {
-    //     "inventoryCheckAssignmentId": 0,
-    //     "isConfirmed": true
+    //   "id": 0,
+    //   "isConfirmed": true,
+    //   "rejectNote": "string"
     // }
-    
 
     try {
-        const res = await api.put(`InventoryCheckRequirement/UpdateInventoryCheckAssignment`, data);
+        const res = await api.post(`InventoryCheckRequirement/UpdateInventoryAnswer`, data);
         return res.data;
     } catch (error) {
-        console.log('error at UpdateInventoryCheckAssignment', error);
+        console.log('error at UpdateInventoryAnswer', error);
         throw error;
     }
 };

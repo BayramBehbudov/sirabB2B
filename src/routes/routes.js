@@ -223,9 +223,9 @@ const routes = [
         children: [
             {
                 id: "12-1", path: "/inventory-check-assignment",
-                label: "İnventar yoxlama siyahısı",
+                label: "İnventar sorğuları",
                 component: InventoryCheckAssignment,
-                permission: "INVENTORY: INVENTORY_LIST_CREATED_FOR_CUSTOMER",
+                permission: "INVENTORY: INVENTORY_CUSTOMER_ANSWER_LIST",
             }
         ]
     },

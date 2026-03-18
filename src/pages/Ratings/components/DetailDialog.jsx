@@ -21,7 +21,11 @@ const DetailDialog = ({ row, setRow }) => {
     >
       <div className="flex flex-col gap-5">
         <DataTableContainer>
-          <DataTable size="small" value={row?.orderEvaluationDetails || []}>
+          <DataTable
+            emptyMessage={t("dataNotFound")}
+            size="small"
+            value={row?.orderEvaluationDetails || []}
+          >
             {["orderEvaluationTypeName", "rating", "comment"].map((field) => (
               <Column
                 className="min-w-[200px]"

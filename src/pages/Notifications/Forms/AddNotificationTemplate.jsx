@@ -3,6 +3,7 @@ import {
   UpdateNotificationTemplate,
 } from "@/api/Notification";
 import ControlledInput from "@/components/ui/ControlledInput";
+import ControlledMention from "@/components/ui/ControlledMention";
 import { showToast } from "@/providers/ToastProvider";
 import { NotificationTemplateSchema } from "@/schemas/notification.schema";
 
@@ -62,6 +63,14 @@ const AddNotificationTemplate = ({ onSuccess, defaultValue }) => {
     reset(defaultValues);
   };
 
+  const variables = [
+    { label: t("name"), value: "FirstName}" },
+    { label: t("contactPersonLastName"), value: "LastName}" },
+    { label: t("customerName"), value: "CustomerName}" },
+    { label: t("companyName"), value: "CompanyName}" },
+    { label: t("phoneNumber"), value: "PhoneNumber}" },
+  ];
+
   return (
     <div>
       <Button
@@ -74,7 +83,7 @@ const AddNotificationTemplate = ({ onSuccess, defaultValue }) => {
       <Dialog
         header={t("addNotificationInfo")}
         visible={visible}
-        className={`max-w-[1100px] min-w-[800px]`}
+        className={`max-w-[1100px] min-w-[800px] min-h-[70%]`}
         onHide={onClose}
         footer={
           <div>
@@ -113,14 +122,15 @@ const AddNotificationTemplate = ({ onSuccess, defaultValue }) => {
           <div className={`flex flex-row flex-wrap gap-2 py-[10px] `}>
             {[{ name: "bodyTemplate", type: "textarea", label: "body" }].map(
               (input) => (
-                <ControlledInput
+                <ControlledMention
                   control={control}
                   key={input.name}
                   name={input.name}
-                  placeholder={t(input.label)}
                   label={t(input.label)}
-                  type={input.type || "text"}
                   classNameContainer="grow"
+                  className={"grow"}
+                  variables={variables}
+                  placeholder={t("addForMention", { key: "{" })}
                 />
               ),
             )}

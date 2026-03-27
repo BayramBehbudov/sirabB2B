@@ -2,18 +2,23 @@ import { deleteCookie, getCookie } from "@/helper/Cookie";
 import axios from "axios";
 
 const api = axios.create({
-    // baseURL: import.meta.env.VITE_API_URL,
     headers: {
         "Content-Type": "application/json",
     },
 });
 
-
+let instance = null
+const getInstance = async () => {
+    if (instance) return instance
+    const res = await fetch('/config.json');
+    const data = await res.json();
+    instance = data
+    return data
+}
 api.interceptors.request.use(
     async (config) => {
         const token = getCookie("token")
-        const res = await fetch('/config.json');
-        const data = await res.json();
+        const data = instance ?? await getInstance();
         config.baseURL = data.API_URL;
 
         if (token) {

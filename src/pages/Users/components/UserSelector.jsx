@@ -1,9 +1,8 @@
 import { GetAllSystemUsers } from "@/api/Auth";
-import ColumnHeaderWithSearch from "@/components/ui/SearchInput";
+import SearchInput from "@/components/ui/SearchInput";
 import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
-import { showToast } from "@/providers/ToastProvider";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
@@ -37,7 +36,7 @@ const UserSelector = ({
       setUsers(res.systemUsers);
       setFilteredUsers(res.systemUsers);
       const preselected = res.systemUsers.filter((c) =>
-        selectedUserIds.includes(c.id)
+        selectedUserIds.includes(c.id),
       );
       setSelectedUsers(preselected);
     } catch (error) {
@@ -58,7 +57,7 @@ const UserSelector = ({
         filtered = filtered.filter((item) =>
           String(item[key] || "")
             .toLowerCase()
-            .includes(value.toLowerCase())
+            .includes(value.toLowerCase()),
         );
       }
     });
@@ -121,8 +120,8 @@ const UserSelector = ({
                 key={f}
                 field={f}
                 header={
-                  <ColumnHeaderWithSearch
-                    label={t(f)}
+                  <SearchInput
+                    placeholder={t(f)}
                     value={filters[f] || ""}
                     onChange={(val) =>
                       setFilters((prev) => ({ ...prev, [f]: val }))

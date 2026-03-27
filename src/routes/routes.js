@@ -146,26 +146,26 @@ const routes = [
             },
         ]
     },
-    // {
-    //     id: 6, path: "/notifications",
-    //     component: Notifications, icon: FaBell,
-    //     label: "Bildiriş göndərilməsi",
-    //     permission: "NOTIFICATION: NOTIFICATION_LIST",
-    //     children: [
-    //         {
-    //             id: "6-1", path: "/notifications/types",
-    //             label: "Bildiriş tipləri",
-    //             component: NotificationTypes,
-    //             permission: "NOTIFICATION_TYPE: NOTIFICATION_TYPE_LIST",
-    //         },
-    //         {
-    //             id: "6-2", path: "/notifications/forms",
-    //             label: "Bildiriş formaları",
-    //             component: NotificationTemplates,
-    //             permission: "NOTIFICATION_TEMPLATE: NOTIFICATION_TEMPLATE_LIST",
-    //         }
-    //     ]
-    // },
+    {
+        id: 6, path: "/notifications",
+        component: Notifications, icon: FaBell,
+        label: "Bildiriş göndərilməsi",
+        permission: "NOTIFICATION: NOTIFICATION_LIST",
+        children: [
+            {
+                id: "6-1", path: "/notifications/types",
+                label: "Bildiriş tipləri",
+                component: NotificationTypes,
+                permission: "NOTIFICATION_TYPE: NOTIFICATION_TYPE_LIST",
+            },
+            {
+                id: "6-2", path: "/notifications/forms",
+                label: "Bildiriş formaları",
+                component: NotificationTemplates,
+                permission: "NOTIFICATION_TEMPLATE: NOTIFICATION_TEMPLATE_LIST",
+            }
+        ]
+    },
     {
         id: 7, path: "/ratings",
         label: "Qiymətləndirmələr",

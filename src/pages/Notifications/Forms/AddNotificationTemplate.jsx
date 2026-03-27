@@ -20,7 +20,7 @@ const AddNotificationTemplate = ({ onSuccess, defaultValue }) => {
   const isEdit = !!defaultValue;
 
   const defaultValues = {
-    ...(isEdit ? { id: defaultValue.id } : {}),
+    name: defaultValue?.name || "",
     titleTemplate: defaultValue?.titleTemplate || "",
     bodyTemplate: defaultValue?.bodyTemplate || "",
   };
@@ -46,7 +46,6 @@ const AddNotificationTemplate = ({ onSuccess, defaultValue }) => {
         detail: res?.message || "",
       });
       setVisible(false);
-      reset(defaultValues);
       onSuccess?.();
     } catch (error) {
       showToast({
@@ -96,19 +95,20 @@ const AddNotificationTemplate = ({ onSuccess, defaultValue }) => {
       >
         <div className="flex flex-col">
           <div className={`flex flex-row flex-wrap gap-2 py-[10px] `}>
-            {[{ name: "titleTemplate", type: "text", label: "title" }].map(
-              (input) => (
-                <ControlledInput
-                  control={control}
-                  key={input.name}
-                  name={input.name}
-                  placeholder={t(input.label)}
-                  label={t(input.label)}
-                  type={input.type || "text"}
-                  className={"w-[250px]"}
-                />
-              )
-            )}
+            {[
+              { name: "name", type: "text", label: "name" },
+              { name: "titleTemplate", type: "text", label: "title" },
+            ].map((input) => (
+              <ControlledInput
+                control={control}
+                key={input.name}
+                name={input.name}
+                placeholder={t(input.label)}
+                label={t(input.label)}
+                type={input.type || "text"}
+                className={"w-[250px]"}
+              />
+            ))}
           </div>
           <div className={`flex flex-row flex-wrap gap-2 py-[10px] `}>
             {[{ name: "bodyTemplate", type: "textarea", label: "body" }].map(
@@ -122,7 +122,7 @@ const AddNotificationTemplate = ({ onSuccess, defaultValue }) => {
                   type={input.type || "text"}
                   classNameContainer="grow"
                 />
-              )
+              ),
             )}
           </div>
         </div>

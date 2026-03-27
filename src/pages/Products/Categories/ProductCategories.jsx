@@ -10,7 +10,6 @@ import { Image } from "primereact/image";
 import { useEffect, useState } from "react";
 import { showToast } from "@/providers/ToastProvider";
 import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
-import ColumnHeaderWithSearch from "@/components/ui/SearchInput";
 import SearchInput from "@/components/ui/SearchInput";
 import { useNavigate } from "react-router-dom";
 import usePermissions from "@/hooks/usePermissions";
@@ -165,7 +164,7 @@ const ProductCategories = () => {
             />
           ))}
           <Column
-            header={"Şəkil"}
+            header={t("image")}
             body={(data) => {
               return (
                 <Image

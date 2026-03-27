@@ -24,7 +24,7 @@ const SaleConditions = () => {
     orderColumn: "",
     searchList: [],
   });
-  // qeyd yoxla gör uzun mətnlər cədvəllərdə necə görünür bütün səhifələri yoxla
+
   const navigate = useNavigate();
   const perms = usePermissions({
     show: "SALE_CONDITION: SALE_CONDITION_LIST",

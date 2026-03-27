@@ -1,5 +1,5 @@
 import z from "zod";
-import { RequiredSchemaId } from "./shared.schema";
+import { NullableSchemaId, RequiredSchemaId, SpecodeSchema } from "./shared.schema";
 
 export const NotificationImageSchema = z.object({
     fileName: z
@@ -11,47 +11,24 @@ export const NotificationImageSchema = z.object({
     id: RequiredSchemaId,
 });
 
+
+
 export const NotificationSchema =
     z.object({
         notificationTypeId: z.number({ error: "errors.notificationTypeRequired" }).min(1, { error: "errors.notificationTypeRequired" }),
         notificationTemplateId: z.number({ error: "errors.notificationTemplateRequired" }).min(1, { error: "errors.notificationTemplateRequired" }),
-        sendDate: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.sendDateRequired" }),
+        scheduledAt: z.string({ message: "errors.invalidDate" }).nonempty({ error: "errors.sendDateRequired" }),
         images: z.array(NotificationImageSchema),
-        b2BCustomerIds: z
-            .array(z.number({ message: "errors.customerOrGroupRequired" })),
-        b2BCustomerGroupIds: z
-            .array(z.number({ message: "errors.customerOrGroupRequired" })),
-        sendToAllCustomers: z.boolean({ message: "errors.customerTypeRequired" }),
-    }).refine((data) => {
-        if (data.sendToAllCustomers) {
-            return (
-                data.b2BCustomerIds.length === 0 &&
-                data.b2BCustomerGroupIds.length === 0
-            );
-        }
-
-        return (
-            data.b2BCustomerIds.length > 0 ||
-            data.b2BCustomerGroupIds.length > 0
-        );
-    }, {
-        path: ['b2BCustomerIds'],
-        message: 'errors.customerOrGroupRequired',
-    }).refine((data) => {
-        if (data.sendToAllCustomers) {
-            return (
-                data.b2BCustomerIds.length === 0 &&
-                data.b2BCustomerGroupIds.length === 0
-            );
-        }
-        return (
-            data.b2BCustomerIds.length > 0 ||
-            data.b2BCustomerGroupIds.length > 0
-        );
-    }, {
-        path: ['b2BCustomerGroupIds'],
-        message: 'errors.customerOrGroupRequired'
-    });
+        customerGroupId: NullableSchemaId,
+        b2BCustomerId: NullableSchemaId,
+        clSpecode: SpecodeSchema,
+        clSpecode1: SpecodeSchema,
+        clSpecode2: SpecodeSchema,
+        clSpecode3: SpecodeSchema,
+        clSpecode4: SpecodeSchema,
+        clSpecode5: SpecodeSchema,
+        b2BCustomerType: SpecodeSchema,
+    })
 
 
 export const NotificationTypeSchema =
@@ -63,18 +40,10 @@ export const NotificationTypeSchema =
     });
 
 
-export const NotificationTypeUpdateSchema =
-    z.object({
-        id: z.number({ error: "errors.required" }).nonnegative({ error: "errors.required" }),
-        name: z.string({ error: "errors.nameRequired" }).optional(),
-        soundFileName: z.string({ error: "errors.addSoundName" }).optional(),
-        iconFileName: z.string({ error: "errors.addIcon" }).optional(),
-        iconBase64: z.string({ error: "errors.addIcon" }).optional(),
-    });
-
 
 export const NotificationTemplateSchema =
     z.object({
+        name: z.string({ error: "errors.nameRequired" }).nonempty({ error: "errors.nameRequired" }),
         titleTemplate: z.string({ error: "errors.titleRequired" }).nonempty({ error: "errors.titleRequired" }).min(3, { error: "errors.min3Chars" }),
         bodyTemplate: z.string({ error: "errors.textRequired" }).nonempty({ error: "errors.textRequired" }).min(3, { error: "errors.min3Chars" }),
     });

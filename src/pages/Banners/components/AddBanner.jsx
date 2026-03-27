@@ -165,9 +165,6 @@ const AddBanner = ({ onSuccess, banner, disabled }) => {
               error={errors.b2BCustomerId}
               value={b2BCustomerId ? [b2BCustomerId] : []}
               setValue={setValue}
-              field="b2BCustomerId"
-              required={false}
-              mode="single"
             />
             {[
               { name: "title" },

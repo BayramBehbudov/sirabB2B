@@ -2,7 +2,7 @@ import {
   GetPermissionsByGroupId,
   SetPermissionSelected,
 } from "@/api/ClaimGroups";
-import ColumnHeaderWithSearch from "@/components/ui/SearchInput";
+import SearchInput from "@/components/ui/SearchInput";
 import { SwitchConfirm } from "@/components/ui/dialogs/SwitchConfirm";
 import { tableStaticProps } from "@/components/ui/TableContainer";
 import { showToast } from "@/providers/ToastProvider";
@@ -18,26 +18,15 @@ const PermissionsSelector = ({ claimGroup }) => {
   const [permissions, setPermissions] = useState([]);
   const [filteredPermissions, setFilteredPermissions] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [page, setPage] = useState({
-    pageNumber: 1,
-    pageSize: 10,
-  });
-  const [totalRecords, setTotalRecords] = useState(0);
   const { t } = useTranslation();
 
-  // qeyd burada search db ilə deyil, cari səhifədəki data üçün lokal search edirəm
   const getPermissions = async () => {
     if (!claimGroup.id) return;
     try {
       setLoading(true);
-      const res = await GetPermissionsByGroupId(
-        claimGroup.id,
-        page.pageNumber,
-        page.pageSize
-      );
+      const res = await GetPermissionsByGroupId(claimGroup.id);
       setPermissions(res.groupPermissionViewModel.permissions);
       setFilteredPermissions(res.groupPermissionViewModel.permissions);
-      setTotalRecords(res.pageInfo.totalItems);
     } catch (error) {
       console.log("error at getPermissions", error);
     } finally {
@@ -75,7 +64,7 @@ const PermissionsSelector = ({ claimGroup }) => {
   useEffect(() => {
     if (!visible) return;
     getPermissions();
-  }, [page, visible]);
+  }, [visible]);
 
   const onClose = () => {
     setVisible(false);
@@ -99,16 +88,8 @@ const PermissionsSelector = ({ claimGroup }) => {
           loading={loading}
           value={filteredPermissions}
           {...tableStaticProps}
-          first={page.pageNumber * page.pageSize - page.pageSize}
-          totalRecords={totalRecords}
-          rows={page.pageSize}
-          onPage={(e) => {
-            const newPage = {
-              pageNumber: e.page + 1,
-              pageSize: e.rows,
-            };
-            setPage(newPage);
-          }}
+          totalRecords={permissions.length}
+          lazy={false}
         >
           <Column
             field=""
@@ -122,8 +103,8 @@ const PermissionsSelector = ({ claimGroup }) => {
               <Column
                 field={f.field}
                 header={
-                  <ColumnHeaderWithSearch
-                    label={t(f.label)}
+                  <SearchInput
+                    placeholder={t(f.label)}
                     onChange={(v) => {
                       if (!permissions.length) return;
                       const filtered = permissions.filter((p) => {

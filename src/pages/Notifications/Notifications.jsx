@@ -8,26 +8,32 @@ import DataTableContainer, {
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { formatDate } from "@/helper/DateFormatter";
-import CustomersViewDialog from "../Customers/components/CustomersViewDialog";
 import { useNavigate } from "react-router-dom";
 import usePermissions from "@/hooks/usePermissions";
 import { PhotosViewerDialog } from "@/components/ui/file/PhotosViewerDialog";
 import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 import { showToast } from "@/providers/ToastProvider";
+import TableHeader from "@/components/ui/TableHeader";
 
 const notificationStatuses = {
-  0: "Pending",
-  1: "Sent",
-  2: "Failed",
+  0: "Draft",
+  1: "Scheduled",
+  2: "Sending",
+  3: "Sent",
+  4: "Failed",
+  5: "PartialFailed",
 };
 
 const Notifications = () => {
   const { t } = useTranslation();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState({
+  const [filter, setFilter] = useState({
     pageNumber: 1,
     pageSize: 10,
+    order: "",
+    orderColumn: "",
+    searchList: [],
   });
   const [totalRecords, setTotalRecords] = useState(0);
   const navigate = useNavigate();
@@ -41,10 +47,10 @@ const Notifications = () => {
 
   const isAllowed = perms.isAllowed("show");
 
-  const getNotifications = async () => {
+  const getNotifications = async (payload = filter) => {
     try {
       setLoading(true);
-      const res = await GetAllNotifications(page);
+      const res = await GetAllNotifications(payload);
       setNotifications(res.notifications);
       setTotalRecords(res.pageInfo.totalItems);
     } catch (error) {
@@ -79,7 +85,7 @@ const Notifications = () => {
     if (!perms.ready) return;
     if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getNotifications();
-  }, [page, isAllowed, perms.ready]);
+  }, [isAllowed, perms.ready]);
 
   if (!isAllowed || !perms.ready) return null;
   return (
@@ -97,60 +103,138 @@ const Notifications = () => {
           value={notifications}
           loading={loading}
           {...tableStaticProps}
-          first={page.pageNumber * page.pageSize - page.pageSize}
+          first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
-          rows={page.pageSize}
+          rows={filter.pageSize}
+          scrollable
           onPage={(e) => {
             const newPage = {
               pageNumber: e.page + 1,
               pageSize: e.rows,
             };
-            setPage(newPage);
+            setFilter((p) => {
+              const newFilter = { ...p, ...newPage };
+              getNotifications(newFilter);
+              return newFilter;
+            });
           }}
         >
-          <Column
-            field=""
-            header={"№"}
-            body={(_, rowData) => rowData.rowIndex + 1}
-          />
-          {["personalizedMessage"].map((i) => {
-            return <Column field={i} header={t(i)} />;
+          {[
+            {
+              field: "notificationTypeName",
+              label: "notificationType",
+              type: "text",
+            },
+            {
+              field: "notificationTemplateName",
+              label: "notificationTemplate",
+              type: "text",
+            },
+            {
+              field: "b2BCustomerType",
+              label: "b2BCustomerType",
+              type: "text",
+            },
+            {
+              field: "status",
+              label: "status",
+              type: "dropdown",
+              options: Object.entries(notificationStatuses).map(
+                ([key, value]) => ({
+                  label: t(value),
+                  value: key,
+                }),
+              ),
+            },
+            { field: "scheduledAt", label: "scheduledAt", type: "date" },
+            { field: "sentAt", label: "sentAt", type: "date" },
+            { field: "clSpecode", label: "clSpecode", type: "text" },
+            { field: "clSpecode1", label: "clSpecode1", type: "text" },
+            { field: "clSpecode2", label: "clSpecode2", type: "text" },
+            { field: "clSpecode3", label: "clSpecode3", type: "text" },
+            { field: "clSpecode4", label: "clSpecode4", type: "text" },
+            { field: "clSpecode5", label: "clSpecode5", type: "text" },
+          ].map(({ field, label, type, options }) => {
+            return (
+              <Column
+                field={field}
+                body={(data) => {
+                  const v = data[field];
+                  if (type === "date") return formatDate(v);
+                  if (type === "dropdown")
+                    return options.find(
+                      (item) => item.value.toString() === v.toString(),
+                    )?.label;
+                  return v;
+                }}
+                header={() => {
+                  return (
+                    <TableHeader
+                      type={type}
+                      handleSearch={getNotifications}
+                      onChange={(v) => {
+                        setFilter((prev) => {
+                          const newFilter = { ...prev };
+                          newFilter.searchList = newFilter.searchList.filter(
+                            (item) => item.colName !== field,
+                          );
+                          if (v) {
+                            newFilter.searchList.push({
+                              colName: field,
+                              value: v,
+                            });
+                          }
+                          return newFilter;
+                        });
+                      }}
+                      label={t(label)}
+                      placeholder={t("search")}
+                      value={
+                        filter.searchList.find((item) => item.colName === field)
+                          ?.value
+                      }
+                      dropdownOptions={options}
+                      sort={filter.orderColumn === field ? filter.order : ""}
+                      handleSort={(s) => {
+                        setFilter((prev) => {
+                          const newFilter = { ...prev };
+                          newFilter.orderColumn = field;
+                          newFilter.order = s;
+                          getNotifications(newFilter);
+                          return newFilter;
+                        });
+                      }}
+                    />
+                  );
+                }}
+              />
+            );
           })}
+
           <Column
-            field="sendDate"
-            header={t("sendDate")}
+            frozen
+            alignFrozen="right"
+            header="#"
+            alignHeader="center"
             body={(data) => {
-              return <p>{formatDate(data.sendDate)}</p>;
-            }}
-          />
-          <Column
-            field="status"
-            header={t("status")}
-            body={(data) => {
-              return <p>{t(notificationStatuses[data.status])}</p>;
-            }}
-          />
-          <Column
-            header={"#"}
-            body={(data) => {
+              const disabled = !!data.sentAt;
               return (
-                <div className="flex flex-row gap-2">
-                  <PhotosViewerDialog images={data.images} />
-                  <CustomersViewDialog customers={data.recipients} />
-                  {perms.update && (
+                <div className="flex flex-row gap-2 justify-end">
+                  {perms.update && !disabled && (
                     <AddNotification
                       onSuccess={getNotifications}
                       disabled={!perms.update}
                       notification={data}
                     />
                   )}
-                  {perms.delete && (
+                  {perms.delete && !disabled && (
                     <DeleteConfirm
                       onConfirm={() => {
                         handleDelete(data.id);
                       }}
                     />
                   )}
+                  <PhotosViewerDialog images={data.images} />
                 </div>
               );
             }}

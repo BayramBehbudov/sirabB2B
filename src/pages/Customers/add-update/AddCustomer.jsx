@@ -153,9 +153,6 @@ const AddCustomer = () => {
       if (!isEdit) {
         reset(defaultValues);
       }
-      {
-        // qeyd səhifəni reload etmək lazımdır
-      }
     } catch (error) {
       showToast({
         severity: "error",

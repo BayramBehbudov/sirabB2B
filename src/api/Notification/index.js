@@ -45,9 +45,9 @@ export const DeleteNotificationType = async (id) => {
 };
 
 
-export const GetNotificationTypes = async ({ pageNumber = 1, pageSize = 10 }) => {
+export const GetNotificationTypes = async (payload) => {
     try {
-        const response = await api.get(`/NotificationType/GetAll?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        const response = await api.post(`/NotificationType/GetAll`, payload);
         return response.data;
     } catch (error) {
         console.log('error at GetNotificationTypes', error);
@@ -76,9 +76,9 @@ export const UpdateNotificationTemplate = async (data) => {
     }
 };
 
-export const GetNotificationTemplates = async ({ pageNumber = 1, pageSize = 10 }) => {
+export const GetNotificationTemplates = async (payload) => {
     try {
-        const response = await api.get(`/NotificationTemplate/GetAll?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        const response = await api.post(`/NotificationTemplate/GetAll`, payload);
         return response.data;
     } catch (error) {
         console.log('error at GetNotificationTemplates', error);
@@ -99,9 +99,9 @@ export const DeleteNotificationTemplates = async (id) => {
 
 
 
-export const GetAllNotifications = async ({ pageNumber = 1, pageSize = 10 }) => {
+export const GetAllNotifications = async (payload) => {
     try {
-        const response = await api.get(`/Notification/GetAllNotification?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        const response = await api.post(`/Notification/GetAllNotification`, payload);
         return response.data;
     } catch (error) {
         console.log('error at GetAllNotifications', error);
@@ -112,31 +112,31 @@ export const GetAllNotifications = async ({ pageNumber = 1, pageSize = 10 }) => 
 
 
 export const CreateNotification = async (data) => {
-    // {
-    //  "b2BCustomerGroupIds": [
-    //     0
-    //   ],
-    //   "b2BCustomerIds": [
-    //     0
-    //   ],
-    //   "sendToAllCustomers": true,
 
+    // {
+    //   "b2BCustomerId": 0,
+    //   "customerGroupId": 0,
+    //   "clSpecode": "string",
+    //   "clSpecode1": "string",
+    //   "clSpecode2": "string",
+    //   "clSpecode3": "string",
+    //   "clSpecode4": "string",
+    //   "clSpecode5": "string",
+    //   "b2BCustomerType": "string",
     //   "notificationTypeId": 0,
     //   "notificationTemplateId": 0,
-    //   "sendDate": "2025-11-11T09:08:11.807Z",
+    //   "scheduledAt": "2026-03-27T06:47:23.088Z",
     //   "images": [
     //     {
     //       "fileName": "string",
-    //       "base64": "string",
+    //       "base64": "string"
     //     }
     //   ]
     // }
 
 
-
-
     try {
-        const response = await api.post("/Notification/Create", data);
+        const response = await api.post("/Notification/CreateNotification", data);
         return response.data;
     } catch (error) {
         console.log('error at CreateNotification', error);
@@ -146,26 +146,33 @@ export const CreateNotification = async (data) => {
 
 
 export const UpdateNotification = async (data) => {
+
+
     // {
-    //     "b2BCustomerGroupIds": [0],
-    //     "b2BCustomerIds": [0],
-    //     "sendDate": "2025-11-25T08:04:01.297Z",
-    //     "notificationTypeId": 0,
-    //     "notificationTemplateId": 0,
-
-    //     "deletedNotificationImageIds": [
-    //       0
-    //     ],
-
-    //     "sendToAllCustomers": true,
-    //     "images": [
-    //       {
-    //         "id": 0,
-    //         "fileName": "string",
-    //         "base64": "string"
-    //       }
-    //     ]
-    //   }
+    //   "id": 0,
+    //   "b2BCustomerId": 0,
+    //   "customerGroupId": 0,
+    //   "clSpecode": "string",
+    //   "clSpecode1": "string",
+    //   "clSpecode2": "string",
+    //   "clSpecode3": "string",
+    //   "clSpecode4": "string",
+    //   "clSpecode5": "string",
+    //   "b2BCustomerType": "string",
+    //   "notificationTypeId": 0,
+    //   "notificationTemplateId": 0,
+    //   "scheduledAt": "2026-03-27T06:54:08.243Z",
+    //   "deletedNotificationImageIds": [
+    //     0
+    //   ],
+    //   "images": [
+    //     {
+    //       "id": 0,
+    //       "fileName": "string",
+    //       "base64": "string"
+    //     }
+    //   ]
+    // }
 
 
     try {

@@ -13,14 +13,18 @@ import { Column } from "primereact/column";
 import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 import { showToast } from "@/providers/ToastProvider";
 import usePermissions from "@/hooks/usePermissions";
+import TableHeader from "@/components/ui/TableHeader";
 
 const NotificationTemplates = () => {
   const { t } = useTranslation();
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState({
+  const [filter, setFilter] = useState({
     pageNumber: 1,
     pageSize: 10,
+    order: "",
+    orderColumn: "",
+    searchList: [],
   });
   const [totalRecords, setTotalRecords] = useState(0);
 
@@ -34,10 +38,10 @@ const NotificationTemplates = () => {
   const isAllowed = perms.isAllowed("show");
   const hasAny = perms.hasAny(["update", "delete"]);
 
-  const getTemplates = async () => {
+  const getTemplates = async (payload = filter) => {
     setLoading(true);
     try {
-      const response = await GetNotificationTemplates(page);
+      const response = await GetNotificationTemplates(payload);
       setTemplates(response.notificationTemplates);
       setTotalRecords(response.pageInfo.totalItems);
     } catch (error) {
@@ -50,7 +54,7 @@ const NotificationTemplates = () => {
     if (!perms.ready) return;
     if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getTemplates();
-  }, [page, isAllowed, perms.ready]);
+  }, [isAllowed, perms.ready]);
 
   const handleDelete = async (id) => {
     try {
@@ -92,20 +96,71 @@ const NotificationTemplates = () => {
           value={templates}
           loading={loading}
           {...tableStaticProps}
-          first={page.pageNumber * page.pageSize - page.pageSize}
+          first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
-          rows={page.pageSize}
+          rows={filter.pageSize}
           onPage={(e) => {
             const newPage = {
               pageNumber: e.page + 1,
               pageSize: e.rows,
             };
-            setPage(newPage);
+            setFilter((p) => {
+              const newFilter = { ...p, ...newPage };
+              getTemplates(newFilter);
+              return newFilter;
+            });
           }}
         >
-          {/* <Column field="id" header={t("id")} /> */}
-          <Column field="titleTemplate" header={t("title")} />
-          <Column field="bodyTemplate" header={t("body")} />
+          {[
+            { field: "name", label: "name" },
+            { field: "titleTemplate", label: "title" },
+            { field: "bodyTemplate", label: "body" },
+          ].map(({ field, label }) => {
+            return (
+              <Column
+                field={field}
+                header={() => {
+                  return (
+                    <TableHeader
+                      type={"text"}
+                      handleSearch={getTemplates}
+                      onChange={(v) => {
+                        setFilter((prev) => {
+                          const newFilter = { ...prev };
+                          newFilter.searchList = newFilter.searchList.filter(
+                            (item) => item.colName !== field,
+                          );
+                          if (v) {
+                            newFilter.searchList.push({
+                              colName: field,
+                              value: v,
+                            });
+                          }
+                          return newFilter;
+                        });
+                      }}
+                      label={t(label)}
+                      placeholder={t("search")}
+                      value={
+                        filter.searchList.find((item) => item.colName === field)
+                          ?.value
+                      }
+                      sort={filter.orderColumn === field ? filter.order : ""}
+                      handleSort={(s) => {
+                        setFilter((prev) => {
+                          const newFilter = { ...prev };
+                          newFilter.orderColumn = field;
+                          newFilter.order = s;
+                          getTemplates(newFilter);
+                          return newFilter;
+                        });
+                      }}
+                    />
+                  );
+                }}
+              />
+            );
+          })}
           {hasAny && (
             <Column
               body={(data) => {

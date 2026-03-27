@@ -39,9 +39,9 @@ export const UpdateClaimGroup = async (data) => {
 
 
 
-export const GetPermissionsByGroupId = async (claimGroupId, pageNumber = 1, pageSize = 10) => {
+export const GetPermissionsByGroupId = async (claimGroupId,) => {
     try {
-        const response = await api.get(`/ClaimGroup/GetClaimsByGroupId/${claimGroupId}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        const response = await api.get(`/ClaimGroup/GetClaimsByGroupId/${claimGroupId}?pageNumber=${1}&pageSize=${10000}`);
         return response.data;
     } catch (error) {
         console.log('error at GetPermissionsByGroupId', error);

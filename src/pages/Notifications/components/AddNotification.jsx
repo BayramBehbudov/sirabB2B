@@ -1,39 +1,41 @@
-import {
-  CreateNotification,
-  GetNotificationTemplates,
-  GetNotificationTypes,
-  UpdateNotification,
-} from "@/api/Notification";
+import { CreateNotification, UpdateNotification } from "@/api/Notification";
 import ControlledCalendar from "@/components/ui/ControlledCalendar";
-import ControlledDropdown from "@/components/ui/ControlledDropdown";
+import ControlledInput from "@/components/ui/ControlledInput";
 import FilePicker from "@/components/ui/file/FilePicker";
 import FileScrollView from "@/components/ui/file/FileScrollView";
 import CustomerHandler from "@/pages/Customers/components/CustomerHandler";
-import SendToAllCustomersHandler from "@/pages/Customers/components/SendToAllCustomersHandler";
-import CustomerGroupMultiSelector from "@/pages/Customers/groups/components/CustomerGroupMultiSelector";
+import CustomerGroupSelector from "@/pages/Customers/groups/components/CustomerGroupSelector";
 import { showToast } from "@/providers/ToastProvider";
 import { NotificationSchema } from "@/schemas/notification.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import React, { useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import NotificationTypeSelector from "../Types/NotificationTypeSelector";
+import NotificationTemplateSelector from "../Forms/NotificationTemplateSelector";
 
 const AddNotification = ({ onSuccess, notification, disabled }) => {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [types, setTypes] = useState([]);
-  const [temps, setTemps] = useState([]);
   const isEdit = !!notification;
-  const defaultValues = {
-    b2BCustomerGroupIds: [],
-    b2BCustomerIds: notification?.recipients?.map((r) => r.b2BCustomerId) || [],
-    sendDate: notification?.sendDate || "",
 
+  const defaultValues = {
+    customerGroupId: notification?.customerGroupId || null,
+    b2BCustomerId: notification?.b2BCustomerId || null,
+    clSpecode: notification?.clSpecode || "*",
+    clSpecode1: notification?.clSpecode1 || "*",
+    clSpecode2: notification?.clSpecode2 || "*",
+    clSpecode3: notification?.clSpecode3 || "*",
+    clSpecode4: notification?.clSpecode4 || "*",
+    clSpecode5: notification?.clSpecode5 || "*",
+    b2BCustomerType: notification?.b2BCustomerType || "*",
     notificationTypeId: notification?.notificationTypeId || 0,
     notificationTemplateId: notification?.notificationTemplateId || 0,
+    scheduledAt: notification?.scheduledAt || "",
+
     images:
       notification?.images?.map((i) => {
         return {
@@ -43,7 +45,6 @@ const AddNotification = ({ onSuccess, notification, disabled }) => {
           id: i.id,
         };
       }) || [],
-    sendToAllCustomers: false,
   };
 
   const {
@@ -52,46 +53,25 @@ const AddNotification = ({ onSuccess, notification, disabled }) => {
     reset,
     formState: { errors },
     setValue,
-    trigger,
     watch,
   } = useForm({
     resolver: zodResolver(NotificationSchema),
     defaultValues,
   });
+  const b2BCustomerId = watch("b2BCustomerId");
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "images",
     keyName: "fieldId",
   });
-  const sendToAllCustomers = watch("sendToAllCustomers");
-  const b2BCustomerIds = watch("b2BCustomerIds");
-
-  const getNotificationsData = async () => {
-    try {
-      setLoading(true);
-      const page = { pageNumber: 1, pageSize: 1000000 };
-      const resTemps = await GetNotificationTemplates(page);
-      const resTypes = await GetNotificationTypes(page);
-      setTemps(resTemps.notificationTemplates);
-      setTypes(resTypes.notificationTypes);
-    } catch (error) {
-      console.log("error at getNotificationsData", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!visible) return;
-    getNotificationsData();
-  }, [visible]);
 
   useEffect(() => {
     reset(defaultValues);
   }, [notification]);
 
   const onSubmit = async (data) => {
+    if (disabled) return;
     const formatted = {
       ...data,
       images: data.images
@@ -172,56 +152,77 @@ const AddNotification = ({ onSuccess, notification, disabled }) => {
         }
       >
         <div className={`flex flex-row flex-wrap gap-2 py-[10px]`}>
-          <SendToAllCustomersHandler control={control} setValue={setValue} />
-
-          {!sendToAllCustomers && (
-            <CustomerGroupMultiSelector
-              fieldName="b2BCustomerGroupIds"
-              control={control}
-              trigger={trigger}
-            />
-          )}
-
-          {!sendToAllCustomers && (
-            <CustomerHandler
-              error={errors.b2BCustomerIds}
-              value={b2BCustomerIds}
-              setValue={setValue}
-              trigger={trigger}
-            />
-          )}
-
-          <ControlledDropdown
-            control={control}
-            name="notificationTypeId"
-            label={t("notificationType")}
-            showIcon={false}
-            options={types.map((t) => {
-              return {
-                label: t.id + " - " + t.name,
-                value: t.id,
-              };
-            })}
-          />
-          <ControlledDropdown
-            control={control}
-            name="notificationTemplateId"
-            label={t("notificationTemplate")}
-            showIcon={false}
-            options={temps.map((t) => {
-              return {
-                label: t.id + " - " + t.titleTemplate,
-                value: t.id,
-              };
-            })}
-          />
           <ControlledCalendar
             control={control}
-            name="sendDate"
-            label={t("sendDate")}
+            name="scheduledAt"
+            label={t("scheduledAt")}
             placeholder={t("select")}
             minDate={new Date()}
+            className={"w-[200px]"}
           />
+          <Controller
+            control={control}
+            name="notificationTypeId"
+            render={({ field: { value, onChange }, fieldState: { error } }) => {
+              return (
+                <NotificationTypeSelector
+                  error={error}
+                  handleSelect={(v) => {
+                    onChange(v[0]?.id ?? 0);
+                  }}
+                  value={value ? [value] : []}
+                />
+              );
+            }}
+          />
+          <Controller
+            control={control}
+            name="notificationTemplateId"
+            render={({ field: { value, onChange }, fieldState: { error } }) => {
+              return (
+                <NotificationTemplateSelector
+                  error={error}
+                  handleSelect={(v) => {
+                    onChange(v[0]?.id ?? 0);
+                  }}
+                  value={value ? [value] : []}
+                />
+              );
+            }}
+          />
+          <CustomerGroupSelector
+            control={control}
+            field="customerGroupId"
+            showClear={true}
+          />
+
+          <CustomerHandler
+            error={errors.b2BCustomerId}
+            value={b2BCustomerId ? [b2BCustomerId] : []}
+            setValue={setValue}
+          />
+
+          {[
+            { name: "clSpecode" },
+            { name: "clSpecode1" },
+            { name: "clSpecode2" },
+            { name: "clSpecode3" },
+            { name: "clSpecode4" },
+            { name: "clSpecode5" },
+            { name: "b2BCustomerType" },
+          ].map((input) => (
+            <ControlledInput
+              control={control}
+              key={input.name}
+              name={input.name}
+              placeholder={t("enter")}
+              label={t(input.name)}
+              type={"text"}
+              avtoValue={input.avtoValue}
+              className={"w-[200px]"}
+            />
+          ))}
+
           <FilePicker
             label={t("images")}
             onChange={(files) => {

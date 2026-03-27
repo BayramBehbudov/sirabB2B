@@ -6,10 +6,7 @@ import ControlledInput from "@/components/ui/ControlledInput";
 import FilePicker from "@/components/ui/file/FilePicker";
 import FileScrollView from "@/components/ui/file/FileScrollView";
 import { showToast } from "@/providers/ToastProvider";
-import {
-  NotificationTypeSchema,
-  NotificationTypeUpdateSchema,
-} from "@/schemas/notification.schema";
+import { NotificationTypeSchema } from "@/schemas/notification.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -24,10 +21,9 @@ const AddNotificationType = ({ onSuccess, defaultValue }) => {
   const isEdit = !!defaultValue;
 
   const defaultValues = {
-    ...(isEdit ? { id: defaultValue.id } : {}),
     name: defaultValue?.name || "",
     soundFileName: defaultValue?.soundFileName || "",
-    iconFileName: "",
+    iconFileName: defaultValue?.iconFileName || "",
     iconBase64: defaultValue?.iconFilePath || "",
   };
 
@@ -39,9 +35,7 @@ const AddNotificationType = ({ onSuccess, defaultValue }) => {
     setValue,
     watch,
   } = useForm({
-    resolver: zodResolver(
-      isEdit ? NotificationTypeUpdateSchema : NotificationTypeSchema
-    ),
+    resolver: zodResolver(NotificationTypeSchema),
     defaultValues,
   });
 
@@ -53,6 +47,7 @@ const AddNotificationType = ({ onSuccess, defaultValue }) => {
   const onSubmit = async (formData) => {
     const formatted = {
       ...formData,
+      ...(isEdit ? { id: defaultValue.id } : {}),
       iconBase64: formData.iconBase64.split(",")[1] || "",
     };
     try {

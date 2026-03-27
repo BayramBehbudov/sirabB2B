@@ -1,5 +1,5 @@
 import { getB2BCustomers } from "@/api/B2BCustomer";
-import ColumnHeaderWithSearch from "@/components/ui/SearchInput";
+import SearchInput from "@/components/ui/SearchInput";
 import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
@@ -36,7 +36,7 @@ const CustomerSelectorDialog = ({
       "companyName",
       "contactPersonFirstName",
       "contactPersonLastName",
-      "customerGroupId",
+      "custmerGrupName",
       "email",
       "erpId",
       "phoneNumber",
@@ -166,8 +166,8 @@ const CustomerSelectorDialog = ({
                   key={f}
                   field={f}
                   header={
-                    <ColumnHeaderWithSearch
-                      label={t(f)}
+                    <SearchInput
+                      placeholder={t(f)}
                       value={filters[f] || ""}
                       onChange={(val) =>
                         setFilters((prev) => ({ ...prev, [f]: val }))

@@ -6,10 +6,9 @@ const CustomerHandler = ({
   error,
   value,
   setValue,
-  trigger,
-  mode = "multiple",
-  required = true,
-  field = "b2BCustomerIds",
+  field = "b2BCustomerId",
+  required = false,
+  mode = "single",
 }) => {
   const [showCustomers, setShowCustomers] = useState(false);
   const { t } = useTranslation();
@@ -50,7 +49,6 @@ const CustomerHandler = ({
               ? (customers[0]?.b2BCustomerId ?? null)
               : (customers.map((c) => c.b2BCustomerId) ?? []);
           setValue(field, ids);
-          trigger?.([field, "b2BCustomerGroupIds"]);
           if (btnRef.current) {
             btnRef.current.focus();
           }

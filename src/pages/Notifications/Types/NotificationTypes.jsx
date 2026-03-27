@@ -14,14 +14,19 @@ import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 import { showToast } from "@/providers/ToastProvider";
 import { useNavigate } from "react-router-dom";
 import usePermissions from "@/hooks/usePermissions";
+import TableHeader from "@/components/ui/TableHeader";
+import { Image } from "primereact/image";
 
 const NotificationTypes = () => {
   const { t } = useTranslation();
   const [types, setTypes] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState({
+  const [filter, setFilter] = useState({
     pageNumber: 1,
     pageSize: 10,
+    order: "",
+    orderColumn: "",
+    searchList: [],
   });
   const [totalRecords, setTotalRecords] = useState(0);
 
@@ -37,10 +42,10 @@ const NotificationTypes = () => {
   const isAllowed = perms.isAllowed("show");
   const hasAny = perms.hasAny(["update", "delete"]);
 
-  const getTypes = async () => {
+  const getTypes = async (payload = filter) => {
     try {
       setLoading(true);
-      const res = await GetNotificationTypes(page);
+      const res = await GetNotificationTypes(payload);
       setTypes(res.notificationTypes);
       setTotalRecords(res.pageInfo.totalItems);
     } catch (error) {
@@ -52,7 +57,7 @@ const NotificationTypes = () => {
     if (!perms.ready) return;
     if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getTypes();
-  }, [page, isAllowed, perms.ready]);
+  }, [isAllowed, perms.ready]);
 
   const handleDelete = async (id) => {
     try {
@@ -92,19 +97,87 @@ const NotificationTypes = () => {
           value={types}
           loading={loading}
           {...tableStaticProps}
-          first={page.pageNumber * page.pageSize - page.pageSize}
+          first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
-          rows={page.pageSize}
+          rows={filter.pageSize}
           onPage={(e) => {
             const newPage = {
               pageNumber: e.page + 1,
               pageSize: e.rows,
             };
-            setPage(newPage);
+            setFilter((p) => {
+              const newFilter = { ...p, ...newPage };
+              getTypes(newFilter);
+              return newFilter;
+            });
           }}
         >
-          <Column field="name" header={t("name")} />
-          <Column field="soundFileName" header={t("soundFileName")} />
+          {[
+            { field: "name", label: "name" },
+            { field: "soundFileName", label: "soundFileName" },
+          ].map(({ field, label }) => {
+            return (
+              <Column
+                field={field}
+                header={() => {
+                  return (
+                    <TableHeader
+                      type={"text"}
+                      handleSearch={getTypes}
+                      onChange={(v) => {
+                        setFilter((prev) => {
+                          const newFilter = { ...prev };
+                          newFilter.searchList = newFilter.searchList.filter(
+                            (item) => item.colName !== field,
+                          );
+                          if (v) {
+                            newFilter.searchList.push({
+                              colName: field,
+                              value: v,
+                            });
+                          }
+                          return newFilter;
+                        });
+                      }}
+                      label={t(label)}
+                      placeholder={t("search")}
+                      value={
+                        filter.searchList.find((item) => item.colName === field)
+                          ?.value
+                      }
+                      sort={filter.orderColumn === field ? filter.order : ""}
+                      handleSort={(s) => {
+                        setFilter((prev) => {
+                          const newFilter = { ...prev };
+                          newFilter.orderColumn = field;
+                          newFilter.order = s;
+                          getTypes(newFilter);
+                          return newFilter;
+                        });
+                      }}
+                    />
+                  );
+                }}
+              />
+            );
+          })}
+          <Column
+            headerClassName="align-top "
+            alignHeader={"center"}
+            header={t("icon")}
+            bodyClassName={"flex items-center justify-center"}
+            body={(data) => {
+              return (
+                <Image
+                  alt={data?.iconFileName || ""}
+                  src={data?.iconFilePath || ""}
+                  preview
+                  className="w-[30px] h-[30px]"
+                  imageClassName="w-[30px] h-[30px] object-contain"
+                />
+              );
+            }}
+          />
           {hasAny && (
             <Column
               body={(data) => {

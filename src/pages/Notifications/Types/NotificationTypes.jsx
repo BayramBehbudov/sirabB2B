@@ -163,9 +163,7 @@ const NotificationTypes = () => {
           })}
           <Column
             headerClassName="align-top "
-            alignHeader={"center"}
             header={t("icon")}
-            bodyClassName={"flex items-center justify-center"}
             body={(data) => {
               return (
                 <Image

@@ -1,6 +1,5 @@
 import { CreateDocumentType, UpdateDocumentType } from "@/api/Document";
 import ControlledInput from "@/components/ui/ControlledInput";
-import ControlledSwitch from "@/components/ui/ControlledSwitch";
 import { showToast } from "@/providers/ToastProvider";
 import { DocumentTypeSchema } from "@/schemas/document.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,15 +17,12 @@ const AddDocumentType = ({ onSuccess, currentType }) => {
 
   const defaultValues = {
     name: currentType?.name || "",
-    isOptional: currentType?.isOptional || false,
   };
 
-  const { control, handleSubmit, reset, watch } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(DocumentTypeSchema),
     defaultValues,
   });
-
-  const isOptionalField = watch("isOptional");
 
   const onSubmit = async (formData) => {
     setLoading(true);
@@ -102,16 +98,9 @@ const AddDocumentType = ({ onSuccess, currentType }) => {
               type={input.type || "text"}
               className={"w-[250px]"}
               avtoValue={input.avtoValue}
-              placeholder={t('enter')}
+              placeholder={t("enter")}
             />
           ))}
-
-          <ControlledSwitch
-            control={control}
-            name="isOptional"
-            label={t("isOptional")}
-            tooltip={isOptionalField ? t("makeOptional") : t("makeMandatory")}
-          />
         </div>
       </Dialog>
     </div>

@@ -10,9 +10,9 @@ export const CreateDocumentType = async (data) => {
     }
 };
 
-export const GetAllDocumentTypes = async ({ pageNumber = 1, pageSize = 10 }) => {
+export const GetAllDocumentTypes = async (payload) => {
     try {
-        const response = await api.get(`/DocumentType/GetAllDocumentTypes?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        const response = await api.post(`/DocumentType/GetAllDocumentTypes`, payload);
         return response.data;
     } catch (error) {
         console.log('error at GetAllDocumentTypes', error);

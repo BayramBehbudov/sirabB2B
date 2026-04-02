@@ -92,6 +92,14 @@ const InventoryCheckRequirement = () => {
           scrollable
         >
           {[
+            { label: "description", field: "description", type: "text" },
+            {
+              label: "requiredPhotoCount",
+              field: "requiredPhotoCount",
+              type: "text",
+            },
+            { label: "startDate", field: "startDate", type: "date" },
+            { label: "endDate", field: "endDate", type: "date" },
             {
               label: "groupName",
               field: "customerGroupName",
@@ -113,12 +121,8 @@ const InventoryCheckRequirement = () => {
             { label: "clSpecode3", field: "clSpecode3", type: "text" },
             { label: "clSpecode4", field: "clSpecode4", type: "text" },
             { label: "clSpecode5", field: "clSpecode5", type: "text" },
-            { label: "endDate", field: "endDate", type: "date" },
-            { label: "startDate", field: "startDate", type: "date" },
             { label: "serialCode", field: "serialCode", type: "text" },
             { label: "erpCode", field: "erpCode", type: "text" },
-            { label: "description", field: "description", type: "text" },
-            { label: "requiredPhotoCount", field: "requiredPhotoCount", type: "text" },
             {
               label: "isActive",
               field: "isActive",

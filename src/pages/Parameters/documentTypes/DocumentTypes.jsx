@@ -7,8 +7,6 @@ import DataTableContainer, {
 } from "@/components/ui/TableContainer";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Badge } from "primereact/badge";
-import { Tag } from "primereact/tag";
 import DeleteConfirm from "@/components/ui/dialogs/DeleteConfirm";
 import { showToast } from "@/providers/ToastProvider";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +16,14 @@ const DocumentTypes = () => {
   const [loading, setLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
   const [types, setTypes] = useState([]);
-  const [page, setPage] = useState({
+  const [filter, setFilter] = useState({
     pageNumber: 1,
     pageSize: 10,
+    order: "",
+    orderColumn: "",
+    searchList: [],
   });
+
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -35,10 +37,10 @@ const DocumentTypes = () => {
   const isAllowed = perms.isAllowed("show");
   const hasAny = perms.hasAny(["update", "delete"]);
 
-  const getTypes = async () => {
+  const getTypes = async (payload = filter) => {
     try {
       setLoading(true);
-      const res = await GetAllDocumentTypes(page);
+      const res = await GetAllDocumentTypes(payload);
       setTypes(res.documentTypes);
       setTotalRecords(res.pageInfo.totalItems);
     } catch (error) {
@@ -73,7 +75,7 @@ const DocumentTypes = () => {
     if (!perms.ready) return;
     if (!isAllowed) return navigate("/not-allowed", { replace: true });
     getTypes();
-  }, [page, isAllowed, perms.ready]);
+  }, [isAllowed, perms.ready]);
 
   if (!isAllowed || !perms.ready) return null;
   return (
@@ -91,33 +93,33 @@ const DocumentTypes = () => {
           loading={loading}
           value={types}
           {...tableStaticProps}
-          first={page.pageNumber * page.pageSize - page.pageSize}
+          first={filter.pageNumber * filter.pageSize - filter.pageSize}
           totalRecords={totalRecords}
-          rows={page.pageSize}
+          rows={filter.pageSize}
           onPage={(e) => {
             const newPage = {
               pageNumber: e.page + 1,
               pageSize: e.rows,
             };
-            setPage(newPage);
+            setFilter((p) => {
+              const newFilter = { ...p, ...newPage };
+              getTypes(newFilter);
+              return newFilter;
+            });
           }}
+          scrollable
         >
           {["name"].map((f) => {
             return <Column field={f} header={t(f)} />;
           })}
-          <Column
-            field={"isOptional"}
-            header={t("isOptional")}
-            body={(data) => (
-              <Tag
-                value={data.isOptional ? t("mandatory") : t("notMandatory")}
-                severity={data.isOptional ? "success" : "danger"}
-              ></Tag>
-            )}
-          />
+
           {hasAny && (
             <Column
               header={"#"}
+              frozen
+              style={{ minWidth: "auto", width: 100 }}
+              alignFrozen="right"
+              alignHeader="center"
               body={(data) => (
                 <div className="flex flex-row gap-2 items-center">
                   {perms.update && (

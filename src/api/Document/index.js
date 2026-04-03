@@ -76,7 +76,7 @@ export const confirmDocument = async (data) => {
     //   "isConfirmed": true,
     //   "adminNote": "string"
     try {
-        const response = await api.put(`/CustomerUploadedDocument/confirmDocument`, data);
+        const response = await api.put(`/CustomerUploadedDocument/UpdateDocumentStatus`, data);
         return response.data;
     } catch (error) {
         console.log('error at confirmDocument', error);

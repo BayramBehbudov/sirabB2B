@@ -7,6 +7,7 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
+import { useConfig } from "@/providers/ConfigProvider";
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -46,6 +47,8 @@ const MapPicker = ({
   mapInstanceRef,
   isShow = false,
 }) => {
+  const { companyName } = useConfig();
+
   const handleMarkerMove = useCallback(
     async ({ lat, lng }) => {
       if (isShow) return;
@@ -73,7 +76,7 @@ const MapPicker = ({
     >
       <MapInstanceBinder mapInstanceRef={mapInstanceRef} />
       <TileLayer
-        attribution="&copy; Sirab B2B"
+        attribution={"&copy; " + companyName}
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Marker

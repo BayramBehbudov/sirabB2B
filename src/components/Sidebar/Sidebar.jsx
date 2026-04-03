@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaBars, FaChevronDown, FaSignOutAlt } from "react-icons/fa";
 import routes from "../../routes/routes";
 import { NavLink } from "react-router-dom";
@@ -8,12 +8,14 @@ import { LogOut } from "@/api/Auth";
 import { showToast } from "@/providers/ToastProvider";
 import { deleteCookie } from "@/helper/Cookie";
 import { Tooltip } from "primereact/tooltip";
+import { useConfig } from "@/providers/ConfigProvider";
 
 const Sidebar = ({ setIsOpen, isOpen }) => {
   const [loading, setLoading] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
   const { setIsLoggedIn, permissions } = useUserContext();
   const { t } = useTranslation();
+  const { companyName } = useConfig();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const handleLogOut = async () => {
@@ -92,7 +94,7 @@ const Sidebar = ({ setIsOpen, isOpen }) => {
             isOpen ? "block" : "hidden"
           }`}
         >
-          Sirab B2B
+          {companyName}
         </span>
       </div>
 

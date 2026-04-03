@@ -126,7 +126,7 @@ const Banners = () => {
               body={(data) => {
                 const v = data[c.field];
                 if (c.type === "date") return formatDate(v);
-                return v;
+                return <span className="line-clamp-2">{v}</span>;
               }}
               header={() => {
                 return (

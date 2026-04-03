@@ -125,6 +125,7 @@
   "reason": "Səbəb",
   "rejectReason": "Rədd səbəbi",
   "documentConfirmed": "Sənəd təsdiqlənib",
+  "documentRejected": "Sənəd rədd edilib",
   "documents": "Sənədlər",
   "confirReject": "Rədd etmək istədiyinizə əminsiniz?",
   "rejectReasonRequired": "Rədd etmə səbəbi daxil edilməyib",

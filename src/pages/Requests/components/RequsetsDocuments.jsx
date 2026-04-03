@@ -188,12 +188,18 @@ const RequestsDocuments = ({ row, onSuccess }) => {
                         <div
                           className="flex flex-row gap-2 buttons-container"
                           data-pr-tooltip={
-                            doc.isConfirmed ? t("documentConfirmed") : ""
+                            doc.status === 1
+                              ? t("documentConfirmed")
+                              : doc.status === 2
+                                ? t("documentRejected")
+                                : ""
                           }
                           data-pr-position="top"
                         >
                           <RejectConfirmWithReason
-                            disabled={doc.isConfirmed || loading}
+                            disabled={
+                              doc.status !== 0 || doc.status !== 3 || loading
+                            }
                             onConfirm={(v) =>
                               handleReject({
                                 id: doc.uploadedDocumentId,
@@ -202,7 +208,9 @@ const RequestsDocuments = ({ row, onSuccess }) => {
                             }
                           />
                           <ConfirmationDialog
-                            disabled={doc.isConfirmed || loading}
+                            disabled={
+                              doc.status !== 0 || doc.status !== 3 || loading
+                            }
                             onConfirm={() =>
                               handleAccept({ id: doc.uploadedDocumentId })
                             }

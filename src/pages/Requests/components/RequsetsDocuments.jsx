@@ -35,9 +35,9 @@ const RequestsDocuments = ({ row, onSuccess }) => {
     try {
       setLoading(true);
       const res = await confirmDocument({
-        id,
+        uploadedDocumentId: id,
         isConfirmed: false,
-        rejectMessage: reason,
+        adminNote: reason,
       });
       showToast({
         summary: t("success"),
@@ -58,9 +58,9 @@ const RequestsDocuments = ({ row, onSuccess }) => {
     try {
       setLoading(true);
       const res = await confirmDocument({
-        id,
+        uploadedDocumentId: id,
         isConfirmed: true,
-        rejectMessage: "",
+        adminNote: "",
       });
       showToast({
         summary: t("success"),
@@ -135,7 +135,7 @@ const RequestsDocuments = ({ row, onSuccess }) => {
               documents.map((doc) => {
                 return (
                   <div
-                    key={doc.id}
+                    key={doc.uploadedDocumentId}
                     className="flex flex-col justify-between p-3 w-[230px] h-[300px] shadow-sm border rounded-2xl"
                   >
                     <div className="flex-1 flex items-center justify-center overflow-hidden ">
@@ -153,18 +153,18 @@ const RequestsDocuments = ({ row, onSuccess }) => {
                         <div className="flex items-center gap-1 flex-row">
                           <span className="text-md">{t("name")}:</span>
                           <span className="text-md font-semibold  truncate max-w-[200px]">
-                            {doc.fileName.substring(37)}
+                            {doc.fileName}
                           </span>
                         </div>
-                        {doc.rejectMessage && (
+                        {doc.adminNote && (
                           <div
-                            data-pr-tooltip={doc.rejectMessage}
+                            data-pr-tooltip={doc.adminNote}
                             data-pr-position="top"
                             className="flex items-center gap-1 flex-row reject-reason"
                           >
                             <span className="text-md">{t("reason")}:</span>
                             <span className="text-md font-semibold  truncate max-w-[200px]">
-                              {doc.rejectMessage}
+                              {doc.adminNote}
                             </span>
                           </div>
                         )}
@@ -195,12 +195,17 @@ const RequestsDocuments = ({ row, onSuccess }) => {
                           <RejectConfirmWithReason
                             disabled={doc.isConfirmed || loading}
                             onConfirm={(v) =>
-                              handleReject({ id: doc.id, reason: v })
+                              handleReject({
+                                id: doc.uploadedDocumentId,
+                                reason: v,
+                              })
                             }
                           />
                           <ConfirmationDialog
                             disabled={doc.isConfirmed || loading}
-                            onConfirm={() => handleAccept({ id: doc.id })}
+                            onConfirm={() =>
+                              handleAccept({ id: doc.uploadedDocumentId })
+                            }
                           />
                         </div>
                       </div>

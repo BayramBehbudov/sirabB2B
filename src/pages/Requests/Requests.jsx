@@ -3,7 +3,6 @@ import DataTableContainer, {
   tableStaticProps,
 } from "@/components/ui/TableContainer";
 import TableHeader from "@/components/ui/TableHeader";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useEffect, useState } from "react";
@@ -29,7 +28,7 @@ const Requests = () => {
 
   const perms = usePermissions({
     show: "CUSTOMER_UPLOAD_DOCUMENT: CUSTOMER_UPLOAD_DOCUMENT_LIST",
-    confirm: "CUSTOMER_UPLOAD_DOCUMENT: CONFIRM_CUSTOMER_UPLOAD_DOCUMENT",
+    confirm: "CUSTOMER_UPLOAD_DOCUMENT: UPDATE_CUSTOMER_UPLOAD_DOCUMENT_STATUS",
   });
 
   const isAllowed = perms.isAllowed("show");
@@ -90,10 +89,7 @@ const Requests = () => {
             "companyName",
             "contactPersonFirstName",
             "contactPersonLastName",
-            "erpId",
-            "taxId",
             "phoneNumber",
-            "email",
           ].map((c) => (
             <Column
               field={c}

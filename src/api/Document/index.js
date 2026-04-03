@@ -61,7 +61,7 @@ export const GetAllPendingDocuments = async (data) => {
     //   ]
     // }
     try {
-        const response = await api.post(`/CustomerUploadedDocument/GetAllPendingDocuments`, data);
+        const response = await api.post(`/CustomerUploadedDocument/GetAllDocuments`, data);
         return response.data;
     } catch (error) {
         console.log('error at GetAllPendingDocuments', error);
@@ -72,11 +72,9 @@ export const GetAllPendingDocuments = async (data) => {
 
 
 export const confirmDocument = async (data) => {
-    // {
-    //   "id": 0,
+    //   "uploadedDocumentId": 0,
     //   "isConfirmed": true,
-    //   "rejectMessage": "string"
-    // }
+    //   "adminNote": "string"
     try {
         const response = await api.put(`/CustomerUploadedDocument/confirmDocument`, data);
         return response.data;
